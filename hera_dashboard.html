@@ -1395,94 +1395,69 @@ function buildGSimu() {
 }
 
 function runSimu() {
-  const r = calcExo(simuState.brut, simuState.heures, simuState.annee, simuState.mois, simuState.ema50p);
+  var brut = simuState.brut;
+  var r = calcExo(brut, simuState.heures, simuState.annee, simuState.mois, simuState.ema50p);
   if (!r) {
     document.getElementById('simu-results').innerHTML = '<p style="color:var(--ink4);font-style:italic;padding:16px 0">Données non disponibles pour cette période.</p>';
     return;
   }
 
-  const am = r.b1.am; // AM = tauAM * brut (même pour tous les barèmes LODEOM)
-  const af = r.b1.af; // AF = tauAF * brut
-  const coefAM = (am / simuState.brut * 100).toFixed(2);
-  const coefAF = (af / simuState.brut * 100).toFixed(2);
-
   document.getElementById('simu-ref-bar').innerHTML =
-    `SMIC horaire : <strong>${r.smic} €</strong> &nbsp;·&nbsp; ` +
-    `SMIC de référence : <strong>${fmt(r.smicRef)}</strong> &nbsp;·&nbsp; ` +
-    `Ratio brut/SMIC : <strong>${r.ratio.toFixed(4)}x</strong> &nbsp;·&nbsp; ` +
-    `Coeff. T : <strong>${r.coefT}</strong> &nbsp;·&nbsp; ` +
-    `AM : <strong>${fmt(am)}</strong> (${coefAM}%) &nbsp;·&nbsp; ` +
-    `AF : <strong>${fmt(af)}</strong> (${coefAF}%)`;
+    'SMIC horaire : <strong>' + r.smic + ' €</strong> &nbsp;·&nbsp; ' +
+    'SMIC de référence : <strong>' + r.smicRef.toFixed(2) + ' €</strong> &nbsp;·&nbsp; ' +
+    'Ratio brut/SMIC : <strong>' + r.ratio.toFixed(4) + 'x</strong> &nbsp;·&nbsp; ' +
+    'Coeff. T : <strong>' + r.coefT + '</strong>';
 
-  // Barèmes à afficher
-  const baremes = [
-    { id:'b1',    name:'B1 — Compétitivité',           res:r.b1,    note:'Plancher 1.3 · Plafond 2.2',                  isRGDU:false },
-    { id:'b2',    name:'B2 — Compétitivité renforcée',  res:r.b2,    note:'Plancher 2.0 · Plafond 2.7',                  isRGDU:false },
-    { id:'b3',    name:'B3 — Innovation & Croissance',  res:r.b3,    note:'Plancher 1.7 · Maintien 2.5 · Plafond 3.5',  isRGDU:false },
-    { id:'b0bis', name:'B0bis — RGDU',                  res:r.b0bis, note:'2026+ · AM+AF intégrés dans le taux',         isRGDU:true  },
-    { id:'b0',    name:'B0 — RGCP',                     res:r.b0,    note:"≤ 2025 · Remplacé par RGDU en 2026",          isRGDU:false },
+  var baremes = [
+    {id:'b1',    name:'B1 — Compétitivité',          res:r.b1,    isRGDU:false, note:'Plancher 1.3 · Plafond 2.2'},
+    {id:'b2',    name:'B2 — Compétitivité renforcée', res:r.b2,    isRGDU:false, note:'Plancher 2.0 · Plafond 2.7'},
+    {id:'b3',    name:'B3 — Innov. & Croissance',     res:r.b3,    isRGDU:false, note:'Plancher 1.7 · Maintien 2.5 · Plafond 3.5'},
+    {id:'b0bis', name:'B0bis — RGDU',                 res:r.b0bis, isRGDU:true,  note:'2026+ · AM+AF inclus dans exo'},
+    {id:"b0",    name:"B0 — RGCP",                    res:r.b0,    isRGDU:false, note:"Jusqu'au 31/12/2025"},
   ];
 
-  const maxTotal = Math.max(...baremes.map(b => b.res.total || 0));
+  var maxTotal = Math.max.apply(null, baremes.map(function(b){ return b.res.total || 0; }));
 
-  document.getElementById('simu-results').innerHTML = baremes.map(b => {
-    const isBest = b.res.total > 0 && b.res.total === maxTotal;
-    const na = b.res.total === 0 && b.res.mode !== 'Hors plafond';
+  function eur(n) { return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n); }
+  function pct(n) { return (n*100).toFixed(2) + ' %'; }
 
-    // Coefficients
-    const coefBareme = b.res.total > 0 ? (b.res.coef * 100).toFixed(4) + ' %' : '—';
-    const coefAMdisp = !b.isRGDU && b.res.total > 0 ? coefAM + ' %' : b.isRGDU ? 'inclus' : '—';
-    const coefAFdisp = !b.isRGDU && b.res.total > 0 ? coefAF + ' %' : b.isRGDU ? 'inclus' : '—';
-    const coefTotal  = b.res.total > 0 ? (b.res.total / simuState.brut * 100).toFixed(4) + ' %' : '—';
+  document.getElementById('simu-results').innerHTML = baremes.map(function(b) {
+    var isBest = b.res.total > 0 && b.res.total === maxTotal;
+    var na = b.res.total === 0;
+    var coefTotal  = b.res.total > 0 ? pct(b.res.total / brut) : '—';
+    var coefBareme = b.res.total > 0 ? pct(b.res.exo / brut)   : '—';
 
-    return `<div class="simu-result ${isBest ? 'best' : ''}">
-      <div class="sr-name">${b.name}</div>
-      <div class="sr-total ${isBest ? 'hi' : ''}">${b.res.total > 0 ? fmt(b.res.total) : '—'}</div>
-      <div class="sr-detail">
-        <table style="width:100%;font-size:10px;border-collapse:collapse;margin-top:8px">
-          <tr style="border-bottom:1px solid var(--line)">
-            <td style="padding:3px 0;color:var(--ink4)">Composante</td>
-            <td style="padding:3px 0;text-align:right;color:var(--ink4)">Montant</td>
-            <td style="padding:3px 0;text-align:right;color:var(--ink4)">Coeff.</td>
-          </tr>
-          ${!b.isRGDU ? `
-          <tr>
-            <td style="padding:3px 0">Exo barème</td>
-            <td style="padding:3px 0;text-align:right;font-weight:500">${b.res.exo > 0 ? fmt(b.res.exo) : '—'}</td>
-            <td style="padding:3px 0;text-align:right">${coefBareme}</td>
-          </tr>
-          <tr>
-            <td style="padding:3px 0">Réd. AM</td>
-            <td style="padding:3px 0;text-align:right">${b.res.total > 0 ? fmt(am) : '—'}</td>
-            <td style="padding:3px 0;text-align:right">${coefAMdisp}</td>
-          </tr>
-          <tr>
-            <td style="padding:3px 0">Réd. AF</td>
-            <td style="padding:3px 0;text-align:right">${b.res.total > 0 ? fmt(af) : '—'}</td>
-            <td style="padding:3px 0;text-align:right">${coefAFdisp}</td>
-          </tr>` : `
-          <tr>
-            <td style="padding:3px 0">Exo RGDU</td>
-            <td style="padding:3px 0;text-align:right;font-weight:500">${b.res.exo > 0 ? fmt(b.res.exo) : '—'}</td>
-            <td style="padding:3px 0;text-align:right">${coefBareme}</td>
-          </tr>
-          <tr>
-            <td style="padding:3px 0;color:var(--ink4);font-style:italic" colspan="3">AM & AF inclus dans le taux RGDU</td>
-          </tr>`}
-          <tr style="border-top:1px solid var(--line)">
-            <td style="padding:4px 0;font-weight:600">Total</td>
-            <td style="padding:4px 0;text-align:right;font-weight:600;color:${isBest?'var(--bx)':'var(--ink)'}">${b.res.total > 0 ? fmt(b.res.total) : '—'}</td>
-            <td style="padding:4px 0;text-align:right;font-weight:500">${coefTotal}</td>
-          </tr>
-        </table>
-        <div style="margin-top:8px;font-size:9px;color:var(--ink4)">${b.res.mode} · ${b.note}</div>
-        ${na ? `<div style="font-size:10px;color:var(--or);margin-top:4px">${b.res.mode}</div>` : ''}
-      </div>
-    </div>`;
+    var lignesDetail = '';
+    if (b.isRGDU) {
+      lignesDetail =
+        '<tr><td>Exo RGDU</td><td>' + eur(b.res.exo) + '</td><td>' + coefBareme + '</td></tr>' +
+        '<tr><td style="color:var(--ink4);font-style:italic" colspan="3">AM &amp; AF inclus dans le montant RGDU</td></tr>';
+    } else {
+      lignesDetail =
+        '<tr><td>Exo barème</td><td>' + (b.res.exo > 0 ? eur(b.res.exo) : '—') + '</td><td>' + coefBareme + '</td></tr>' +
+        '<tr><td>Réd. AM (6%)</td><td>' + (b.res.total > 0 ? eur(b.res.am) : '—') + '</td><td>' + (b.res.total > 0 ? '6.00 %' : '—') + '</td></tr>' +
+        '<tr><td>Réd. AF (1.8%)</td><td>' + (b.res.total > 0 ? eur(b.res.af) : '—') + '</td><td>' + (b.res.total > 0 ? '1.80 %' : '—') + '</td></tr>';
+    }
+
+    return '<div class="simu-result' + (isBest ? ' best' : '') + '">' +
+      '<div class="sr-name">' + b.name + '</div>' +
+      '<div class="sr-total' + (isBest ? ' hi' : '') + '">' + (b.res.total > 0 ? eur(b.res.total) : '—') + '</div>' +
+      '<div class="sr-mode">' + b.res.mode + '</div>' +
+      '<table class="sr-table">' +
+        '<thead><tr><th>Composante</th><th>Montant</th><th>Coeff.</th></tr></thead>' +
+        '<tbody>' +
+        lignesDetail +
+        '<tr class="sr-total-row">' +
+          '<td><strong>Total</strong></td>' +
+          '<td><strong>' + (b.res.total > 0 ? eur(b.res.total) : '—') + '</strong></td>' +
+          '<td><strong>' + coefTotal + '</strong></td>' +
+        '</tr>' +
+        '</tbody>' +
+      '</table>' +
+      '<div class="sr-note">' + b.note + '</div>' +
+      '</div>';
   }).join('');
 }
-
-
 
 function toggleGroup(gi){
   const items = document.getElementById('sbgi-'+gi);
