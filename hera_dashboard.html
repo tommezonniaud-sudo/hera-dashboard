@@ -41,7 +41,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ff-body);font-size:
 .l-hero-title em{font-style:italic;color:var(--or2)}
 .l-hero-sub{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;max-width:380px}
 .l-hero-caption{font-size:9px;color:rgba(255,255,255,.3);font-family:var(--ff-mono);letter-spacing:1.5px;text-transform:uppercase;margin-top:32px}
-.l-panel{width:420px;flex-shrink:0;height:100vh;background:var(--white);overflow-y:auto;padding:28px 36px;display:flex;flex-direction:column;justify-content:center;position:relative;box-shadow:-20px 0 60px rgba(0,0,0,.12)}
+.l-panel{width:420px;flex-shrink:0;height:100vh;background:var(--white);overflow-y:auto;padding:32px 36px 40px;display:flex;flex-direction:column;position:relative;box-shadow:-20px 0 60px rgba(0,0,0,.12)}
 .l-panel-eyebrow{font-size:9px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--bx);font-family:var(--ff-mono);margin-bottom:10px}
 .l-panel-title{font-family:var(--ff-serif);font-size:26px;font-weight:300;color:var(--ink);line-height:1.1;margin-bottom:4px}
 .l-panel-title em{font-style:italic;color:var(--bx)}
@@ -625,8 +625,8 @@ function loadDemo(){
 const GUIDE_TEAM_DATA=[
   {id:'TME',name:'Tom Mezonniaud',role:'Associé — Optimisation & Performance RH',email:'t.mezonniaud@groupehera.fr',cls:'li-a'},
   {id:'EDE',name:'Edouard Dechelette',role:'Associé — Optimisation & Performance RH',email:'e.dechelette@groupehera.fr',cls:'li-a'},
-  {id:'RMA',name:'Raphaël Marteau',role:'Associé — Finance d'Entreprise',email:'r.marteau@groupehera.fr',cls:'li-a'},
-  {id:'PLB',name:'Pierre-Louis Boyet',role:'Associé — Finance d'Entreprise',email:'p.boyet@groupehera.fr',cls:'li-a'},
+  {id:'RMA',name:'Raphaël Marteau',role:'Associé — Finance d\'Entreprise',email:'r.marteau@groupehera.fr',cls:'li-a'},
+  {id:'PLB',name:'Pierre-Louis Boyet',role:'Associé — Finance d\'Entreprise',email:'p.boyet@groupehera.fr',cls:'li-a'},
   {id:'RBA',name:'Romane Basle',role:'Manager — Optimisation Sociale',email:'r.basle@groupehera.fr',cls:'li-m'},
   {id:'MJO',name:'Margaux Jouanin',role:'Consultant Senior',email:'m.jouanin@groupehera.fr',cls:'li-c'},
   {id:'MFY',name:'Myriam Fock-Yee',role:'Consultant Senior',email:'m.fock-yee@groupehera.fr',cls:'li-c'},
@@ -640,19 +640,19 @@ const GUIDE_TOOLS=[
   {name:'La Poste Professionnelle',note:'⚠️ Vérifier que le compte est bien en mode Professionnel (peut basculer sur Particulier)'},
 ];
 const GUIDE_PROCESS=[
-  {n:1,t:'Audit préalable',sub:'Identification des leviers et estimation des montants récupérables',tasks:['Analyser les fichiers Excel de paie transmis par le client','Identifier les leviers d'optimisation et estimer les montants','Rédiger le support PPT de restitution (estimations et projections, sans fondements juridiques)','Participer au RDV de restitution avec le prospect (optionnel)']},
-  {n:2,t:'Audit définitif',sub:'Analyse complète sur 3 ans avec fondements juridiques',tasks:['Réaliser l'analyse complète du passé sur les 3 dernières années','Cadrer les données : croiser BRC (cotisations déclarées) avec journaux de paie','Rédiger le support PPT avec fondements juridiques et économies définitives chiffrées','Arbitrer avec le client quels leviers mettre en œuvre']},
-  {n:3,t:'Mise en œuvre passé',sub:'Rédaction des demandes de remboursement',tasks:['Rédiger la demande de remboursement','Rédiger les annexes : tableaux rectificatifs récapitulatifs par établissement','Envoyer la demande via LRAR à l'URSSAF']},
-  {n:4,t:'Mise en œuvre futur',sub:'Application des nouveaux paramétrages de paie',tasks:['Envoyer mail au client détaillant les leviers à appliquer','Contacter le gestionnaire de paie pour modifier les paramétrages','Vérifier la modification le mois suivant (BP ou LP)','Établir l'état récapitulatif des économies générées pour facturation']},
-  {n:5,t:'Suivi & facturation',sub:'Contrôle de la conformité et facturation',tasks:['Contrôler la conformité de la paie modifiée sur la DSN du mois suivant','Établir la facture sur la base des économies générées','Relancer si nécessaire','Clore le dossier']},
+  {n:1,t:"Audit préalable",sub:"Identification des leviers et estimation des montants récupérables",tasks:["Analyser les fichiers Excel de paie transmis par le client","Identifier les leviers d'optimisation et estimer les montants","Rédiger le support PPT de restitution (estimations et projections, sans fondements juridiques)","Participer au RDV de restitution avec le prospect (optionnel)"]},
+  {n:2,t:"Audit définitif",sub:"Analyse complète sur 3 ans avec fondements juridiques",tasks:["Réaliser l'analyse complète du passé sur les 3 dernières années","Cadrer les données : croiser BRC (cotisations déclarées) avec journaux de paie","Rédiger le support PPT avec fondements juridiques et économies définitives chiffrées","Arbitrer avec le client quels leviers mettre en oeuvre"]},
+  {n:3,t:"Mise en oeuvre passé",sub:"Rédaction des demandes de remboursement",tasks:["Rédiger la demande de remboursement","Rédiger les annexes : tableaux rectificatifs récapitulatifs par établissement","Envoyer la demande via LRAR à l'URSSAF"]},
+  {n:4,t:"Mise en oeuvre futur",sub:"Application des nouveaux paramétrages de paie",tasks:["Envoyer mail au client détaillant les leviers à appliquer","Contacter le gestionnaire de paie pour modifier les paramétrages","Vérifier la modification le mois suivant (BP ou LP)","Etablir l'état récapitulatif des économies générées pour facturation"]},
+  {n:5,t:"Suivi & facturation",sub:"Contrôle de la conformité et facturation",tasks:["Contrôler la conformité de la paie modifiée sur la DSN du mois suivant","Etablir la facture sur la base des économies générées","Relancer si nécessaire","Clore le dossier"]},
 ];
 const GUIDE_LEVIERS=[
-  {n:1,t:'Barème de compétitivité',body:'Le barème de compétitivité constitue l'un des barèmes d'exonération prévus par la LODEOM. Il peut s'appliquer aux entreprises de moins de 11 salariés ou à certaines entreprises relevant de secteurs d'activité éligibles.',warn:'Non applicable aux apprentis · CTP associé = 462',ref:'Art. L.752-3-2 CSS'},
-  {n:2,t:'Barème de compétitivité renforcée',body:'Barème d'exonération renforcé prévu par la LODEOM, applicable aux entreprises relevant de secteurs d'activité éligibles ou aux entreprises bénéficiant de perfectionnement actif.',warn:'Non applicable aux apprentis · CTP associé = 463',ref:'Art. L.752-3-2 CSS'},
-  {n:3,t:'RPA — Perfectionnement actif',body:'Le perfectionnement actif est un régime douanier applicable lorsqu'on importe des marchandises hors UE et qu'on effectue des opérations sur ces marchandises. Le fait de disposer d'une autorisation + réaliser des opérations sous ce régime permet de bénéficier du barème LODEOM renforcé à l'ensemble des salariés.',warn:'Non applicable aux apprentis · CTP 463 · L'autorisation est préalable (levier futur uniquement) · Dossier déposé par DELTAPRO auprès des Douanes',ref:'Art. L.752-3-2 CSS'},
-  {n:4,t:'Pluriactivité',body:'Lorsqu'une entreprise exerce plusieurs activités, l'éligibilité aux barèmes LODEOM peut dépendre de la nature réelle de l'activité exercée par les salariés. Possibilité d'appliquer le barème de compétitivité à certains salariés et la RGDU aux autres.',warn:'Analyser l'affectation réelle des salariés par activité',ref:'Art. L.752-3-2 CSS'},
-  {n:5,t:'Neutralisation franchissement de seuil',body:'Lors du franchissement de certains seuils d'effectifs (11, 50 salariés…), de nouvelles obligations sociales s'appliquent. Le franchissement de seuil est neutralisé pendant 5 années en matière de sécurité sociale. Cotisations concernées : FNAL, versement mobilité, forfait social.',warn:'Vérifier l'année de franchissement et les cotisations applicables',ref:'Art. L.131-4-2 CSS'},
-  {n:6,t:'Taux fonction support',body:'Certaines fonctions support au sein d'entreprises pluriactives peuvent bénéficier d'un taux de cotisation réduit, selon leur affectation réelle à des activités éligibles LODEOM.',warn:'Nécessite une analyse précise de l'affectation des salariés concernés',ref:'Art. L.752-3-2 CSS'},
+  {n:1,t:"Barème de compétitivité",body:"Le barème de compétitivité constitue l'un des barèmes d'exonération prévus par la LODEOM. Il peut s'appliquer aux entreprises de moins de 11 salariés ou à certaines entreprises relevant de secteurs éligibles.",warn:"Non applicable aux apprentis · CTP associé = 462",ref:"Art. L.752-3-2 CSS"},
+  {n:2,t:"Barème de compétitivité renforcée",body:"Barème d'exonération renforcé prévu par la LODEOM, applicable aux entreprises relevant de secteurs éligibles ou aux entreprises bénéficiant de perfectionnement actif.",warn:"Non applicable aux apprentis · CTP associé = 463",ref:"Art. L.752-3-2 CSS"},
+  {n:3,t:"RPA — Perfectionnement actif",body:"Le perfectionnement actif est un régime douanier applicable lors d'importation de marchandises hors UE. Disposer d'une autorisation + réaliser des opérations sous ce régime permet de bénéficier du barème LODEOM renforcé pour l'ensemble des salariés.",warn:"Non applicable aux apprentis · CTP 463 · Autorisation préalable requise (levier futur uniquement) · Dossier déposé par DELTAPRO auprès des Douanes",ref:"Art. L.752-3-2 CSS"},
+  {n:4,t:"Pluriactivité",body:"Lorsqu'une entreprise exerce plusieurs activités, l'éligibilité aux barèmes LODEOM peut dépendre de la nature réelle de l'activité des salariés. Possibilité d'appliquer différents barèmes selon l'affectation réelle.",warn:"Analyser l'affectation réelle des salariés par activité",ref:"Art. L.752-3-2 CSS"},
+  {n:5,t:"Neutralisation franchissement de seuil",body:"Lors du franchissement de certains seuils d'effectifs (11, 50 salariés), de nouvelles obligations sociales s'appliquent. Ce franchissement est neutralisé pendant 5 années. Cotisations concernées : FNAL, versement mobilité, forfait social.",warn:"Vérifier l'année de franchissement et les cotisations applicables",ref:"Art. L.131-4-2 CSS"},
+  {n:6,t:"Taux fonction support",body:"Certaines fonctions support au sein d'entreprises pluriactives peuvent bénéficier d'un taux de cotisation réduit, selon leur affectation réelle à des activités éligibles LODEOM.",warn:"Nécessite une analyse précise de l'affectation des salariés concernés",ref:"Art. L.752-3-2 CSS"},
 ];
 const GUIDE_TEMPLATES=[
   {t:'NDA & pièces audit préalable',body:`Bonjour Madame/Monsieur,
@@ -715,11 +715,11 @@ Or, à ce jour, nous n'avons toujours pas eu de retour concernant notre demande.
 Bien cordialement,`},
 ];
 const GUIDE_RPA=[
-  {n:1,t:'Rescrit social (CGSS)',desc:'Courrier LRAR envoyé à la CGSS. Demande confirmation que le client pourra bénéficier du barème LODEOM renforcé une fois l'autorisation douanière obtenue.',action:'Envoyer en LRAR + récupérer les 3 preuves (dépôt, contenu, AR) + mettre à jour le tableau de suivi'},
-  {n:2,t:'Mandat DELTAPRO',desc:'Donne pouvoir à DELTAPRO pour représenter le client auprès des Douanes. Sans ce mandat signé, DELTAPRO ne peut pas déposer le dossier. Implication client : faible — juste une signature.',action:'Compléter via DocuSign et envoyer pour signature au client'},
-  {n:3,t:'Certification compte Pro Douane',desc:'Formulaire officiel Douanes pour désigner les administrateurs du compte douane.gouv.fr du client. Deux cas : (1) Client a déjà un compte → récupérer les identifiants. (2) Client n'a pas de compte → créer sur douane.gouv.fr avec email dédié.',action:'Compléter via DocuSign et envoyer pour signature'},
-  {n:4,t:'Document de travail PA (Excel)',desc:'Tableau central de la mission. Rempli avec le client lors des ateliers. Les colonnes Exemple 1 et 2 sont pré-renseignées pour guider — seule la colonne Société est à compléter.',action:'Compléter lors des ateliers avec le client'},
-  {n:5,t:'Demande d'autorisation + Annexe 12',desc:'Courrier adressé au Bureau de Douanes. L'Annexe 12 (formulaire UE officiel) est jointe obligatoirement. Les deux documents signés sont transmis à DELTAPRO pour dépôt.',action:'Transmettre à DELTAPRO (Jamil et Yann) pour dépôt auprès des Douanes'},
+  {n:1,t:"Rescrit social (CGSS)",desc:"Courrier LRAR envoyé à la CGSS. Demande confirmation que le client pourra bénéficier du barème LODEOM renforcé une fois l'autorisation douanière obtenue.",action:"Envoyer en LRAR + récupérer les 3 preuves (dépôt, contenu, AR) + mettre à jour le tableau de suivi"},
+  {n:2,t:"Mandat DELTAPRO",desc:"Donne pouvoir à DELTAPRO pour représenter le client auprès des Douanes. Sans ce mandat, DELTAPRO ne peut pas déposer le dossier. Implication client : faible.",action:"Compléter via DocuSign et envoyer pour signature au client"},
+  {n:3,t:"Certification compte Pro Douane",desc:"Formulaire officiel Douanes pour désigner les administrateurs du compte douane.gouv.fr du client. (1) Client a déjà un compte : récupérer les identifiants. (2) Pas de compte : créer sur douane.gouv.fr.",action:"Compléter via DocuSign et envoyer pour signature"},
+  {n:4,t:"Document de travail PA (Excel)",desc:"Tableau central de la mission. Rempli avec le client lors des ateliers. Les colonnes Exemple 1 et 2 sont pré-renseignées — seule la colonne Société est à compléter.",action:"Compléter lors des ateliers avec le client"},
+  {n:5,t:"Demande d'autorisation + Annexe 12",desc:"Courrier adressé au Bureau de Douanes. L'Annexe 12 (formulaire UE officiel) est jointe obligatoirement. Les deux documents signés sont transmis à DELTAPRO pour dépôt.",action:"Transmettre à DELTAPRO (Jamil et Yann) pour dépôt auprès des Douanes"},
 ];
 
 function buildGEquipe(){
