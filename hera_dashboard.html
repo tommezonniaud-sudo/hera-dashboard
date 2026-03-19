@@ -245,6 +245,42 @@ tr:hover td{background:var(--bg)}
 /* ── ECO ── */
 .eco{font-weight:500;color:#16a34a}
 
+/* ── GUIDE ── */
+.g-hero{background:linear-gradient(135deg,var(--bx) 0%,var(--bx3) 100%);border-radius:var(--r20);padding:24px 28px 20px;margin-bottom:20px;position:relative;overflow:hidden}
+.g-hero::after{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
+.g-hero-ey{font-size:9px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.4);font-family:var(--ff-mono);margin-bottom:6px}
+.g-hero-title{font-family:var(--ff-serif);font-size:26px;font-weight:300;color:#fff}
+.g-hero-title em{font-style:italic;color:var(--or2)}
+.g-hero-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:6px}
+.g-team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.g-team-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:16px;text-align:center;transition:all .2s}
+.g-team-card:hover{box-shadow:var(--sh2);border-color:var(--line2);transform:translateY(-2px)}
+.g-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;font-family:var(--ff-mono);margin:0 auto 10px}
+.g-tname{font-size:13px;font-weight:500;margin-bottom:2px}
+.g-trole{font-size:10px;color:var(--ink4);font-family:var(--ff-mono)}
+.g-step{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.g-step:last-child{border-bottom:none}
+.g-step-num{width:32px;height:32px;border-radius:50%;background:var(--bx);color:#fff;font-family:var(--ff-mono);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.g-step-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.g-step-sub{font-size:12px;color:var(--ink3);line-height:1.6}
+.g-step-tasks{margin-top:8px}
+.g-step-task{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--ink3);margin-bottom:4px;line-height:1.5}
+.g-step-task::before{content:'→';color:var(--bx);flex-shrink:0;font-size:10px;margin-top:1px}
+.g-levier-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:18px 20px;margin-bottom:10px;transition:all .2s}
+.g-levier-card:hover{box-shadow:var(--sh2);border-color:var(--line2)}
+.g-levier-num{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--bx);font-family:var(--ff-mono);margin-bottom:4px}
+.g-levier-title{font-size:15px;font-weight:500;font-family:var(--ff-serif);color:var(--ink);margin-bottom:8px}
+.g-levier-body{font-size:12px;color:var(--ink3);line-height:1.65;margin-bottom:8px}
+.g-levier-warn{font-size:11px;color:var(--or);background:var(--or-pale);border:1px solid rgba(184,137,31,.2);border-radius:var(--r6);padding:7px 10px;margin-top:8px}
+.g-levier-ref{font-size:10px;color:var(--ink4);font-family:var(--ff-mono);margin-top:6px}
+.g-tpl-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:18px 20px;margin-bottom:10px}
+.g-tpl-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.g-tpl-title{font-size:13px;font-weight:600;color:var(--ink)}
+.g-tpl-body{font-size:12px;color:var(--ink3);line-height:1.7;white-space:pre-wrap;background:var(--bg);border-radius:var(--r6);padding:12px 14px;border:1px solid var(--line)}
+.copy-btn{font-size:10px;padding:4px 12px;border-radius:20px;border:1px solid var(--line2);background:var(--white);cursor:pointer;font-family:var(--ff-mono);color:var(--ink3);transition:all .15s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--bx);color:var(--bx)}
+.copy-btn.copied{background:var(--bx);color:#fff;border-color:var(--bx)}
+
 /* ── PANEL ── */
 .pov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;display:none;align-items:flex-start;justify-content:flex-end}
 .pov.open{display:flex}
@@ -454,6 +490,12 @@ tr:hover td{background:var(--bg)}
             <div class="card" style="margin-bottom:0"><div class="card-ttl">Par gestionnaire</div><div id="c-gv"></div></div>
           </div>
         </div>
+
+        <div class="page" id="page-g-equipe"><div id="g-equipe-content"></div></div>
+        <div class="page" id="page-g-process"><div id="g-process-content"></div></div>
+        <div class="page" id="page-g-leviers"><div id="g-leviers-content"></div></div>
+        <div class="page" id="page-g-templates"><div id="g-templates-content"></div></div>
+        <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
       </div>
     </div>
   </div>
@@ -579,6 +621,158 @@ function loadDemo(){
 }
 
 // ── LOGIN ─────────────────────────────────────────────────────────────────────
+// ── GUIDE PAGES ──────────────────────────────────────────────────────────────
+const GUIDE_TEAM_DATA=[
+  {id:'TME',name:'Tom Mezonniaud',role:'Associé — Optimisation & Performance RH',email:'t.mezonniaud@groupehera.fr',cls:'li-a'},
+  {id:'EDE',name:'Edouard Dechelette',role:'Associé — Optimisation & Performance RH',email:'e.dechelette@groupehera.fr',cls:'li-a'},
+  {id:'RMA',name:'Raphaël Marteau',role:'Associé — Finance d'Entreprise',email:'r.marteau@groupehera.fr',cls:'li-a'},
+  {id:'PLB',name:'Pierre-Louis Boyet',role:'Associé — Finance d'Entreprise',email:'p.boyet@groupehera.fr',cls:'li-a'},
+  {id:'RBA',name:'Romane Basle',role:'Manager — Optimisation Sociale',email:'r.basle@groupehera.fr',cls:'li-m'},
+  {id:'MJO',name:'Margaux Jouanin',role:'Consultant Senior',email:'m.jouanin@groupehera.fr',cls:'li-c'},
+  {id:'MFY',name:'Myriam Fock-Yee',role:'Consultant Senior',email:'m.fock-yee@groupehera.fr',cls:'li-c'},
+  {id:'LHE',name:'Laura Hermans',role:'Consultante',email:'l.hermans@groupehera.fr',cls:'li-c'},
+  {id:'ZGE',name:'Zélie Gerbal',role:'Consultante',email:'z.gerbal@groupehera.fr',cls:'li-c'},
+  {id:'VDP',name:'Valérie Dit Parny',role:"Chargé d'audit",email:'v.ditparny@groupehera.fr',cls:'li-au'},
+];
+const GUIDE_TOOLS=[
+  {name:'Portail URSSAF',note:'Compte HERA tiers mandaté — SIRET 91153381800017 / Compte URSSAF : 974 000000004578225'},
+  {name:'DocuSign',note:'Lettres de mission, conventions tiers mandaté, demandes de remboursement'},
+  {name:'La Poste Professionnelle',note:'⚠️ Vérifier que le compte est bien en mode Professionnel (peut basculer sur Particulier)'},
+];
+const GUIDE_PROCESS=[
+  {n:1,t:'Audit préalable',sub:'Identification des leviers et estimation des montants récupérables',tasks:['Analyser les fichiers Excel de paie transmis par le client','Identifier les leviers d'optimisation et estimer les montants','Rédiger le support PPT de restitution (estimations et projections, sans fondements juridiques)','Participer au RDV de restitution avec le prospect (optionnel)']},
+  {n:2,t:'Audit définitif',sub:'Analyse complète sur 3 ans avec fondements juridiques',tasks:['Réaliser l'analyse complète du passé sur les 3 dernières années','Cadrer les données : croiser BRC (cotisations déclarées) avec journaux de paie','Rédiger le support PPT avec fondements juridiques et économies définitives chiffrées','Arbitrer avec le client quels leviers mettre en œuvre']},
+  {n:3,t:'Mise en œuvre passé',sub:'Rédaction des demandes de remboursement',tasks:['Rédiger la demande de remboursement','Rédiger les annexes : tableaux rectificatifs récapitulatifs par établissement','Envoyer la demande via LRAR à l'URSSAF']},
+  {n:4,t:'Mise en œuvre futur',sub:'Application des nouveaux paramétrages de paie',tasks:['Envoyer mail au client détaillant les leviers à appliquer','Contacter le gestionnaire de paie pour modifier les paramétrages','Vérifier la modification le mois suivant (BP ou LP)','Établir l'état récapitulatif des économies générées pour facturation']},
+  {n:5,t:'Suivi & facturation',sub:'Contrôle de la conformité et facturation',tasks:['Contrôler la conformité de la paie modifiée sur la DSN du mois suivant','Établir la facture sur la base des économies générées','Relancer si nécessaire','Clore le dossier']},
+];
+const GUIDE_LEVIERS=[
+  {n:1,t:'Barème de compétitivité',body:'Le barème de compétitivité constitue l'un des barèmes d'exonération prévus par la LODEOM. Il peut s'appliquer aux entreprises de moins de 11 salariés ou à certaines entreprises relevant de secteurs d'activité éligibles.',warn:'Non applicable aux apprentis · CTP associé = 462',ref:'Art. L.752-3-2 CSS'},
+  {n:2,t:'Barème de compétitivité renforcée',body:'Barème d'exonération renforcé prévu par la LODEOM, applicable aux entreprises relevant de secteurs d'activité éligibles ou aux entreprises bénéficiant de perfectionnement actif.',warn:'Non applicable aux apprentis · CTP associé = 463',ref:'Art. L.752-3-2 CSS'},
+  {n:3,t:'RPA — Perfectionnement actif',body:'Le perfectionnement actif est un régime douanier applicable lorsqu'on importe des marchandises hors UE et qu'on effectue des opérations sur ces marchandises. Le fait de disposer d'une autorisation + réaliser des opérations sous ce régime permet de bénéficier du barème LODEOM renforcé à l'ensemble des salariés.',warn:'Non applicable aux apprentis · CTP 463 · L'autorisation est préalable (levier futur uniquement) · Dossier déposé par DELTAPRO auprès des Douanes',ref:'Art. L.752-3-2 CSS'},
+  {n:4,t:'Pluriactivité',body:'Lorsqu'une entreprise exerce plusieurs activités, l'éligibilité aux barèmes LODEOM peut dépendre de la nature réelle de l'activité exercée par les salariés. Possibilité d'appliquer le barème de compétitivité à certains salariés et la RGDU aux autres.',warn:'Analyser l'affectation réelle des salariés par activité',ref:'Art. L.752-3-2 CSS'},
+  {n:5,t:'Neutralisation franchissement de seuil',body:'Lors du franchissement de certains seuils d'effectifs (11, 50 salariés…), de nouvelles obligations sociales s'appliquent. Le franchissement de seuil est neutralisé pendant 5 années en matière de sécurité sociale. Cotisations concernées : FNAL, versement mobilité, forfait social.',warn:'Vérifier l'année de franchissement et les cotisations applicables',ref:'Art. L.131-4-2 CSS'},
+  {n:6,t:'Taux fonction support',body:'Certaines fonctions support au sein d'entreprises pluriactives peuvent bénéficier d'un taux de cotisation réduit, selon leur affectation réelle à des activités éligibles LODEOM.',warn:'Nécessite une analyse précise de l'affectation des salariés concernés',ref:'Art. L.752-3-2 CSS'},
+];
+const GUIDE_TEMPLATES=[
+  {t:'NDA & pièces audit préalable',body:`Bonjour Madame/Monsieur,
+
+Nous vous remercions pour notre échange.
+Comme convenu, vous trouverez en pièce jointe l'engagement de confidentialité.
+
+Afin de débuter nos travaux, pourriez-vous nous adresser les éléments suivants :
+- Sous format Excel, les extractions de paie de l'année 2025, faisant état, pour chaque salarié, de l'ensemble des rubriques de paie (y compris les heures travaillées et les cotisations patronales) avec les colonnes intitulées « base » « salarial » « patronal » ;
+- Les bulletins de paie de décembre 2025 et de janvier 2026 ;
+- L'extraction des effectifs disponible sur le site de l'URSSAF (onglet « Compte », rubrique « Embauche », volet « Effectifs »).
+
+Dès réception, nous serons en mesure de vous présenter rapidement nos conclusions lors d'un rendez-vous de restitution d'audit.
+
+Bien cordialement,`},
+  {t:'Suite à restitution audit préalable',body:`Bonjour Madame/Monsieur,
+
+Suite à la restitution des conclusions de l'audit préalable et comme évoqué lors de notre réunion, vous trouverez ci-joint :
+- La présentation de l'audit préalable projetée ;
+- La lettre de mission (transmise via DocuSign pour signature).
+
+Si cette dernière emporte votre adhésion, nous reviendrons vers vous pour solliciter les documents complémentaires nécessaires à la réalisation de l'audit définitif.
+
+Bien cordialement,`},
+  {t:'Suite signature LM & convention tiers mandaté',body:`Bonjour Madame/Monsieur,
+
+Nous accusons réception de la lettre de mission et vous remercions pour votre confiance.
+
+Afin de vous présenter en détail les leviers d'économies identifiés, pourriez-vous nous adresser le journal de paie annuel pour les exercices 2023 et 2024, faisant état, pour chaque salarié, de l'état cumulé des rubriques de paie sous format Excel ?
+
+Par ailleurs, nous vous transmettons une convention de tiers mandaté via DocuSign. À ce titre, nous vous remercions de bien vouloir nous communiquer :
+- Le montant à payer figurant sur la DSN du mois précédent ;
+- Votre numéro de compte URSSAF.
+
+Bien cordialement,`},
+  {t:'0 économie — Fin de mission',body:`Bonjour Madame/Monsieur,
+
+Nous tenons à vous remercier pour la confiance que vous nous avez accordée.
+
+Après analyse des documents, nous n'avons malheureusement pas identifié de leviers d'économies significatifs. En conséquence, et conformément à nos engagements, nous mettons fin à notre mission à ce stade.
+
+Seriez-vous d'accord pour que nous vous recontactions si de nouveaux dispositifs d'allègement venaient à émerger ?
+
+Bien cordialement,`},
+  {t:'Rattachement portail URSSAF',body:`Bonjour,
+
+Nous sommes désignés tiers déclarant pour le compte de la société suivante :
+SOCIÉTÉ : [nom] · SIREN : [siren] · Compte URSSAF : [compte] · Dernier montant DSN : [montant]
+
+Nous souhaiterions procéder au rattachement de ce compte à notre portefeuille URSSAF HERA GROUPE (SIRET 91153381800017 / Compte URSSAF : 974 000000004578225).
+
+Pourriez-vous l'effectuer ?
+Merci,`},
+  {t:'Relance URSSAF — absence retour',body:`Bonjour,
+
+Nous avons formulé en date du [date] une demande de remboursement de cotisations sociales indûment versées pour le compte de [société].
+
+Or, à ce jour, nous n'avons toujours pas eu de retour concernant notre demande.
+
+Bien cordialement,`},
+];
+const GUIDE_RPA=[
+  {n:1,t:'Rescrit social (CGSS)',desc:'Courrier LRAR envoyé à la CGSS. Demande confirmation que le client pourra bénéficier du barème LODEOM renforcé une fois l'autorisation douanière obtenue.',action:'Envoyer en LRAR + récupérer les 3 preuves (dépôt, contenu, AR) + mettre à jour le tableau de suivi'},
+  {n:2,t:'Mandat DELTAPRO',desc:'Donne pouvoir à DELTAPRO pour représenter le client auprès des Douanes. Sans ce mandat signé, DELTAPRO ne peut pas déposer le dossier. Implication client : faible — juste une signature.',action:'Compléter via DocuSign et envoyer pour signature au client'},
+  {n:3,t:'Certification compte Pro Douane',desc:'Formulaire officiel Douanes pour désigner les administrateurs du compte douane.gouv.fr du client. Deux cas : (1) Client a déjà un compte → récupérer les identifiants. (2) Client n'a pas de compte → créer sur douane.gouv.fr avec email dédié.',action:'Compléter via DocuSign et envoyer pour signature'},
+  {n:4,t:'Document de travail PA (Excel)',desc:'Tableau central de la mission. Rempli avec le client lors des ateliers. Les colonnes Exemple 1 et 2 sont pré-renseignées pour guider — seule la colonne Société est à compléter.',action:'Compléter lors des ateliers avec le client'},
+  {n:5,t:'Demande d'autorisation + Annexe 12',desc:'Courrier adressé au Bureau de Douanes. L'Annexe 12 (formulaire UE officiel) est jointe obligatoirement. Les deux documents signés sont transmis à DELTAPRO pour dépôt.',action:'Transmettre à DELTAPRO (Jamil et Yann) pour dépôt auprès des Douanes'},
+];
+
+function buildGEquipe(){
+  document.getElementById('g-equipe-content').innerHTML=`
+    <div class="g-hero"><div class="g-hero-ey">Guide · Équipe</div><div class="g-hero-title">L'<em>équipe</em> Hera Groupe</div><div class="g-hero-sub">33 rue du Kerval, Mont-Roquefeuil — 97434 Saint-Paul, La Réunion</div></div>
+    <div class="card"><div class="card-ttl">Pôle Optimisation & Performance RH</div><div class="g-team-grid">${GUIDE_TEAM_DATA.filter(u=>['TME','EDE','RBA','MJO','MFY','LHE','ZGE','VDP'].includes(u.id)).map(u=>`
+      <div class="g-team-card"><div class="g-av ${u.cls}">${u.id}</div><div class="g-tname">${u.name}</div><div class="g-trole">${u.role}</div></div>`).join('')}</div></div>
+    <div class="card"><div class="card-ttl">Outils & accès</div>${GUIDE_TOOLS.map(t=>`
+      <div class="ar"><div class="ar-dot dg"></div><div style="flex:1"><div class="ar-name">${t.name}</div><div class="ar-det">${t.note}</div></div></div>`).join('')}</div>`;
+}
+function buildGProcess(){
+  document.getElementById('g-process-content').innerHTML=`
+    <div class="g-hero"><div class="g-hero-ey">Guide · Process</div><div class="g-hero-title">Séquençage d'une <em>mission</em></div><div class="g-hero-sub">Une mission d'optimisation sociale suit toujours le même séquençage en 5 étapes.</div></div>
+    <div class="card">${GUIDE_PROCESS.map(s=>`
+      <div class="g-step"><div class="g-step-num">${s.n}</div>
+      <div style="flex:1"><div class="g-step-title">${s.t}</div><div class="g-step-sub">${s.sub}</div>
+      <div class="g-step-tasks">${s.tasks.map(tk=>`<div class="g-step-task">${tk}</div>`).join('')}</div>
+      </div></div>`).join('')}</div>`;
+}
+function buildGLeviers(){
+  document.getElementById('g-leviers-content').innerHTML=`
+    <div class="g-hero"><div class="g-hero-ey">Guide · Leviers</div><div class="g-hero-title">Fiche <em>leviers</em> d'optimisation sociale</div><div class="g-hero-sub">6 leviers principaux identifiés pour les entreprises de La Réunion.</div></div>
+    ${GUIDE_LEVIERS.map(l=>`
+    <div class="g-levier-card"><div class="g-levier-num">Levier ${l.n}</div><div class="g-levier-title">${l.t}</div>
+    <div class="g-levier-body">${l.body}</div>
+    <div class="g-levier-warn">⚠ ${l.warn}</div>
+    <div class="g-levier-ref">Réf. juridique : ${l.ref}</div></div>`).join('')}`;
+}
+function buildGTemplates(){
+  document.getElementById('g-templates-content').innerHTML=`
+    <div class="g-hero"><div class="g-hero-ey">Guide · Templates</div><div class="g-hero-title">Templates de <em>mails</em></div><div class="g-hero-sub">Modèles à utiliser à chaque étape de la mission. Cliquez sur Copier pour copier le texte.</div></div>
+    ${GUIDE_TEMPLATES.map((t,i)=>`
+    <div class="g-tpl-card"><div class="g-tpl-head"><div class="g-tpl-title">${t.t}</div>
+    <button class="copy-btn" id="cpbtn-${i}" onclick="copyTpl(${i})">⎘ Copier</button></div>
+    <div class="g-tpl-body">${t.body}</div></div>`).join('')}`;
+}
+function copyTpl(i){
+  navigator.clipboard.writeText(GUIDE_TEMPLATES[i].body).then(()=>{
+    const btn=document.getElementById('cpbtn-'+i);
+    btn.textContent='✓ Copié !';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='⎘ Copier';btn.classList.remove('copied');},2000);
+  });
+}
+function buildGRpa(){
+  document.getElementById('g-rpa-content').innerHTML=`
+    <div class="g-hero"><div class="g-hero-ey">Guide · RPA</div><div class="g-hero-title">Annexe — Mission <em>RPA</em></div><div class="g-hero-sub">Régime de Perfectionnement Actif — Documents à produire par phase.</div></div>
+    <div class="card">${GUIDE_RPA.map(d=>`
+      <div class="g-step"><div class="g-step-num">${d.n}</div>
+      <div style="flex:1"><div class="g-step-title">${d.t}</div><div class="g-step-sub">${d.desc}</div>
+      <div style="margin-top:8px;font-size:11px;color:var(--bx);font-family:var(--ff-mono)">→ ${d.action}</div>
+      </div></div>`).join('')}</div>`;
+}
+
 function buildLogin(){
   const br={assoc:[],mgr:[],clt:[],aud:[]};
   USERS.forEach(u=>br[u.role].push(u));
@@ -633,14 +827,18 @@ function buildApp(){
   document.getElementById('sb-role').textContent=CU.lbl;
 
   const navCfg={
-    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'}],
-    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'}],
-    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'}],
-    aud:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'}],
+    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}],
+    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}],
+    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}],
+    aud:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'}],
   };
   const items=navCfg[CU.role]||navCfg.aud;
   document.getElementById('sb-nav').innerHTML='<div class="sb-nav-sect">Navigation</div>'+
-    items.map((n,i)=>`<div class="ni${i===0?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('');
+    items.map((n,i)=>{
+      if(n.sect) return `<div class="sb-nav-sect">${n.sect}</div>`;
+      const isFirst = items.findIndex(x=>x.id) === i;
+      return `<div class="ni${isFirst?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`;
+    }).join('');
 
   const th=document.getElementById('d-th');
   if(isFull()||CU.role==='aud'){
@@ -661,11 +859,11 @@ function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa};
   if(renders[id])renders[id]();
 }
 
