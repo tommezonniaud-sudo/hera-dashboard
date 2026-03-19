@@ -265,13 +265,12 @@ tr:hover td{background:var(--bg)}
 .eco{font-weight:500;color:#16a34a}
 
 /* ── SIDEBAR GROUPS ── */
-.sb-group{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 4px;cursor:pointer;user-select:none}
+.sb-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 4px;cursor:pointer;user-select:none}
 .sb-group-label{font-size:8px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);font-family:var(--ff-mono);transition:color .15s}
-.sb-group:hover .sb-group-label{color:rgba(255,255,255,.6)}
+.sb-group-header:hover .sb-group-label{color:rgba(255,255,255,.6)}
 .sb-group-arrow{font-size:8px;color:rgba(255,255,255,.25);transition:transform .2s}
-.sb-group.open .sb-group-arrow{transform:rotate(90deg)}
-.sb-group-items{overflow:hidden;max-height:0;transition:max-height .25s ease}
-.sb-group-items.open{max-height:400px}
+.sb-group-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.sb-group-items.open{max-height:500px}
 
 /* ── SIMULATEUR ── */
 .simu-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
@@ -1263,27 +1262,25 @@ function buildGLex() {
 }
 
 function toggleGroup(gi){
-  const grp = document.getElementById('sbg-'+gi);
   const items = document.getElementById('sbgi-'+gi);
+  const arrow = document.getElementById('sba-'+gi);
   const isOpen = items.classList.contains('open');
-  // Ouvrir le groupe cliqué, fermer les autres si déjà ouvert
   if(!isOpen){
     items.classList.add('open');
-    grp.classList.add('open');
+    if(arrow) arrow.style.transform = 'rotate(90deg)';
   } else {
     items.classList.remove('open');
-    grp.classList.remove('open');
+    if(arrow) arrow.style.transform = '';
   }
 }
 
 function openGroupForPage(pageId){
-  // Trouver quel groupe contient cette page et l'ouvrir
   document.querySelectorAll('.sb-group-items').forEach((el,gi) => {
-    const hasPage = el.querySelector(`#ni-${pageId}`);
+    const hasPage = el.querySelector('#ni-'+pageId);
     if(hasPage){
       el.classList.add('open');
-      const grp = document.getElementById('sbg-'+gi);
-      if(grp) grp.classList.add('open');
+      const arrow = document.getElementById('sba-'+gi);
+      if(arrow) arrow.style.transform = 'rotate(90deg)';
     }
   });
 }
@@ -1424,12 +1421,12 @@ function buildApp(){
   };
   const roleGroups = groups[CU.role] || groups.aud;
   document.getElementById('sb-nav').innerHTML = roleGroups.map((g,gi) => `
-    <div class="sb-group${gi===0?' open':''}" id="sbg-${gi}" onclick="toggleGroup(${gi})">
+    <div class="sb-group-header" id="sbg-${gi}" onclick="toggleGroup(${gi})">
       <div class="sb-group-label">${g.label}</div>
-      <span class="sb-group-arrow">▶</span>
+      <span class="sb-group-arrow" id="sba-${gi}">▶</span>
     </div>
     <div class="sb-group-items" id="sbgi-${gi}">
-      ${g.items.map(n=>`<div class="ni" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('')}
+      ${g.items.map(n=>`<div class="ni" id="ni-${n.id}" onclick="event.stopPropagation();showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('')}
     </div>`).join('');
 
   const th=document.getElementById('d-th');
