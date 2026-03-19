@@ -3,115 +3,185 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Hera Groupe — Optimisation sociale</title>
+<title>HERA GROUPE — Suivi Optimisation Sociale</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
+:root {
+  --bordeaux:#9B1C31; --bordeaux-l:#B52238; --bordeaux-pale:#FDF0F2;
+  --or:#C4982A; --or-l:#D4AA40; --or-pale:#FDFAF3;
+  --g50:#FAFAFA; --g100:#F4F4F5; --g200:#E4E4E7; --g300:#D1D1D6;
+  --g400:#A1A1AA; --g500:#71717A; --g700:#3F3F46; --g900:#18181B;
+  --white:#FFFFFF; --text:#18181B; --text2:#52525B; --text3:#A1A1AA;
+  --ff-serif:'Playfair Display',Georgia,serif;
+  --ff-body:'Plus Jakarta Sans',sans-serif;
+  --ff-mono:'JetBrains Mono',monospace;
+  --sh-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:13px;color:#1a1a1a;background:#f5f5f5}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.5rem;background:#fff;border-bottom:1px solid #e5e5e5;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50}
-.logo{font-size:15px;font-weight:600;color:#1F3864}.logo small{font-weight:400;color:#888;font-size:12px;margin-left:8px}
-.nav{display:flex;gap:4px;flex-wrap:wrap}
-.nb{padding:5px 13px;font-size:12px;border-radius:6px;border:1px solid transparent;cursor:pointer;color:#666;background:transparent;font-family:inherit}
-.nb.on{background:#e8f0fe;color:#1a56db;border-color:#c7d9f9}
-.nb:hover:not(.on){background:#f5f5f5}
-.main{padding:1.25rem 1.5rem;max-width:1400px;margin:0 auto}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:8px;margin-bottom:1rem}
-.kpi{background:#fff;border-radius:8px;padding:.75rem 1rem;border:1px solid #e5e5e5}
-.kpi-l{font-size:11px;color:#888;margin-bottom:3px}
-.kpi-v{font-size:20px;font-weight:600;line-height:1}
-.kpi-v.grn{color:#1e8449}.kpi-v.amb{color:#d35400}.kpi-v.red{color:#c0392b}
-.kpi-s{font-size:10px;color:#aaa;margin-top:2px}
-.card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.9rem}
-.card-ttl{font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.8rem}
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.8rem;align-items:center}
-.filters input,.filters select{font-size:12px;padding:5px 8px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#1a1a1a;font-family:inherit}
-.filters input{flex:1;min-width:140px}
-.btn{font-size:11px;padding:5px 11px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font-family:inherit;white-space:nowrap}
-.btn:hover{background:#f5f5f5}
-.btn.pri{background:#1a56db;color:#fff;border-color:#1a56db}
-.btn.pri:hover{background:#1648c0}
-.btn.sml{font-size:10px;padding:3px 8px}
-.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid #e5e5e5}
-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}
-th{font-weight:600;color:#666;padding:7px 11px;text-align:left;border-bottom:1px solid #e5e5e5;background:#fafafa;white-space:nowrap;user-select:none;cursor:pointer}
-th:hover{color:#1a1a1a}
-td{padding:7px 11px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+body{background:var(--g50);color:var(--text);font-family:var(--ff-body);min-height:100vh}
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--g50);padding:2rem}
+.login-box{background:var(--white);border:1px solid var(--g200);border-radius:16px;padding:2.5rem;width:100%;max-width:560px;box-shadow:var(--sh-md)}
+.login-eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bordeaux);font-family:var(--ff-mono);margin-bottom:8px}
+.login-title{font-family:var(--ff-serif);font-size:32px;font-weight:400;color:var(--g900);margin-bottom:6px}
+.login-title em{font-style:italic;color:var(--bordeaux)}
+.login-sub{font-size:13px;color:var(--text2);margin-bottom:2rem}
+.login-section{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--ff-mono);margin-bottom:10px;margin-top:1.25rem}
+.login-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.5rem}
+.login-card{border:1px solid var(--g200);border-radius:10px;padding:.9rem;cursor:pointer;background:var(--white);transition:all .15s}
+.login-card:hover{border-color:var(--bordeaux);background:var(--bordeaux-pale);box-shadow:var(--sh-sm)}
+.login-card.sel{border:2px solid var(--bordeaux);background:var(--bordeaux-pale)}
+.lc-init{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-size:11px;font-weight:700;margin-bottom:6px;font-family:var(--ff-mono)}
+.lc-role{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:3px;font-family:var(--ff-mono)}
+.login-card.sel .lc-role{color:var(--bordeaux)}
+.lc-name{font-size:12px;font-weight:600;color:var(--text)}
+.init-assoc{background:var(--bordeaux-pale);color:var(--bordeaux)}
+.init-mgr{background:#EFF6FF;color:#1e40af}
+.init-clt{background:#F0FDF4;color:#15803d}
+.init-aud{background:var(--or-pale);color:var(--or)}
+.login-btn{width:100%;padding:12px;border-radius:8px;border:none;background:var(--bordeaux);color:var(--white);font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;font-family:var(--ff-body);opacity:.4;transition:all .2s;margin-top:1.5rem;box-shadow:0 4px 16px rgba(155,28,49,.2)}
+.login-btn.ready{opacity:1}
+.login-btn.ready:hover{background:var(--bordeaux-l);transform:translateY(-1px)}
+/* SHELL */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:256px;min-height:100vh;background:var(--white);border-right:1px solid var(--g200);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100}
+.sb-brand{padding:24px 24px 18px;border-bottom:1px solid var(--g100)}
+.sb-brand-name{font-family:var(--ff-serif);font-size:18px;font-weight:600;color:var(--g900)}
+.sb-brand-name em{font-style:italic;color:var(--bordeaux)}
+.sb-brand-sub{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--ff-mono);margin-top:4px}
+.sb-user{display:flex;align-items:center;gap:10px;padding:14px 24px;border-bottom:1px solid var(--g100)}
+.sb-user-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--ff-mono)}
+.sb-user-name{font-size:12px;font-weight:600;color:var(--text)}
+.sb-user-role{font-size:10px;color:var(--text3)}
+.sb-nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-sect{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:10px 24px 4px;font-family:var(--ff-mono)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 24px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);border-left:2px solid transparent;transition:all .15s;text-decoration:none}
+.nav-item:hover{color:var(--text);background:var(--g50)}
+.nav-item.on{color:var(--bordeaux);border-left-color:var(--bordeaux);background:var(--bordeaux-pale);font-weight:600}
+.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--bordeaux);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;font-family:var(--ff-mono)}
+.sb-footer{padding:14px 24px;border-top:1px solid var(--g100)}
+.sb-logout{font-size:11px;color:var(--text3);cursor:pointer;font-family:var(--ff-mono)}
+.sb-logout:hover{color:var(--bordeaux)}
+.main{margin-left:256px;flex:1;padding:40px 48px;max-width:calc(100vw - 256px);min-height:100vh}
+/* PAGES */
+.page{display:none}
+.page.on{display:block;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+/* PAGE HEADERS */
+.page-eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bordeaux);font-family:var(--ff-mono);margin-bottom:6px}
+.page-title{font-family:var(--ff-serif);font-size:34px;font-weight:400;color:var(--g900);margin-bottom:6px}
+.page-title em{font-style:italic;color:var(--bordeaux)}
+.page-sub{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:28px}
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem}
+.kpi{background:var(--white);border:1px solid var(--g200);border-radius:10px;padding:16px 18px;box-shadow:var(--sh-sm)}
+.kpi-l{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;font-family:var(--ff-mono)}
+.kpi-v{font-family:var(--ff-serif);font-size:28px;font-weight:400;line-height:1}
+.kpi-v.red{color:var(--bordeaux)}.kpi-v.amb{color:var(--or)}.kpi-v.grn{color:#15803d}
+.kpi-s{font-size:10px;color:var(--text3);margin-top:4px}
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:20px 24px;box-shadow:var(--sh-sm);margin-bottom:1rem}
+.card-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);font-family:var(--ff-mono);margin-bottom:10px}
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--g200)}
+table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white)}
+th{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:10px 14px;text-align:left;border-bottom:1px solid var(--g200);background:var(--g50);white-space:nowrap;font-family:var(--ff-mono)}
+td{padding:10px 14px;border-bottom:1px solid var(--g100);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafafa}
-.bx{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;white-space:nowrap;display:inline-block}
+tr:hover td{background:var(--g50)}
+/* BADGES */
+.bx{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;white-space:nowrap;display:inline-block;letter-spacing:.5px;text-transform:uppercase;font-family:var(--ff-mono)}
 .b-ok{background:#d4edda;color:#155724}
 .b-att{background:#fff3cd;color:#856404}
 .b-ko{background:#f8d7da;color:#721c24}
-.b-info{background:#d1ecf1;color:#0c5460}
-.b-afact{background:#fff3cd;color:#856404}
-.b-fact{background:#d1ecf1;color:#0c5460}
-.sect{display:none}.sect.on{display:block}
-.pager{display:flex;align-items:center;gap:7px;justify-content:flex-end;margin-top:6px;font-size:11px;color:#888}
-.pager button{font-size:11px;padding:3px 8px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit}
-.pager button:disabled{opacity:.35;cursor:default}
-.alert-row{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #f0f0f0}
+.b-val{background:var(--bordeaux-pale);color:var(--bordeaux);border:1px solid rgba(155,28,49,.2)}
+.b-info{background:#EFF6FF;color:#1e40af}
+/* FILTERS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+.filters input,.filters select{font-size:12px;padding:6px 10px;border:1px solid var(--g300);border-radius:6px;background:var(--white);color:var(--text);font-family:var(--ff-body)}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--bordeaux)}
+.filters input{flex:1;min-width:160px}
+.btn{font-size:11px;font-weight:600;padding:6px 14px;border:1px solid var(--g300);border-radius:6px;background:var(--white);color:var(--text2);cursor:pointer;font-family:var(--ff-body);white-space:nowrap;letter-spacing:.3px}
+.btn:hover{background:var(--g50);border-color:var(--g400)}
+.btn.pri{background:var(--bordeaux);color:#fff;border-color:var(--bordeaux);box-shadow:0 2px 8px rgba(155,28,49,.2)}
+.btn.pri:hover{background:var(--bordeaux-l)}
+.btn.or{background:var(--or);color:#fff;border-color:var(--or)}
+.btn.sml{font-size:10px;padding:4px 10px}
+/* PAGER */
+.pager{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--ff-mono)}
+.pager button{font-size:11px;padding:4px 10px;border:1px solid var(--g200);border-radius:6px;background:var(--white);cursor:pointer;font-family:var(--ff-mono)}
+.pager button:disabled{opacity:.3;cursor:default}
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1rem}
+.kb-col{background:var(--g50);border:1px solid var(--g200);border-radius:10px;padding:12px}
+.kb-col-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.kb-col-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);font-family:var(--ff-mono)}
+.kb-col-cnt{font-size:10px;font-weight:700;background:var(--g200);color:var(--text3);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono)}
+.kb-card{background:var(--white);border:1px solid var(--g200);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:all .15s;box-shadow:var(--sh-sm)}
+.kb-card:hover{border-color:var(--bordeaux);box-shadow:var(--sh-md);transform:translateY(-1px)}
+.kb-card.urgent{border-left:3px solid var(--bordeaux)}
+.kb-card.pending{border-left:3px solid var(--or)}
+.kb-client{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
+.kb-task{font-size:11px;color:var(--text2);margin-bottom:6px}
+.kb-meta{display:flex;align-items:center;justify-content:space-between}
+.kb-ref{font-size:9px;color:var(--text3);font-family:var(--ff-mono)}
+/* ALERT */
+.alert-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--g100)}
 .alert-row:last-child{border-bottom:none}
-.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.dot-r{background:#c0392b}.dot-a{background:#d35400}
-.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.bar-lbl{font-size:11px;color:#888;width:48px;flex-shrink:0}
-.bar-track{flex:1;height:7px;background:#f0f0f0;border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px}
-.bar-val{font-size:11px;color:#888;min-width:22px;text-align:right}
-.eco-v{font-weight:600;color:#1e8449}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.9rem}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}}
-/* Login */
-.login-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:#f5f5f5}
-.login-box{background:#fff;border-radius:12px;border:1px solid #e5e5e5;padding:2rem;width:100%;max-width:520px}
-.login-logo{font-size:22px;font-weight:700;color:#1F3864;margin-bottom:4px}
-.login-sub{font-size:12px;color:#888;margin-bottom:1.5rem}
-.login-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
-.login-card{border:1px solid #e5e5e5;border-radius:8px;padding:.9rem;cursor:pointer;background:#fff;transition:all .15s}
-.login-card:hover{background:#f5f5f5;border-color:#ccc}
-.login-card.selected{border:2px solid #1a56db;background:#e8f0fe}
-.login-card-role{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:3px}
-.login-card.selected .login-card-role{color:#1a56db}
-.login-card-name{font-size:13px;font-weight:500;color:#1a1a1a}
-.login-card-init{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-size:11px;font-weight:700;margin-bottom:6px}
-.init-associe{background:#EEEDFE;color:#3C3489}
-.init-manager{background:#d1ecf1;color:#0c5460}
-.init-collab{background:#d4edda;color:#155724}
-.init-audit{background:#fff3cd;color:#856404}
-.login-btn{width:100%;padding:10px;border-radius:8px;border:none;background:#1a56db;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;opacity:.4;transition:opacity .15s}
-.login-btn.ready{opacity:1}
-.login-btn.ready:hover{background:#1648c0}
-/* Sync */
-.sync-bar{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:8px;margin-bottom:1rem;font-size:12px;border:1px solid #e5e5e5;background:#fafafa}
-.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sync-dot.ok{background:#27ae60}
-.sync-dot.loading{background:#f39c12;animation:pulse 1s infinite}
-.sync-dot.err{background:#e74c3c}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-/* Role banner */
-.role-banner{padding:8px 12px;border-radius:8px;margin-bottom:1rem;font-size:12px}
-.role-banner.collab{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
-.role-banner.manager{background:#d1ecf1;color:#0c5460;border:1px solid #bee5eb}
-.role-banner.associe{background:#EEEDFE;color:#3C3489;border:1px solid #c5c0f8}
-.role-banner.audit{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
-/* User pill */
-.user-pill{display:flex;align-items:center;gap:7px;padding:4px 12px;border:1px solid #ddd;border-radius:20px;cursor:pointer;font-size:12px;background:#fff}
-.user-pill:hover{background:#f5f5f5}
-.user-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
-/* Panel */
-.pov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:flex-start;justify-content:flex-end}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dot-r{background:var(--bordeaux)}.dot-a{background:var(--or)}.dot-g{background:#15803d}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1rem}
+@media(max-width:768px){.g2{grid-template-columns:1fr}}
+/* BARS */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-lbl{font-size:10px;color:var(--text3);width:48px;flex-shrink:0;font-family:var(--ff-mono)}
+.bar-track{flex:1;height:6px;background:var(--g200);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.bar-val{font-size:10px;color:var(--text3);min-width:22px;text-align:right;font-family:var(--ff-mono)}
+/* VALIDATION FILE */
+.val-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100)}
+.val-row:last-child{border-bottom:none}
+.val-info{flex:1;min-width:0}
+.val-client{font-size:13px;font-weight:600;color:var(--text)}
+.val-detail{font-size:11px;color:var(--text2);margin-top:2px}
+.val-actions{display:flex;gap:6px;flex-shrink:0}
+/* PANEL */
+.pov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;display:none;align-items:flex-start;justify-content:flex-end}
 .pov.open{display:flex}
-.panel{width:420px;max-width:96vw;background:#fff;border-left:1px solid #e5e5e5;min-height:100vh;padding:1.4rem;overflow-y:auto;box-shadow:-4px 0 20px rgba(0,0,0,.1)}
-.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
-.pttl{font-size:16px;font-weight:600}
-.psub{font-size:11px;color:#888;margin-top:2px}
-.pcls{font-size:20px;cursor:pointer;color:#888;background:none;border:none;font-family:inherit;line-height:1}
-.pcls:hover{color:#1a1a1a}
+.panel{width:460px;max-width:96vw;background:var(--white);border-left:1px solid var(--g200);min-height:100vh;padding:1.5rem;overflow-y:auto;box-shadow:-8px 0 32px rgba(0,0,0,.1)}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
+.panel-ttl{font-family:var(--ff-serif);font-size:20px;font-weight:400;color:var(--g900)}
+.panel-ttl em{font-style:italic;color:var(--bordeaux)}
+.panel-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.pcls{font-size:20px;cursor:pointer;color:var(--text3);background:none;border:none;font-family:var(--ff-body);line-height:1}
+.pcls:hover{color:var(--text)}
+.fl{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.8rem}
 .fl1{margin-bottom:.8rem}
-.fl-lbl{font-size:11px;color:#666;margin-bottom:4px;font-weight:600}
-.fs,.fta{width:100%;font-size:12px;padding:7px 10px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#1a1a1a;font-family:inherit}
-.fs:focus,.fta:focus{outline:none;border-color:#1a56db}
-.fta{resize:vertical;min-height:60px}
-.sep{border:none;border-top:1px solid #f0f0f0;margin:.9rem 0}
+.fl-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);font-family:var(--ff-mono);margin-bottom:4px}
+.fi,.fs,.fta{width:100%;font-size:12px;padding:8px 11px;border:1px solid var(--g300);border-radius:6px;background:var(--white);color:var(--text);font-family:var(--ff-body)}
+.fi:focus,.fs:focus,.fta:focus{outline:none;border-color:var(--bordeaux)}
+.fta{resize:vertical;min-height:70px}
+.sep{border:none;border-top:1px solid var(--g100);margin:1rem 0}
+/* SYNC */
+.sync-bar{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:8px;margin-bottom:1.25rem;font-size:11px;border:1px solid var(--g200);background:var(--g50);font-family:var(--ff-mono)}
+.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sync-dot.ok{background:#15803d}
+.sync-dot.loading{background:var(--or);animation:pulse 1s infinite}
+.sync-dot.err{background:var(--bordeaux)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* WELCOME */
+.welcome-badge{display:inline-flex;align-items:center;gap:8px;background:var(--bordeaux-pale);color:var(--bordeaux);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px;font-family:var(--ff-mono);border:1px solid rgba(155,28,49,.15)}
+.welcome-title{font-family:var(--ff-serif);font-size:42px;font-weight:400;line-height:1.1;color:var(--g900);margin-bottom:12px}
+.welcome-title em{font-style:italic;color:var(--bordeaux)}
+.welcome-text{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:28px;max-width:520px}
+.welcome-stats{display:flex;gap:40px;margin-top:36px;padding-top:28px;border-top:1px solid var(--g200)}
+.stat-num{font-family:var(--ff-serif);font-size:32px;color:var(--g900);line-height:1}
+.stat-lbl{font-size:9px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:1.5px;font-family:var(--ff-mono)}
+/* ECO */
+.eco{font-weight:600;color:#15803d}
 </style>
 </head>
 <body>
@@ -119,111 +189,186 @@ tr:hover td{background:#fafafa}
 <!-- LOGIN -->
 <div id="login-wrap" class="login-wrap">
   <div class="login-box">
-    <div class="login-logo">Hera Groupe</div>
-    <div class="login-sub">Optimisation sociale — sélectionnez votre profil</div>
-    <div class="login-grid" id="login-grid"></div>
-    <button class="login-btn" id="login-btn" onclick="doLogin()">Accéder au dashboard</button>
+    <div class="login-eyebrow">Hera Groupe</div>
+    <div class="login-title">Suivi <em>optimisation sociale</em></div>
+    <div class="login-sub">Sélectionnez votre profil pour accéder à votre espace personnalisé.</div>
+    <div class="login-section">Associés</div>
+    <div class="login-grid" id="lg-assoc"></div>
+    <div class="login-section">Manager</div>
+    <div class="login-grid" id="lg-mgr"></div>
+    <div class="login-section">Consultants</div>
+    <div class="login-grid" id="lg-clt"></div>
+    <div class="login-section">Audit</div>
+    <div class="login-grid" id="lg-aud"></div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Accéder à mon espace →</button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app" style="display:none">
-  <div class="topbar">
-    <div class="logo">Hera Groupe <small id="app-ctx"></small></div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <div class="nav" id="main-nav"></div>
-      <div class="user-pill" onclick="logout()">
-        <div class="user-avatar" id="user-avatar"></div>
-        <span id="user-label"></span>
-        <span style="color:#aaa;font-size:10px">· Déconnexion</span>
+  <div class="shell">
+    <div class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-brand-name">Hera <em>Groupe</em></div>
+        <div class="sb-brand-sub">Optimisation sociale</div>
       </div>
-    </div>
-  </div>
-
-  <div class="main">
-    <div id="sync-bar" class="sync-bar">
-      <div class="sync-dot loading" id="sync-dot"></div>
-      <span id="sync-msg">Connexion à SharePoint...</span>
-      <button class="btn sml" onclick="syncData()" style="margin-left:auto">Actualiser</button>
-      <span id="sync-time" style="font-size:10px;color:#aaa"></span>
-    </div>
-
-    <div id="role-banner" class="role-banner"></div>
-
-    <div class="sect" id="sect-clients">
-      <div class="kpis" id="kpi-c"></div>
-      <div class="card">
-        <div class="filters">
-          <input type="text" id="c-s" placeholder="Rechercher client, société..." oninput="renderC()"/>
-          <select id="c-st" onchange="renderC()"><option value="">Tous statuts</option><option>OK</option><option>En attente</option><option>KO</option></select>
-          <select id="c-sv" onchange="renderC()" style="display:none"><option value="">Tous référents</option></select>
-          <button class="btn" id="btn-al15" onclick="filterAl()" style="display:none">⚠ Inactifs 15j+</button>
-          <button class="btn" onclick="resetC()">Tout</button>
+      <div class="sb-user">
+        <div class="sb-user-av" id="sb-av"></div>
+        <div>
+          <div class="sb-user-name" id="sb-name"></div>
+          <div class="sb-user-role" id="sb-role"></div>
         </div>
-        <div class="tbl-wrap"><table><thead><tr id="thead-c"></tr></thead><tbody id="tbl-c"></tbody></table></div>
-        <div class="pager"><span id="pg-c-i"></span><button onclick="pgC(-1)" id="pc-p">← Préc.</button><button onclick="pgC(1)" id="pc-n">Suiv. →</button></div>
+      </div>
+      <div class="sb-nav" id="sb-nav"></div>
+      <div class="sb-footer">
+        <div class="sb-logout" onclick="logout()">← Changer de profil</div>
       </div>
     </div>
 
-    <div class="sect" id="sect-leviers">
-      <div class="kpis" id="kpi-l"></div>
-      <div class="card">
-        <div class="filters">
-          <input type="text" id="l-s" placeholder="Client, levier..." oninput="renderL()"/>
-          <select id="l-lv" onchange="renderL()"><option value="">Tous leviers</option></select>
-          <select id="l-pr" onchange="renderL()"><option value="">Passé + Futur</option><option value="Passé">Passé</option><option value="Futur">Futur</option></select>
+    <div class="main">
+      <div id="sync-bar" class="sync-bar">
+        <div class="sync-dot loading" id="sync-dot"></div>
+        <span id="sync-msg">Chargement des données...</span>
+        <button class="btn sml" onclick="syncData()" style="margin-left:auto">Actualiser</button>
+        <span id="sync-time" style="margin-left:8px;color:var(--text3)"></span>
+      </div>
+
+      <!-- ACCUEIL -->
+      <div class="page" id="page-accueil">
+        <div class="welcome-badge" id="w-badge">Bienvenue</div>
+        <div class="welcome-title" id="w-title"></div>
+        <div class="welcome-text" id="w-text"></div>
+        <div class="kpis" id="kpi-home"></div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-label">Alertes prioritaires</div>
+            <div id="home-alerts"></div>
+          </div>
+          <div class="card">
+            <div class="card-label" id="val-label">Validations en attente</div>
+            <div id="home-val"></div>
+          </div>
         </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Client</th><th>Société</th><th>Levier</th><th>Période</th><th>Années</th><th>Économies</th><th>Honoraires HT</th><th>Statut</th></tr></thead>
-          <tbody id="tbl-l"></tbody>
-        </table></div>
       </div>
-    </div>
 
-    <div class="sect" id="sect-facturation">
-      <div class="kpis" id="kpi-f"></div>
-      <div class="grid2">
-        <div class="card" style="margin-bottom:0"><div class="card-ttl">Honoraires par client</div><div id="chart-cl"></div></div>
-        <div class="card" style="margin-bottom:0"><div class="card-ttl">Honoraires par levier</div><div id="chart-lv"></div></div>
-      </div>
-      <div style="margin-bottom:.9rem"></div>
-      <div class="card">
-        <div class="filters">
-          <input type="text" id="f-s" placeholder="Client..." oninput="renderF()"/>
-          <select id="f-st" onchange="renderF()"><option value="">Tous statuts</option><option>À facturer</option><option>Facturé</option></select>
+      <!-- DOSSIERS -->
+      <div class="page" id="page-dossiers">
+        <div class="page-eyebrow">Suivi</div>
+        <div class="page-title" id="dos-title">Dossiers</div>
+        <div class="page-sub" id="dos-sub"></div>
+        <div class="kpis" id="kpi-dos"></div>
+        <div class="card">
+          <div class="filters">
+            <input type="text" id="d-s" placeholder="Rechercher client, société..." oninput="renderDos()"/>
+            <select id="d-st" onchange="renderDos()"><option value="">Tous statuts</option><option>OK</option><option>En attente</option><option>KO</option></select>
+            <select id="d-sv" onchange="renderDos()" style="display:none"><option value="">Tous référents</option></select>
+            <button class="btn" id="d-al-btn" onclick="filterAl()" style="display:none">⚑ Inactifs 15j+</button>
+            <button class="btn" onclick="resetDos()">Réinitialiser</button>
+          </div>
+          <div class="tbl-wrap"><table>
+            <thead><tr id="dos-thead"></tr></thead>
+            <tbody id="dos-tbody"></tbody>
+          </table></div>
+          <div class="pager"><span id="dos-pginfo"></span><button onclick="pgDos(-1)" id="dos-pp">← Préc.</button><button onclick="pgDos(1)" id="dos-pn">Suiv. →</button></div>
         </div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Client</th><th>Société</th><th>Levier</th><th>Période</th><th>Économies</th><th>Taux</th><th>Honoraires HT</th><th>Statut</th><th>N° facture</th><th>Échéance</th></tr></thead>
-          <tbody id="tbl-f"></tbody>
-        </table></div>
       </div>
-    </div>
 
-    <div class="sect" id="sect-alertes">
-      <div class="kpis" id="kpi-a"></div>
-      <div class="card"><div class="card-ttl">Inactivité ≥ 15 jours — règle automatique</div><div id="al-list"></div></div>
-    </div>
+      <!-- KANBAN -->
+      <div class="page" id="page-kanban">
+        <div class="page-eyebrow">Mes tâches</div>
+        <div class="page-title">Tableau de <em>bord</em></div>
+        <div class="page-sub">Vos dossiers organisés par étape d'avancement.</div>
+        <div class="kanban" id="kanban-board"></div>
+      </div>
 
-    <div class="sect" id="sect-charge">
-      <div class="kpis" id="kpi-ch"></div>
-      <div class="grid2">
-        <div class="card" style="margin-bottom:0"><div class="card-ttl">Charge par référent</div><div id="ch-sv"></div></div>
-        <div class="card" style="margin-bottom:0"><div class="card-ttl">Charge par gestionnaire</div><div id="ch-gv"></div></div>
+      <!-- VALIDATIONS -->
+      <div class="page" id="page-validations">
+        <div class="page-eyebrow">File de validation</div>
+        <div class="page-title">En <em>attente</em> de validation</div>
+        <div class="page-sub">Tâches soumises par vos consultants, en attente de votre décision.</div>
+        <div class="kpis" id="kpi-val"></div>
+        <div class="card">
+          <div id="val-list"></div>
+        </div>
+      </div>
+
+      <!-- LEVIERS -->
+      <div class="page" id="page-leviers">
+        <div class="page-eyebrow">Analyse</div>
+        <div class="page-title">Leviers d'<em>optimisation</em></div>
+        <div class="page-sub">Vue consolidée des économies identifiées et honoraires générés.</div>
+        <div class="kpis" id="kpi-lev"></div>
+        <div class="card">
+          <div class="filters">
+            <input type="text" id="l-s" placeholder="Client, levier..." oninput="renderLev()"/>
+            <select id="l-lv" onchange="renderLev()"><option value="">Tous leviers</option></select>
+            <select id="l-pr" onchange="renderLev()"><option value="">Passé + Futur</option><option value="Passé">Passé</option><option value="Futur">Futur</option></select>
+          </div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Client</th><th>Société</th><th>Levier</th><th>Période</th><th>Années</th><th>Économies</th><th>Hon. HT</th><th>Statut</th></tr></thead>
+            <tbody id="lev-tbody"></tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- FACTURATION -->
+      <div class="page" id="page-fact">
+        <div class="page-eyebrow">Finance</div>
+        <div class="page-title">Facturation</div>
+        <div class="page-sub">Suivi des honoraires générés et statuts de facturation.</div>
+        <div class="kpis" id="kpi-fact"></div>
+        <div class="g2">
+          <div class="card" style="margin-bottom:0"><div class="card-label">Par client</div><div id="fact-cl"></div></div>
+          <div class="card" style="margin-bottom:0"><div class="card-label">Par levier</div><div id="fact-lv"></div></div>
+        </div>
+        <div style="margin-bottom:1rem"></div>
+        <div class="card">
+          <div class="filters">
+            <input type="text" id="f-s" placeholder="Client..." oninput="renderFact()"/>
+            <select id="f-st" onchange="renderFact()"><option value="">Tous statuts</option><option>À facturer</option><option>Facturé</option></select>
+          </div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Client</th><th>Société</th><th>Levier</th><th>Période</th><th>Économies</th><th>Taux</th><th>Hon. HT</th><th>Statut</th><th>N° facture</th></tr></thead>
+            <tbody id="fact-tbody"></tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- ALERTES -->
+      <div class="page" id="page-alertes">
+        <div class="page-eyebrow">Surveillance</div>
+        <div class="page-title">Alertes <em>actives</em></div>
+        <div class="page-sub">Dossiers nécessitant une action immédiate.</div>
+        <div class="kpis" id="kpi-al"></div>
+        <div class="card">
+          <div class="card-label">Inactivité ≥ 15 jours — règle automatique</div>
+          <div id="al-list"></div>
+        </div>
+      </div>
+
+      <!-- CHARGE -->
+      <div class="page" id="page-charge">
+        <div class="page-eyebrow">RH</div>
+        <div class="page-title">Charge <em>équipe</em></div>
+        <div class="page-sub">Répartition des dossiers par référent et gestionnaire.</div>
+        <div class="kpis" id="kpi-ch"></div>
+        <div class="g2">
+          <div class="card" style="margin-bottom:0"><div class="card-label">Par référent</div><div id="ch-sv"></div></div>
+          <div class="card" style="margin-bottom:0"><div class="card-label">Par gestionnaire</div><div id="ch-gv"></div></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL -->
+<!-- PANEL DOSSIER -->
 <div class="pov" id="pov" onclick="maybeClose(event)">
 <div class="panel">
-  <div class="ph"><div><div class="pttl" id="p-ttl"></div><div class="psub" id="p-sub"></div></div><button class="pcls" onclick="closeP()">✕</button></div>
-  <div class="fl1"><div class="fl-lbl">Statut</div><select class="fs" id="p-st"><option>OK</option><option>En attente</option><option>KO</option></select></div>
-  <div class="fl1"><div class="fl-lbl">Action</div>
-    <select class="fs" id="p-ac"><option value="">—</option><option>Néant</option><option>En production chez HERA</option><option>En attente client</option><option>En instruction organisme tiers</option><option>Relance nécessaire</option><option>Dossier clôturé</option></select>
+  <div class="panel-head">
+    <div><div class="panel-ttl" id="p-ttl">Dossier</div><div class="panel-sub" id="p-sub"></div></div>
+    <button class="pcls" onclick="closeP()">✕</button>
   </div>
-  <div class="fl1"><div class="fl-lbl">Jours sans mise à jour</div><input type="number" id="p-ji" min="0" class="fs"/></div>
-  <div class="fl1"><div class="fl-lbl">Commentaire</div><textarea class="fta" id="p-co"></textarea></div>
+  <div id="p-role-fields"></div>
   <div class="sep"></div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
     <button class="btn" onclick="closeP()">Annuler</button>
@@ -233,86 +378,71 @@ tr:hover td{background:#fafafa}
 </div>
 
 <script>
-// Connexion via JSON généré par Power Automate
-const USERS=[
-  {id:'TME',name:'Tom Mezonniaud',    role:'associe',cls:'init-associe',lbl:'Associé'},
-  {id:'EDE',name:'Edouard Dechelette',role:'associe',cls:'init-associe',lbl:'Associé'},
-  {id:'RBA',name:'Romane Basle',      role:'manager',cls:'init-manager',lbl:'Manager'},
-  {id:'MJO',name:'Margaux Jouanin',   role:'collab', cls:'init-collab', lbl:'Consultant'},
-  {id:'MFY',name:'Myriam Fock-Yee',   role:'collab', cls:'init-collab', lbl:'Consultant'},
-  {id:'LHE',name:'Laura Hermans',     role:'collab', cls:'init-collab', lbl:'Consultant'},
-  {id:'ZGE',name:'Zélie Gerbal',      role:'collab', cls:'init-collab', lbl:'Consultant'},
-  {id:'VDP',name:'Valérie Dit Parny', role:'audit',  cls:'init-audit',  lbl:"Chargé d'audit"},
-];
-const LEVIERS=['LODEOM - Changement de barème','LODEOM - Pluriactivité','RPA','Neutralisation franchissement seuil','Taux fonction support'];
+const JSON_URL='https://tommezonniaud-sudo.github.io/hera-dashboard/data.json';
 const TAUX_DEF=35,SEUIL=15;
-let currentUser=null,DB=[],FACT_DB=[],editId=null,cFil=[],cSK='client',cSA=true,cP=1;
+const LEVIERS=['LODEOM - Changement de barème','LODEOM - Pluriactivité','RPA','Neutralisation franchissement seuil','Taux fonction support'];
+const ETAPES=['Analyse préliminaire','Collecte de documents','Production du rapport','Validation interne','Restitution client','Suivi post-mission'];
+
+const USERS=[
+  {id:'TME',name:'Tom Mezonniaud',    prenom:'Tom',   role:'assoc', cls:'init-assoc', lbl:'Associé'},
+  {id:'EDE',name:'Edouard Dechelette',prenom:'Edouard',role:'assoc',cls:'init-assoc', lbl:'Associé'},
+  {id:'RBA',name:'Romane Basle',      prenom:'Romane', role:'mgr',  cls:'init-mgr',   lbl:'Manager'},
+  {id:'MJO',name:'Margaux Jouanin',   prenom:'Margaux',role:'clt',  cls:'init-clt',   lbl:'Consultant'},
+  {id:'MFY',name:'Myriam Fock-Yee',   prenom:'Myriam', role:'clt',  cls:'init-clt',   lbl:'Consultant'},
+  {id:'LHE',name:'Laura Hermans',     prenom:'Laura',  role:'clt',  cls:'init-clt',   lbl:'Consultant'},
+  {id:'ZGE',name:'Zélie Gerbal',      prenom:'Zélie',  role:'clt',  cls:'init-clt',   lbl:'Consultant'},
+  {id:'VDP',name:'Valérie Dit Parny', prenom:'Valérie',role:'aud',  cls:'init-aud',   lbl:"Chargé d'audit"},
+];
+
+let CU=null, DB=[], FACT_DB=[], editId=null;
+let dFil=[], dSK='client', dSA=true, dP=1;
 const PS=20;
+
+// Tâches en mémoire (en prod : stockées dans Excel via Power Automate)
+let TASKS=[];
+
 const fmt=n=>n!=null?new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n):'—';
-const fmtD=s=>s?new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
 const isAl=d=>d.joursInactif>=SEUIL;
-const canFull=()=>currentUser&&['associe','manager'].includes(currentUser.role);
-const myDos=()=>canFull()?DB:DB.filter(d=>d.suivi===currentUser.id||d.gestion===currentUser.id);
+const isAssoc=()=>CU&&CU.role==='assoc';
+const isMgr=()=>CU&&(CU.role==='assoc'||CU.role==='mgr');
+const myDos=()=>isMgr()?DB:DB.filter(d=>d.suivi===CU.id||d.gestion===CU.id);
+const valPending=()=>TASKS.filter(t=>t.statut==='En attente validation');
 
-
-const JSON_URL = 'https://tommezonniaud-sudo.github.io/hera-dashboard/data.json';
-
+// ── SYNC ──────────────────────────────────────────────────────────────────────
 async function syncData(){
   setSyncState('loading','Chargement des données...');
   try{
-    const r = await fetch(JSON_URL);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const raw = await r.json();
-    // Format Power Automate : tableau d'objets avec clés Nom_Client, Referent, etc.
-    DB = (Array.isArray(raw) ? raw : []).map(row => {
-      const lev = [];
-      if(row.Levier_1_Nom) lev.push({
-        nom: row.Levier_1_Nom,
-        passe: {actif:true, annees:row.Levier_1_Annees||'', eco:parseFloat(row.Levier_1_Eco)||null, taux:parseFloat(row.Levier_1_Taux)||TAUX_DEF},
-        futur: {actif:false, annees:'', eco:null, taux:TAUX_DEF}
-      });
-      if(row.Levier_2_Nom) lev.push({
-        nom: row.Levier_2_Nom,
-        passe: {actif:true, annees:row.Levier_2_Annees||'', eco:parseFloat(row.Levier_2_Eco)||null, taux:parseFloat(row.Levier_2_Taux)||TAUX_DEF},
-        futur: {actif:false, annees:'', eco:null, taux:TAUX_DEF}
-      });
-      return {
-        id:      row.ID_Dossier,
-        client:  row.Nom_Client||'',
-        societe: row.Nom_Societe||'',
-        naf:     row.Code_NAF||'',
-        date:    row.Date_Signature||'',
-        suivi:   row.Referent||'',
-        gestion: row.Gestionnaire||'',
-        statut:  row.Statut_Dossier||'',
-        action:  row.Action||'',
-        joursInactif: parseInt(row.Jours_Inactif)||0,
-        leviers: lev,
-      };
+    const r=await fetch(JSON_URL);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const raw=await r.json();
+    DB=(Array.isArray(raw)?raw:[]).filter(r=>r.Nom_Client).map(row=>{
+      const lev=[];
+      if(row.Levier_1_Nom)lev.push({nom:row.Levier_1_Nom,passe:{actif:true,annees:row.Levier_1_Annees||'',eco:parseFloat(row.Levier_1_Eco)||null,taux:parseFloat(row.Levier_1_Taux)||TAUX_DEF},futur:{actif:false,annees:'',eco:null,taux:TAUX_DEF}});
+      if(row.Levier_2_Nom)lev.push({nom:row.Levier_2_Nom,passe:{actif:true,annees:row.Levier_2_Annees||'',eco:parseFloat(row.Levier_2_Eco)||null,taux:parseFloat(row.Levier_2_Taux)||TAUX_DEF},futur:{actif:false,annees:'',eco:null,taux:TAUX_DEF}});
+      return{id:row.ID_Dossier,client:row.Nom_Client||'',societe:row.Nom_Societe||'',naf:row.Code_NAF||'',date:row.Date_Signature||'',suivi:row.Referent||'',gestion:row.Gestionnaire||'',statut:row.Statut_Dossier||'',action:row.Action||'',joursInactif:parseInt(row.Jours_Inactif)||0,leviers:lev};
     });
-    FACT_DB = [];
-    setSyncState('ok', `Synchronisé — ${DB.length} dossiers chargés`);
-    document.getElementById('sync-time').textContent = 'Dernière sync : '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    FACT_DB=[];
+    // Générer des tâches de démo si vide
+    if(TASKS.length===0) generateDemoTasks();
+    setSyncState('ok',`Synchronisé — ${DB.length} dossiers`);
+    document.getElementById('sync-time').textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
     refreshAll();
   }catch(e){
-    setSyncState('err','Données non accessibles — mode démo actif ('+e.message+')');
+    setSyncState('err','Mode démo ('+e.message+')');
     loadDemo();
   }
 }
 function setSyncState(s,m){document.getElementById('sync-dot').className='sync-dot '+s;document.getElementById('sync-msg').textContent=m;}
-function parseDos(rows){
-  if(rows.length<3)return[];
-  return rows.slice(2).filter(r=>r[0]||r[1]).map(r=>{
-    const lev=[];
-    if(r[10])lev.push({nom:r[10],passe:{actif:true,annees:r[11]||'',eco:parseFloat(r[12])||null,taux:parseFloat(r[13])||TAUX_DEF},futur:{actif:false,annees:'',eco:null,taux:TAUX_DEF}});
-    if(r[14])lev.push({nom:r[14],passe:{actif:true,annees:r[15]||'',eco:parseFloat(r[16])||null,taux:parseFloat(r[17])||TAUX_DEF},futur:{actif:false,annees:'',eco:null,taux:TAUX_DEF}});
-    return{id:r[0],client:r[1]||'',societe:r[2]||'',date:r[4]||'',suivi:r[5]||'',gestion:r[6]||'',statut:r[7]||'',action:r[8]||'',joursInactif:parseInt(r[9])||0,leviers:lev};
+
+function generateDemoTasks(){
+  const dos=DB.slice(0,12);
+  dos.forEach((d,i)=>{
+    const etape=ETAPES[i%ETAPES.length];
+    const statuts=['À faire','En cours','En cours','Terminé','En attente validation'];
+    TASKS.push({id:'T'+i,dosId:d.id,client:d.client,societe:d.societe,etape,statut:statuts[i%statuts.length],ref:d.suivi,commentaire:''});
   });
 }
-function parseFact(rows){
-  if(rows.length<3)return[];
-  return rows.slice(2).filter(r=>r[0]||r[1]).map(r=>({dosId:r[0],client:r[1]||'',societe:r[2]||'',levier:r[3]||'',periode:r[4]||'',eco:parseFloat(r[5])||null,taux:parseFloat(r[6])||TAUX_DEF,statut:r[9]||'À facturer',numFacture:r[10]||'',echeance:r[11]||''}));
-}
+
 function loadDemo(){
   DB=[
     {id:1,client:'3 BRASSEURS',societe:'MERCUREST [GIE]',date:'2023-04-01',suivi:'TME',gestion:'RBA',statut:'En attente',action:'Dernière relance 04/07/25',joursInactif:18,leviers:[{nom:'LODEOM - Changement de barème',passe:{actif:true,annees:'2021-2022-2023',eco:180000,taux:35},futur:{actif:false,annees:'',eco:null,taux:35}}]},
@@ -320,173 +450,454 @@ function loadDemo(){
     {id:3,client:'CORSAIR',societe:'CORSAIR',date:'2021-01-01',suivi:'MJO',gestion:'MFY',statut:'En attente',action:'Relance nécessaire',joursInactif:35,leviers:[{nom:'LODEOM - Pluriactivité',passe:{actif:true,annees:'2021-2022',eco:95000,taux:35},futur:{actif:false,annees:'',eco:null,taux:35}}]},
     {id:4,client:'ARK ASSUR',societe:'ARK ASSUR',date:'2022-04-05',suivi:'LHE',gestion:'RBA',statut:'KO',action:'Néant',joursInactif:45,leviers:[]},
     {id:5,client:'DUBREUIL',societe:'AIR AUSTRAL',date:'2021-01-01',suivi:'EDE',gestion:'MJO',statut:'OK',action:'En production chez HERA',joursInactif:10,leviers:[{nom:'LODEOM - Changement de barème',passe:{actif:true,annees:'2021-2022-2023',eco:620000,taux:35},futur:{actif:false,annees:'',eco:null,taux:35}}]},
+    {id:6,client:'VINDEMIA',societe:'VINDEMIA',date:'2022-05-04',suivi:'MFY',gestion:'MFY',statut:'En attente',action:'Attente documents',joursInactif:25,leviers:[{nom:'Neutralisation franchissement seuil',passe:{actif:true,annees:'2022-2023',eco:210000,taux:35},futur:{actif:false,annees:'',eco:null,taux:35}}]},
+    {id:7,client:'GROUPAMA',societe:'GROUPAMA OI',date:'2022-11-14',suivi:'ZGE',gestion:'MFY',statut:'OK',action:'Néant',joursInactif:3,leviers:[{nom:'Taux fonction support',passe:{actif:true,annees:'2022-2023',eco:85000,taux:35},futur:{actif:false,annees:'',eco:null,taux:35}}]},
+    {id:8,client:'RFO',societe:'RFO',date:'2021-01-01',suivi:'TME',gestion:'MJO',statut:'En attente',action:'Relance requise',joursInactif:31,leviers:[]},
   ];
-  FACT_DB=[];refreshAll();
+  FACT_DB=[];
+  if(TASKS.length===0)generateDemoTasks();
+  setSyncState('err','Mode démo actif');
+  refreshAll();
 }
 
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
 function buildLoginGrid(){
-  document.getElementById('login-grid').innerHTML=USERS.map(u=>`
-    <div class="login-card" id="lc-${u.id}" onclick="selectUser('${u.id}')">
-      <div class="login-card-init ${u.cls}">${u.id}</div>
-      <div class="login-card-role">${u.lbl}</div>
-      <div class="login-card-name">${u.name}</div>
-    </div>`).join('');
+  const byRole={assoc:[],mgr:[],clt:[],aud:[]};
+  USERS.forEach(u=>byRole[u.role].push(u));
+  const render=(id,users)=>{
+    document.getElementById(id).innerHTML=users.map(u=>`
+      <div class="login-card" id="lc-${u.id}" onclick="selUser('${u.id}')">
+        <div class="lc-init ${u.cls}">${u.id}</div>
+        <div class="lc-role">${u.lbl}</div>
+        <div class="lc-name">${u.name}</div>
+      </div>`).join('');
+  };
+  render('lg-assoc',byRole.assoc);
+  render('lg-mgr',byRole.mgr);
+  render('lg-clt',byRole.clt);
+  render('lg-aud',byRole.aud);
 }
 let selUid=null;
-function selectUser(id){selUid=id;document.querySelectorAll('.login-card').forEach(c=>c.classList.remove('selected'));document.getElementById('lc-'+id).classList.add('selected');document.getElementById('login-btn').classList.add('ready');}
-function doLogin(){if(!selUid)return;currentUser=USERS.find(u=>u.id===selUid);document.getElementById('login-wrap').style.display='none';document.getElementById('app').style.display='block';buildApp();syncData();}
-function logout(){currentUser=null;selUid=null;document.getElementById('login-wrap').style.display='flex';document.getElementById('app').style.display='none';document.querySelectorAll('.login-card').forEach(c=>c.classList.remove('selected'));document.getElementById('login-btn').classList.remove('ready');}
+function selUser(id){selUid=id;document.querySelectorAll('.login-card').forEach(c=>c.classList.remove('sel'));document.getElementById('lc-'+id).classList.add('sel');document.getElementById('login-btn').classList.add('ready');}
+function doLogin(){if(!selUid)return;CU=USERS.find(u=>u.id===selUid);document.getElementById('login-wrap').style.display='none';document.getElementById('app').style.display='block';buildApp();syncData();}
+function logout(){CU=null;selUid=null;document.getElementById('login-wrap').style.display='flex';document.getElementById('app').style.display='none';document.querySelectorAll('.login-card').forEach(c=>c.classList.remove('sel'));document.getElementById('login-btn').classList.remove('ready');}
 
+// ── BUILD APP ─────────────────────────────────────────────────────────────────
 function buildApp(){
-  const av=document.getElementById('user-avatar');
-  av.textContent=currentUser.id;av.className='user-avatar '+currentUser.cls;
-  document.getElementById('user-label').textContent=currentUser.name.split(' ')[0];
-  document.getElementById('app-ctx').textContent=canFull()?'Vue complète':'Mes dossiers';
-  const bn=document.getElementById('role-banner');
-  bn.className='role-banner '+(currentUser.role==='audit'?'audit':currentUser.role);
-  bn.textContent={associe:'Vue complète — tous les dossiers, facturation, alertes et charge.',manager:'Vue complète — tous les dossiers, facturation, alertes et charge.',collab:`Vos dossiers uniquement (${currentUser.id}) — modification du statut et de l'action.`,audit:'Lecture seule — tous les dossiers sans facturation.'}[currentUser.role];
-  const items=canFull()
-    ?[{id:'clients',l:'Dossiers'},{id:'leviers',l:'Leviers'},{id:'facturation',l:'Facturation'},{id:'alertes',l:'Alertes'},{id:'charge',l:'Charge'}]
-    :currentUser.role==='audit'
-      ?[{id:'clients',l:'Dossiers'},{id:'leviers',l:'Leviers'},{id:'alertes',l:'Alertes'}]
-      :[{id:'clients',l:'Mes dossiers'},{id:'leviers',l:'Mes leviers'}];
-  document.getElementById('main-nav').innerHTML=items.map((n,i)=>`<button class="nb${i===0?' on':''}" id="nb-${n.id}" onclick="showS('${n.id}',this)">${n.l}</button>`).join('');
-  const th=document.getElementById('thead-c');
-  if(canFull()||currentUser.role==='audit'){
-    th.innerHTML='<th>Client</th><th>Société</th><th>Signature</th><th>Référent</th><th>Gestion</th><th>Statut</th><th>Action</th><th>Inactivité</th><th>Leviers</th><th></th>';
-    document.getElementById('c-sv').style.display='inline-block';
-    document.getElementById('btn-al15').style.display='inline-block';
-    const sel=document.getElementById('c-sv');
-    [...new Set(DB.map(d=>d.suivi).filter(Boolean))].sort().forEach(v=>{if(!sel.querySelector(`option[value="${v}"]`)){const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);}});
+  // Sidebar user
+  const av=document.getElementById('sb-av');
+  av.textContent=CU.id; av.className='sb-user-av '+CU.cls;
+  document.getElementById('sb-name').textContent=CU.name;
+  document.getElementById('sb-role').textContent=CU.lbl;
+
+  // Navigation par rôle
+  const navConfig={
+    assoc:[
+      {id:'accueil',icon:'⌂',lbl:'Accueil'},
+      {id:'dossiers',icon:'◫',lbl:'Tous les dossiers'},
+      {id:'validations',icon:'✓',lbl:'Validations',badge:true},
+      {id:'leviers',icon:'◈',lbl:'Leviers'},
+      {id:'fact',icon:'◉',lbl:'Facturation'},
+      {id:'alertes',icon:'⚑',lbl:'Alertes'},
+      {id:'charge',icon:'◎',lbl:'Charge équipe'},
+    ],
+    mgr:[
+      {id:'accueil',icon:'⌂',lbl:'Accueil'},
+      {id:'dossiers',icon:'◫',lbl:'Dossiers'},
+      {id:'validations',icon:'✓',lbl:'Validations',badge:true},
+      {id:'leviers',icon:'◈',lbl:'Leviers'},
+      {id:'alertes',icon:'⚑',lbl:'Alertes'},
+      {id:'charge',icon:'◎',lbl:'Charge équipe'},
+    ],
+    clt:[
+      {id:'accueil',icon:'⌂',lbl:'Accueil'},
+      {id:'kanban',icon:'⊞',lbl:'Mes tâches'},
+      {id:'dossiers',icon:'◫',lbl:'Mes dossiers'},
+      {id:'leviers',icon:'◈',lbl:'Mes leviers'},
+    ],
+    aud:[
+      {id:'accueil',icon:'⌂',lbl:'Accueil'},
+      {id:'dossiers',icon:'◫',lbl:'Dossiers'},
+      {id:'alertes',icon:'⚑',lbl:'Alertes'},
+    ],
+  };
+  const items=navConfig[CU.role]||navConfig.aud;
+  document.getElementById('sb-nav').innerHTML=
+    '<div class="nav-sect">Navigation</div>'+
+    items.map((n,i)=>`<div class="nav-item${i===0?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="nav-icon">${n.icon}</span>${n.lbl}${n.badge?`<span class="nav-badge" id="badge-val">0</span>`:''}</div>`).join('');
+
+  // Setup thead dossiers
+  const th=document.getElementById('dos-thead');
+  if(isMgr()){
+    th.innerHTML='<th>Client</th><th>Société</th><th>Référent</th><th>Gestion</th><th>Statut</th><th>Action</th><th>Inactivité</th><th>Leviers</th><th></th>';
+    document.getElementById('d-sv').style.display='inline-block';
+    document.getElementById('d-al-btn').style.display='inline-block';
   }else{
-    th.innerHTML='<th>Client</th><th>Société</th><th>Signature</th><th>Statut</th><th>Action</th><th>Inactivité</th><th>Leviers</th><th></th>';
+    th.innerHTML='<th>Client</th><th>Société</th><th>Statut</th><th>Action</th><th>Inactivité</th><th>Tâche en cours</th><th></th>';
   }
+
+  // Setup leviers select
   const lsel=document.getElementById('l-lv');
   if(lsel.children.length<=1)LEVIERS.forEach(lv=>{const o=document.createElement('option');o.value=lv;o.textContent=lv;lsel.appendChild(o);});
-  showS('clients',document.getElementById('nb-clients'));
+
+  showPage('accueil',document.getElementById('ni-accueil'));
 }
 
-function showS(s,btn){
-  document.querySelectorAll('.sect').forEach(el=>el.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('sect-'+s).classList.add('on');btn.classList.add('on');
-  if(s==='clients'){buildKPIsC();renderC();}
-  else if(s==='leviers')buildLeviers();
-  else if(s==='facturation')buildFacturation();
-  else if(s==='alertes')buildAlerts();
-  else if(s==='charge')buildCharge();
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');
+  if(btn)btn.classList.add('on');
+  const render={
+    accueil:buildAccueil, dossiers:()=>{buildKPIsDos();renderDos();},
+    kanban:buildKanban, validations:buildValidations,
+    leviers:buildLeviers, fact:buildFact,
+    alertes:buildAlertes, charge:buildCharge,
+  };
+  if(render[id])render[id]();
 }
 
-function buildKPIsC(){
+// ── ACCUEIL ───────────────────────────────────────────────────────────────────
+function buildAccueil(){
+  const now=new Date();
+  const h=now.getHours();
+  const greet=h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
+  document.getElementById('w-badge').textContent=greet+', '+CU.prenom;
+  const dos=myDos();
+  const al=dos.filter(isAl);
+  const vp=valPending();
+
+  const roleTexts={
+    assoc:`Vous avez <strong>${dos.length} dossiers</strong> actifs, <strong>${al.length}</strong> alertes inactivité et <strong>${vp.length}</strong> validation${vp.length>1?'s':''} en attente.`,
+    mgr:`Votre pôle compte <strong>${dos.length} dossiers</strong>. <strong>${vp.length}</strong> tâche${vp.length>1?'s':''} attend${vp.length>1?'ent':''} votre validation.`,
+    clt:`Vous suivez <strong>${dos.length} dossier${dos.length>1?'s':''}</strong>. <strong>${myTasks().filter(t=>t.statut!=='Terminé').length}</strong> tâche${myTasks().filter(t=>t.statut!=='Terminé').length>1?'s':''} en cours.`,
+    aud:`<strong>${dos.length} dossiers</strong> visibles. <strong>${al.length}</strong> alerte${al.length>1?'s':''} d'inactivité active${al.length>1?'s':''}.`,
+  };
+  document.getElementById('w-title').innerHTML=`Suivi <em>${CU.role==='clt'?'de mes dossiers':'optimisation sociale'}</em>`;
+  document.getElementById('w-text').innerHTML=roleTexts[CU.role]||'';
+
+  // KPIs accueil
+  const kpiData=isMgr()?[
+    {l:'Dossiers',v:dos.length,cls:''},
+    {l:'OK',v:dos.filter(d=>d.statut==='OK').length,cls:'grn'},
+    {l:'En attente',v:dos.filter(d=>d.statut==='En attente').length,cls:'amb'},
+    {l:'KO',v:dos.filter(d=>d.statut==='KO').length,cls:'red'},
+    {l:'Inactifs ≥15j',v:al.length,cls:al.length>0?'red':'',s:'règle auto'},
+    {l:'À valider',v:vp.length,cls:vp.length>0?'amb':''},
+  ]:[
+    {l:'Mes dossiers',v:dos.length,cls:''},
+    {l:'Tâches actives',v:myTasks().filter(t=>['À faire','En cours'].includes(t.statut)).length,cls:'amb'},
+    {l:'À valider',v:myTasks().filter(t=>t.statut==='En attente validation').length,cls:vp.length>0?'red':''},
+    {l:'Terminées',v:myTasks().filter(t=>t.statut==='Terminé').length,cls:'grn'},
+  ];
+  document.getElementById('kpi-home').innerHTML=kpiData.map(k=>`<div class="kpi"><div class="kpi-l">${k.l}</div><div class="kpi-v ${k.cls||''}">${k.v}</div>${k.s?`<div class="kpi-s">${k.s}</div>`:''}</div>`).join('');
+
+  // Alertes accueil
+  const alerts=[...al,...DB.filter(d=>d.statut==='KO'&&!isAl(d))].slice(0,5);
+  document.getElementById('home-alerts').innerHTML=alerts.length?alerts.map(d=>`
+    <div class="alert-row">
+      <div class="alert-dot ${d.statut==='KO'?'dot-r':'dot-a'}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600">${d.client}</div>
+        <div style="font-size:11px;color:var(--text3)">${d.societe.substring(0,40)} · ${d.statut==='KO'?'Bloqué':d.joursInactif+'j sans màj'}</div>
+      </div>
+      <span class="bx ${d.statut==='KO'?'b-ko':'b-att'}">${d.statut==='KO'?'KO':d.joursInactif+'j'}</span>
+    </div>`).join(''):'<p style="font-size:12px;color:var(--text3);padding:8px 0">Aucune alerte active</p>';
+
+  // Validations accueil
+  document.getElementById('val-label').textContent=isMgr()?'Validations en attente':'Tâches soumises';
+  const vals=isMgr()?vp:myTasks().filter(t=>t.statut==='En attente validation');
+  document.getElementById('home-val').innerHTML=vals.length?vals.slice(0,4).map(t=>`
+    <div class="alert-row">
+      <div class="alert-dot dot-a"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600">${t.client}</div>
+        <div style="font-size:11px;color:var(--text3)">${t.etape}</div>
+      </div>
+      ${isMgr()?`<div style="display:flex;gap:4px"><button class="btn sml" style="color:#15803d;border-color:#15803d" onclick="validerTask('${t.id}',true)">✓ Valider</button><button class="btn sml" style="color:var(--bordeaux);border-color:var(--bordeaux)" onclick="validerTask('${t.id}',false)">✕</button></div>`:'<span class="bx b-val">En attente</span>'}
+    </div>`).join(''):'<p style="font-size:12px;color:var(--text3);padding:8px 0">Aucune validation en attente</p>';
+
+  // Badge nav
+  const badge=document.getElementById('badge-val');
+  if(badge)badge.textContent=vp.length||'';
+}
+
+// ── DOSSIERS ──────────────────────────────────────────────────────────────────
+function buildKPIsDos(){
   const d=myDos(),al=d.filter(isAl).length;
-  document.getElementById('kpi-c').innerHTML=`<div class="kpi"><div class="kpi-l">Dossiers</div><div class="kpi-v">${d.length}</div></div><div class="kpi"><div class="kpi-l">OK</div><div class="kpi-v grn">${d.filter(x=>x.statut==='OK').length}</div></div><div class="kpi"><div class="kpi-l">En attente</div><div class="kpi-v amb">${d.filter(x=>x.statut==='En attente').length}</div></div><div class="kpi"><div class="kpi-l">KO</div><div class="kpi-v red">${d.filter(x=>x.statut==='KO').length}</div></div><div class="kpi"><div class="kpi-l">Inactifs ≥15j</div><div class="kpi-v ${al>0?'red':''}">${al}</div><div class="kpi-s">règle auto</div></div>`;
+  document.getElementById('kpi-dos').innerHTML=`
+    <div class="kpi"><div class="kpi-l">Dossiers</div><div class="kpi-v">${d.length}</div></div>
+    <div class="kpi"><div class="kpi-l">OK</div><div class="kpi-v grn">${d.filter(x=>x.statut==='OK').length}</div></div>
+    <div class="kpi"><div class="kpi-l">En attente</div><div class="kpi-v amb">${d.filter(x=>x.statut==='En attente').length}</div></div>
+    <div class="kpi"><div class="kpi-l">KO</div><div class="kpi-v red">${d.filter(x=>x.statut==='KO').length}</div></div>
+    <div class="kpi"><div class="kpi-l">Inactifs ≥15j</div><div class="kpi-v ${al>0?'red':''}">${al}</div></div>`;
+  document.getElementById('dos-title').innerHTML=isMgr()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>';
+  document.getElementById('dos-sub').textContent=isMgr()?`Vision complète — ${myDos().length} sociétés suivies.`:`Vos dossiers en tant que référent ou gestionnaire.`;
 }
-function renderC(){
-  const s=document.getElementById('c-s').value.toLowerCase(),st=document.getElementById('c-st').value,sv=document.getElementById('c-sv').value;
-  cFil=myDos().filter(d=>{if(st&&d.statut!==st)return false;if(sv&&d.suivi!==sv)return false;if(s&&!(d.client.toLowerCase().includes(s)||d.societe.toLowerCase().includes(s)))return false;return true;});
-  cFil.sort((a,b)=>{let va=a[cSK]??'',vb=b[cSK]??'';if(typeof va==='number')return cSA?va-vb:vb-va;return cSA?String(va).localeCompare(String(vb)):String(vb).localeCompare(String(va));});
-  const s2=(cP-1)*PS,en=Math.min(s2+PS,cFil.length);
-  const ro=currentUser.role==='audit';
-  document.getElementById('tbl-c').innerHTML=cFil.slice(s2,en).map(d=>{
-    const al=isAl(d),nb=(d.leviers||[]).filter(l=>l.passe.actif||l.futur?.actif).length;
-    const bg=al?'background:#fff8e1':'';
-    const alB=al?`<span class="bx b-ko">${d.joursInactif}j ⚠</span>`:`<span style="font-size:11px;color:#aaa">${d.joursInactif}j</span>`;
-    const stB=`<span class="bx ${d.statut==='OK'?'b-ok':d.statut==='KO'?'b-ko':'b-att'}">${d.statut}</span>`;
-    if(canFull()||ro)return`<tr style="${bg}"><td style="font-weight:600">${d.client}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.societe}</td><td style="font-size:11px;color:#888">${d.date||'—'}</td><td style="font-weight:600">${d.suivi}</td><td style="color:#888">${d.gestion}</td><td>${stB}</td><td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#888">${d.action||'—'}</td><td>${alB}</td><td style="font-size:11px;color:#1a56db">${nb?nb+' lev.':'—'}</td><td>${!ro?`<button class="btn sml" onclick="openStatut(${d.id})">Éditer</button>`:''}</td></tr>`;
-    return`<tr style="${bg}"><td style="font-weight:600">${d.client}</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.societe}</td><td style="font-size:11px;color:#888">${d.date||'—'}</td><td>${stB}</td><td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#888">${d.action||'—'}</td><td>${alB}</td><td style="font-size:11px;color:#1a56db">${nb?nb+' lev.':'—'}</td><td><button class="btn sml" onclick="openStatut(${d.id})">Màj</button></td></tr>`;
+function renderDos(){
+  const s=document.getElementById('d-s').value.toLowerCase();
+  const st=document.getElementById('d-st').value;
+  const sv=document.getElementById('d-sv').value;
+  dFil=myDos().filter(d=>{if(st&&d.statut!==st)return false;if(sv&&d.suivi!==sv)return false;if(s&&!(d.client.toLowerCase().includes(s)||d.societe.toLowerCase().includes(s)))return false;return true;});
+  dFil.sort((a,b)=>{let va=a[dSK]??'',vb=b[dSK]??'';if(typeof va==='number')return dSA?va-vb:vb-va;return dSA?String(va).localeCompare(String(vb)):String(vb).localeCompare(String(va));});
+  const s2=(dP-1)*PS,en=Math.min(s2+PS,dFil.length);
+  const ro=CU.role==='aud';
+  document.getElementById('dos-tbody').innerHTML=dFil.slice(s2,en).map(d=>{
+    const al=isAl(d);
+    const nb=(d.leviers||[]).filter(l=>l.passe.actif).length;
+    const bg=al?'background:#FFFBF0':'';
+    const stB=`<span class="bx ${d.statut==='OK'?'b-ok':d.statut==='KO'?'b-ko':'b-att'}">${d.statut||'—'}</span>`;
+    const alB=al?`<span class="bx b-ko">${d.joursInactif}j ⚑</span>`:`<span style="font-size:10px;color:var(--text3);font-family:var(--ff-mono)">${d.joursInactif}j</span>`;
+    const myTask=TASKS.find(t=>t.dosId==d.id&&(t.ref===CU.id||isMgr()));
+    if(isMgr()||ro){
+      return`<tr style="${bg}">
+        <td style="font-weight:600">${d.client}</td>
+        <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.societe}</td>
+        <td style="font-weight:600;font-family:var(--ff-mono);font-size:11px">${d.suivi}</td>
+        <td style="color:var(--text3);font-family:var(--ff-mono);font-size:11px">${d.gestion}</td>
+        <td>${stB}</td>
+        <td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${d.action||'—'}</td>
+        <td>${alB}</td>
+        <td style="font-size:10px;color:var(--bordeaux);font-family:var(--ff-mono)">${nb?nb+' lev.':'—'}</td>
+        <td>${!ro?`<button class="btn sml" onclick="openDos(${d.id})">Ouvrir</button>`:''}</td>
+      </tr>`;
+    }
+    return`<tr style="${bg}">
+      <td style="font-weight:600">${d.client}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.societe}</td>
+      <td>${stB}</td>
+      <td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${d.action||'—'}</td>
+      <td>${alB}</td>
+      <td>${myTask?`<span class="bx ${myTask.statut==='En attente validation'?'b-val':myTask.statut==='Terminé'?'b-ok':'b-att'}">${myTask.etape}</span>`:'—'}</td>
+      <td><button class="btn sml" onclick="openDos(${d.id})">Màj</button></td>
+    </tr>`;
   }).join('');
-  document.getElementById('pg-c-i').textContent=`${s2+1}–${en} / ${cFil.length}`;
-  document.getElementById('pc-p').disabled=cP===1;document.getElementById('pc-n').disabled=en>=cFil.length;
+  document.getElementById('dos-pginfo').textContent=`${s2+1}–${en} / ${dFil.length}`;
+  document.getElementById('dos-pp').disabled=dP===1;
+  document.getElementById('dos-pn').disabled=en>=dFil.length;
 }
-function pgC(d){cP+=d;renderC();}
-function resetC(){['c-s','c-st','c-sv'].forEach(id=>document.getElementById(id).value='');cP=1;renderC();}
-function filterAl(){cFil=DB.filter(isAl);cP=1;renderC();}
+function pgDos(d){dP+=d;renderDos();}
+function resetDos(){['d-s','d-st','d-sv'].forEach(id=>document.getElementById(id).value='');dP=1;renderDos();}
+function filterAl(){dFil=DB.filter(isAl);dP=1;renderDos();}
 
+// ── KANBAN ────────────────────────────────────────────────────────────────────
+function myTasks(){return isMgr()?TASKS:TASKS.filter(t=>t.ref===CU.id);}
+function buildKanban(){
+  const cols=['À faire','En cours','En attente validation','Terminé'];
+  const colCfg={
+    'À faire':{color:'var(--text3)',accent:'var(--g200)'},
+    'En cours':{color:'var(--or)',accent:'var(--or-pale)'},
+    'En attente validation':{color:'var(--bordeaux)',accent:'var(--bordeaux-pale)'},
+    'Terminé':{color:'#15803d',accent:'#F0FDF4'},
+  };
+  const tasks=myTasks();
+  document.getElementById('kanban-board').innerHTML=cols.map(col=>{
+    const colTasks=tasks.filter(t=>t.statut===col);
+    const cfg=colCfg[col];
+    return`<div class="kb-col" style="border-top:3px solid ${cfg.color}">
+      <div class="kb-col-head">
+        <div class="kb-col-title" style="color:${cfg.color}">${col}</div>
+        <div class="kb-col-cnt">${colTasks.length}</div>
+      </div>
+      ${colTasks.map(t=>`
+        <div class="kb-card ${t.statut==='En attente validation'?'pending':''}">
+          <div class="kb-client">${t.client}</div>
+          <div class="kb-task">${t.etape}</div>
+          <div class="kb-meta">
+            <span class="kb-ref">${t.ref}</span>
+            <div style="display:flex;gap:4px">
+              ${t.statut==='En cours'?`<button class="btn sml" style="font-size:9px;padding:2px 7px;color:var(--bordeaux);border-color:var(--bordeaux)" onclick="soumettreTache('${t.id}')">Soumettre</button>`:''}
+              ${t.statut==='À faire'?`<button class="btn sml" style="font-size:9px;padding:2px 7px" onclick="demarrerTache('${t.id}')">Démarrer</button>`:''}
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function demarrerTache(id){
+  const t=TASKS.find(x=>x.id===id);if(!t)return;
+  t.statut='En cours';buildKanban();buildAccueil();
+}
+function soumettreTache(id){
+  const t=TASKS.find(x=>x.id===id);if(!t)return;
+  t.statut='En attente validation';buildKanban();buildAccueil();
+  updateBadge();
+}
+function validerTask(id,ok){
+  const t=TASKS.find(x=>x.id===id);if(!t)return;
+  t.statut=ok?'Terminé':'En cours';
+  if(!ok)t.commentaire='Refusé — à corriger';
+  buildAccueil();if(document.getElementById('page-validations').classList.contains('on'))buildValidations();
+  updateBadge();
+}
+function updateBadge(){const b=document.getElementById('badge-val');if(b)b.textContent=valPending().length||'';}
+
+// ── VALIDATIONS ───────────────────────────────────────────────────────────────
+function buildValidations(){
+  const vp=valPending();
+  document.getElementById('kpi-val').innerHTML=`
+    <div class="kpi"><div class="kpi-l">En attente</div><div class="kpi-v ${vp.length>0?'amb':''}">${vp.length}</div></div>
+    <div class="kpi"><div class="kpi-l">Validées ce mois</div><div class="kpi-v grn">${TASKS.filter(t=>t.statut==='Terminé').length}</div></div>`;
+  document.getElementById('val-list').innerHTML=vp.length?vp.map(t=>`
+    <div class="val-row">
+      <div class="val-info">
+        <div class="val-client">${t.client} — <span style="font-weight:400;color:var(--text2)">${t.societe.substring(0,40)}</span></div>
+        <div class="val-detail">Étape : <strong>${t.etape}</strong> · Référent : <span style="font-family:var(--ff-mono)">${t.ref}</span></div>
+      </div>
+      <div class="val-actions">
+        <button class="btn or sml" onclick="validerTask('${t.id}',true)">✓ Valider</button>
+        <button class="btn sml" style="color:var(--bordeaux);border-color:var(--bordeaux)" onclick="validerTask('${t.id}',false)">✕ Refuser</button>
+      </div>
+    </div>`).join(''):'<p style="font-size:13px;color:var(--text3);padding:16px 0;text-align:center">Aucune validation en attente — tout est à jour.</p>';
+}
+
+// ── LEVIERS ───────────────────────────────────────────────────────────────────
 function buildLeviers(){
   let rows=[];
   myDos().forEach(d=>(d.leviers||[]).forEach(l=>{
     if(l.passe.actif)rows.push({client:d.client,societe:d.societe,levier:l.nom,periode:'Passé',annees:l.passe.annees,eco:l.passe.eco,taux:l.passe.taux??TAUX_DEF,honoraires:l.passe.eco?Math.round(l.passe.eco*(l.passe.taux??TAUX_DEF)/100):null,statut:l.passe.statut||''});
-    if(l.futur?.actif)rows.push({client:d.client,societe:d.societe,levier:l.nom,periode:'Futur',annees:l.futur.annees,eco:l.futur.eco,taux:l.futur.taux??TAUX_DEF,honoraires:l.futur.eco?Math.round(l.futur.eco*(l.futur.taux??TAUX_DEF)/100):null,statut:l.futur.statut||''});
   }));
   const eT=rows.reduce((s,r)=>s+(r.eco||0),0),hT=rows.reduce((s,r)=>s+(r.honoraires||0),0);
-  document.getElementById('kpi-l').innerHTML=`<div class="kpi"><div class="kpi-l">Lignes leviers</div><div class="kpi-v">${rows.length}</div></div><div class="kpi"><div class="kpi-l">Économies</div><div class="kpi-v grn">${fmt(eT)}</div></div><div class="kpi"><div class="kpi-l">Honoraires HT</div><div class="kpi-v grn">${fmt(hT)}</div></div>`;
-  const s=document.getElementById('l-s').value.toLowerCase(),lv=document.getElementById('l-lv').value,pr=document.getElementById('l-pr').value;
-  document.getElementById('tbl-l').innerHTML=rows.filter(r=>{if(lv&&r.levier!==lv)return false;if(pr&&r.periode!==pr)return false;if(s&&!(r.client.toLowerCase().includes(s)||r.levier.toLowerCase().includes(s)))return false;return true;}).map(r=>`<tr><td style="font-weight:600">${r.client}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.societe}</td><td style="font-size:11px">${r.levier}</td><td><span class="bx ${r.periode==='Passé'?'b-att':'b-info'}">${r.periode}</span></td><td style="font-size:11px;color:#888">${r.annees||'—'}</td><td><span class="eco-v">${fmt(r.eco)}</span></td><td>${fmt(r.honoraires)}</td><td><span class="bx ${r.statut==='OK'?'b-ok':r.statut==='KO'?'b-ko':r.statut?'b-att':''}">${r.statut||'—'}</span></td></tr>`).join('');
+  document.getElementById('kpi-lev').innerHTML=`
+    <div class="kpi"><div class="kpi-l">Lignes leviers</div><div class="kpi-v">${rows.length}</div></div>
+    <div class="kpi"><div class="kpi-l">Économies</div><div class="kpi-v grn">${fmt(eT)}</div></div>
+    <div class="kpi"><div class="kpi-l">Honoraires HT</div><div class="kpi-v grn">${fmt(hT)}</div></div>`;
+  const s=document.getElementById('l-s').value.toLowerCase();
+  const lv=document.getElementById('l-lv').value;
+  const pr=document.getElementById('l-pr').value;
+  document.getElementById('lev-tbody').innerHTML=rows.filter(r=>{if(lv&&r.levier!==lv)return false;if(pr&&r.periode!==pr)return false;if(s&&!(r.client.toLowerCase().includes(s)||r.levier.toLowerCase().includes(s)))return false;return true;}).map(r=>`<tr>
+    <td style="font-weight:600">${r.client}</td>
+    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.societe}</td>
+    <td style="font-size:11px">${r.levier}</td>
+    <td><span class="bx b-att">${r.periode}</span></td>
+    <td style="font-size:10px;color:var(--text3);font-family:var(--ff-mono)">${r.annees||'—'}</td>
+    <td><span class="eco">${fmt(r.eco)}</span></td>
+    <td>${fmt(r.honoraires)}</td>
+    <td><span class="bx ${r.statut==='OK'?'b-ok':r.statut==='KO'?'b-ko':r.statut?'b-att':''}">${r.statut||'—'}</span></td>
+  </tr>`).join('');
 }
 
+// ── FACTURATION ───────────────────────────────────────────────────────────────
 function getFactRows(){
   const rows=[];
   DB.forEach(d=>(d.leviers||[]).forEach(l=>{
-    ['passe','futur'].forEach(side=>{
-      const p=l[side];if(!p?.actif||!p.eco)return;
-      const per=side==='passe'?'Passé':'Futur';
-      const ex=FACT_DB.find(f=>f.dosId==d.id&&f.levier===l.nom&&f.periode===per)||{};
-      const taux=ex.taux??p.taux??TAUX_DEF;
-      rows.push({client:d.client,societe:d.societe,levier:l.nom,periode:per,annees:p.annees||'',eco:p.eco,taux,honoraires:Math.round(p.eco*taux/100),statut:ex.statut||'À facturer',numFacture:ex.numFacture||'',echeance:ex.echeance||''});
-    });
+    if(!l.passe.actif||!l.passe.eco)return;
+    const ex=FACT_DB.find(f=>f.dosId==d.id&&f.levier===l.nom)||{};
+    const taux=ex.taux??l.passe.taux??TAUX_DEF;
+    rows.push({client:d.client,societe:d.societe,levier:l.nom,periode:'Passé',eco:l.passe.eco,taux,honoraires:Math.round(l.passe.eco*taux/100),statut:ex.statut||'À facturer',numFacture:ex.numFacture||''});
   }));
   return rows;
 }
-function buildFacturation(){
+function buildFact(){
   const fr=getFactRows();
   const aF=fr.filter(r=>r.statut==='À facturer'),fa=fr.filter(r=>r.statut==='Facturé');
   const tA=aF.reduce((s,r)=>s+r.honoraires,0),tF=fa.reduce((s,r)=>s+r.honoraires,0);
-  document.getElementById('kpi-f').innerHTML=`<div class="kpi"><div class="kpi-l">À facturer</div><div class="kpi-v amb">${fmt(tA)}</div><div class="kpi-s">${aF.length} lignes</div></div><div class="kpi"><div class="kpi-l">Facturé</div><div class="kpi-v">${fmt(tF)}</div></div><div class="kpi"><div class="kpi-l">Total honoraires</div><div class="kpi-v grn">${fmt(tA+tF)}</div></div>`;
+  document.getElementById('kpi-fact').innerHTML=`
+    <div class="kpi"><div class="kpi-l">À facturer</div><div class="kpi-v amb">${fmt(tA)}</div><div class="kpi-s">${aF.length} lignes</div></div>
+    <div class="kpi"><div class="kpi-l">Facturé</div><div class="kpi-v">${fmt(tF)}</div></div>
+    <div class="kpi"><div class="kpi-l">Total honoraires</div><div class="kpi-v grn">${fmt(tA+tF)}</div></div>`;
   const byC={},byL={};fr.forEach(r=>{byC[r.client]=(byC[r.client]||0)+r.honoraires;byL[r.levier]=(byL[r.levier]||0)+r.honoraires;});
-  const C=['#1a56db','#27ae60','#d35400','#7f4098','#c0392b'];
+  const COLS=['#9B1C31','#C4982A','#3F3F46','#1e40af','#15803d'];
   const sC=Object.entries(byC).sort((a,b)=>b[1]-a[1]).slice(0,8),mC=sC[0]?.[1]||1;
-  document.getElementById('chart-cl').innerHTML=sC.map(([k,v])=>`<div class="bar-row"><div class="bar-lbl">${k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mC*100)}%;background:#1a56db"></div></div><div class="bar-val">${fmt(v)}</div></div>`).join('');
+  document.getElementById('fact-cl').innerHTML=sC.map(([k,v])=>`<div class="bar-row"><div class="bar-lbl">${k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mC*100)}%;background:var(--bordeaux)"></div></div><div class="bar-val">${fmt(v)}</div></div>`).join('');
   const sL=Object.entries(byL).sort((a,b)=>b[1]-a[1]),mL=sL[0]?.[1]||1;
-  document.getElementById('chart-lv').innerHTML=sL.map(([k,v],i)=>`<div class="bar-row"><div class="bar-lbl" title="${k}">${k.length>18?k.substring(0,18)+'…':k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mL*100)}%;background:${C[i%C.length]}"></div></div><div class="bar-val">${fmt(v)}</div></div>`).join('');
+  document.getElementById('fact-lv').innerHTML=sL.map(([k,v],i)=>`<div class="bar-row"><div class="bar-lbl" title="${k}">${k.length>16?k.substring(0,16)+'…':k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mL*100)}%;background:${COLS[i%COLS.length]}"></div></div><div class="bar-val">${fmt(v)}</div></div>`).join('');
   const s=document.getElementById('f-s').value.toLowerCase(),st=document.getElementById('f-st').value;
-  document.getElementById('tbl-f').innerHTML=fr.filter(r=>{if(st&&r.statut!==st)return false;if(s&&!r.client.toLowerCase().includes(s))return false;return true;}).map(r=>`<tr><td style="font-weight:600">${r.client}</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.societe}</td><td style="font-size:11px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.levier}</td><td><span class="bx ${r.periode==='Passé'?'b-att':'b-info'}">${r.periode}</span></td><td><span class="eco-v">${fmt(r.eco)}</span></td><td style="color:#888">${r.taux}%</td><td style="font-weight:600">${fmt(r.honoraires)}</td><td><span class="bx ${r.statut==='Facturé'?'b-fact':'b-afact'}">${r.statut}</span></td><td style="font-size:11px;color:#888">${r.numFacture||'—'}</td><td style="font-size:11px;color:#888">${fmtD(r.echeance)}</td></tr>`).join('');
+  document.getElementById('fact-tbody').innerHTML=fr.filter(r=>{if(st&&r.statut!==st)return false;if(s&&!r.client.toLowerCase().includes(s))return false;return true;}).map(r=>`<tr>
+    <td style="font-weight:600">${r.client}</td>
+    <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.societe}</td>
+    <td style="font-size:11px">${r.levier}</td>
+    <td><span class="bx b-att">${r.periode}</span></td>
+    <td><span class="eco">${fmt(r.eco)}</span></td>
+    <td style="color:var(--text3);font-family:var(--ff-mono);font-size:10px">${r.taux}%</td>
+    <td style="font-weight:600">${fmt(r.honoraires)}</td>
+    <td><span class="bx ${r.statut==='Facturé'?'b-info':'b-att'}">${r.statut}</span></td>
+    <td style="font-size:10px;color:var(--text3);font-family:var(--ff-mono)">${r.numFacture||'—'}</td>
+  </tr>`).join('');
 }
 
-function buildAlerts(){
+// ── ALERTES ───────────────────────────────────────────────────────────────────
+function buildAlertes(){
   const al=DB.filter(isAl).sort((a,b)=>b.joursInactif-a.joursInactif);
-  document.getElementById('kpi-a').innerHTML=`<div class="kpi"><div class="kpi-l">Inactifs ≥15j</div><div class="kpi-v red">${al.length}</div></div><div class="kpi"><div class="kpi-l">KO</div><div class="kpi-v red">${DB.filter(d=>d.statut==='KO').length}</div></div><div class="kpi"><div class="kpi-l">En attente</div><div class="kpi-v amb">${DB.filter(d=>d.statut==='En attente').length}</div></div>`;
-  document.getElementById('al-list').innerHTML=al.map(d=>`<div class="alert-row"><div class="dot ${d.statut==='KO'?'dot-r':'dot-a'}"></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600">${d.client} — <span style="font-weight:400">${d.societe.substring(0,45)}</span></div><div style="font-size:11px;color:#888">${d.suivi} · ${d.gestion} · ${d.action||'—'}</div></div><span class="bx ${d.statut==='KO'?'b-ko':'b-att'}" style="margin-right:6px">${d.statut}</span><span class="bx b-ko">${d.joursInactif}j</span></div>`).join('');
+  document.getElementById('kpi-al').innerHTML=`
+    <div class="kpi"><div class="kpi-l">Inactifs ≥15j</div><div class="kpi-v red">${al.length}</div></div>
+    <div class="kpi"><div class="kpi-l">KO</div><div class="kpi-v red">${DB.filter(d=>d.statut==='KO').length}</div></div>
+    <div class="kpi"><div class="kpi-l">En attente</div><div class="kpi-v amb">${DB.filter(d=>d.statut==='En attente').length}</div></div>`;
+  document.getElementById('al-list').innerHTML=al.map(d=>`
+    <div class="alert-row">
+      <div class="alert-dot ${d.statut==='KO'?'dot-r':'dot-a'}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${d.client} <span style="font-weight:400;color:var(--text2)">— ${d.societe.substring(0,40)}</span></div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--ff-mono)">${d.suivi} · ${d.gestion} · ${d.action||'—'}</div>
+      </div>
+      <span class="bx ${d.statut==='KO'?'b-ko':'b-att'}" style="margin-right:6px">${d.statut}</span>
+      <span class="bx b-ko">${d.joursInactif}j</span>
+    </div>`).join('');
 }
 
+// ── CHARGE ────────────────────────────────────────────────────────────────────
 function buildCharge(){
   const bs={},bg={};DB.forEach(d=>{bs[d.suivi]=(bs[d.suivi]||0)+1;bg[d.gestion]=(bg[d.gestion]||0)+1;});
   const mS=Math.max(...Object.values(bs)),mG=Math.max(...Object.values(bg));
-  const col=v=>v>40?'#c0392b':v>20?'#d35400':'#27ae60';
-  document.getElementById('kpi-ch').innerHTML=`<div class="kpi"><div class="kpi-l">Référents</div><div class="kpi-v">${Object.keys(bs).length}</div></div><div class="kpi"><div class="kpi-l">Gestionnaires</div><div class="kpi-v">${Object.keys(bg).length}</div></div><div class="kpi"><div class="kpi-l">Moy./référent</div><div class="kpi-v">${Math.round(DB.length/Math.max(Object.keys(bs).length,1))}</div></div>`;
+  const col=v=>v>40?'var(--bordeaux)':v>20?'var(--or)':'#15803d';
+  document.getElementById('kpi-ch').innerHTML=`
+    <div class="kpi"><div class="kpi-l">Référents</div><div class="kpi-v">${Object.keys(bs).length}</div></div>
+    <div class="kpi"><div class="kpi-l">Gestionnaires</div><div class="kpi-v">${Object.keys(bg).length}</div></div>
+    <div class="kpi"><div class="kpi-l">Moy./référent</div><div class="kpi-v">${Math.round(DB.length/Math.max(Object.keys(bs).length,1))}</div></div>`;
   document.getElementById('ch-sv').innerHTML=Object.entries(bs).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="bar-row"><div class="bar-lbl">${k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mS*100)}%;background:${col(v)}"></div></div><div class="bar-val">${v}</div></div>`).join('');
   document.getElementById('ch-gv').innerHTML=Object.entries(bg).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="bar-row"><div class="bar-lbl">${k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mG*100)}%;background:${col(v)}"></div></div><div class="bar-val">${v}</div></div>`).join('');
 }
 
-function openStatut(id){
+// ── PANEL ─────────────────────────────────────────────────────────────────────
+function openDos(id){
   const d=DB.find(x=>x.id==id);if(!d)return;
   editId=id;
-  document.getElementById('p-ttl').textContent=d.client;
+  document.getElementById('p-ttl').innerHTML=`${d.client}`;
   document.getElementById('p-sub').textContent=d.societe;
-  document.getElementById('p-st').value=d.statut;
-  document.getElementById('p-ac').value=d.action||'';
-  document.getElementById('p-ji').value=d.joursInactif||0;
-  document.getElementById('p-co').value=d.commentaire||'';
+  const myTask=TASKS.find(t=>t.dosId==id&&t.ref===CU.id);
+  let fields='';
+  if(isMgr()){
+    fields=`
+      <div class="fl1"><div class="fl-lbl">Statut</div><select class="fs" id="p-st"><option ${d.statut==='OK'?'selected':''}>OK</option><option ${d.statut==='En attente'?'selected':''}>En attente</option><option ${d.statut==='KO'?'selected':''}>KO</option></select></div>
+      <div class="fl1"><div class="fl-lbl">Action</div><select class="fs" id="p-ac"><option value="">—</option><option>Néant</option><option>En production chez HERA</option><option>En attente client</option><option>En instruction organisme tiers</option><option>Relance nécessaire</option><option>Dossier clôturé</option></select></div>
+      <div class="fl1"><div class="fl-lbl">Jours sans mise à jour</div><input type="number" class="fi" id="p-ji" value="${d.joursInactif||0}" min="0"/></div>`;
+  }else{
+    const task=myTask||{etape:ETAPES[0],statut:'À faire',commentaire:''};
+    fields=`
+      <div class="fl1"><div class="fl-lbl">Étape en cours</div><select class="fs" id="p-etape">${ETAPES.map(e=>`<option ${e===task.etape?'selected':''}>${e}</option>`).join('')}</select></div>
+      <div class="fl1"><div class="fl-lbl">Statut tâche</div><select class="fs" id="p-tst"><option ${task.statut==='À faire'?'selected':''}>À faire</option><option ${task.statut==='En cours'?'selected':''}>En cours</option><option ${task.statut==='En attente validation'?'selected':''}>En attente validation</option></select></div>
+      <div class="fl1"><div class="fl-lbl">Commentaire</div><textarea class="fta" id="p-co">${task.commentaire||''}</textarea></div>`;
+  }
+  document.getElementById('p-role-fields').innerHTML=fields;
+  if(isMgr()&&document.getElementById('p-ac'))document.getElementById('p-ac').value=d.action||'';
   document.getElementById('pov').classList.add('open');
 }
+
 function saveP(){
   const d=DB.find(x=>x.id==editId);if(!d)return;
-  d.statut=document.getElementById('p-st').value;
-  d.action=document.getElementById('p-ac').value;
-  d.joursInactif=parseInt(document.getElementById('p-ji').value)||0;
-  d.commentaire=document.getElementById('p-co').value;
-  closeP();refreshAll();
+  if(isMgr()){
+    d.statut=document.getElementById('p-st').value;
+    d.action=document.getElementById('p-ac').value;
+    d.joursInactif=parseInt(document.getElementById('p-ji').value)||0;
+  }else{
+    let t=TASKS.find(x=>x.dosId==editId&&x.ref===CU.id);
+    if(!t){t={id:'T'+Date.now(),dosId:editId,client:d.client,societe:d.societe,etape:'',statut:'À faire',ref:CU.id,commentaire:''};TASKS.push(t);}
+    t.etape=document.getElementById('p-etape').value;
+    t.statut=document.getElementById('p-tst').value;
+    t.commentaire=document.getElementById('p-co').value;
+  }
+  closeP();refreshAll();updateBadge();
 }
+
 function closeP(){document.getElementById('pov').classList.remove('open');}
 function maybeClose(e){if(e.target===document.getElementById('pov'))closeP();}
+
 function refreshAll(){
-  if(!currentUser)return;
-  const s=document.querySelector('.sect.on')?.id?.replace('sect-','');
-  if(s==='clients'){buildKPIsC();renderC();}
-  else if(s==='leviers')buildLeviers();
-  else if(s==='facturation')buildFacturation();
-  else if(s==='alertes')buildAlerts();
-  else if(s==='charge')buildCharge();
+  const active=document.querySelector('.page.on')?.id?.replace('page-','');
+  if(active)showPage(active,document.getElementById('ni-'+active));
 }
+
 buildLoginGrid();
 </script>
 </body>
