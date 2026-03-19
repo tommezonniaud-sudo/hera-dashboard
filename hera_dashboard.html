@@ -182,6 +182,52 @@ tr:hover td{background:var(--g50)}
 .stat-lbl{font-size:9px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:1.5px;font-family:var(--ff-mono)}
 /* ECO */
 .eco{font-weight:600;color:#15803d}
+
+/* GUIDE STYLES */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:2rem}
+.team-card{background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:var(--sh-sm);transition:all .2s}
+.team-card:hover{border-color:var(--bordeaux);box-shadow:var(--sh-md);transform:translateY(-2px)}
+.team-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--bordeaux-pale),var(--or-pale));display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-weight:700;font-size:14px;color:var(--bordeaux);margin:0 auto 10px}
+.team-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.team-role{font-size:11px;color:var(--text3);margin-bottom:3px}
+.team-dept{font-size:10px;color:var(--bordeaux);font-family:var(--ff-mono)}
+.team-email{font-size:10px;color:var(--text3);margin-top:6px;word-break:break-all}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.tool-card{background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:18px 20px;box-shadow:var(--sh-sm)}
+.tool-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.tool-ico{font-size:22px;flex-shrink:0}
+.tool-name{font-size:14px;font-weight:600;color:var(--text)}
+.tool-cat{font-size:10px;color:var(--text3);font-family:var(--ff-mono)}
+.tool-field-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);font-family:var(--ff-mono);margin-top:8px;margin-bottom:3px}
+.tool-field-val{font-size:12px;color:var(--text);font-family:var(--ff-mono);background:var(--g50);padding:5px 9px;border-radius:5px;border:1px solid var(--g200);cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.tool-field-val.pw{color:transparent;text-shadow:0 0 8px var(--g400);transition:.2s}
+.tool-field-val.pw:hover{color:var(--text);text-shadow:none}
+.tool-url{display:inline-block;margin-top:12px;font-size:11px;color:var(--bordeaux);font-weight:600;text-decoration:none}
+.tool-url:hover{text-decoration:underline}
+.tool-note{font-size:11px;color:var(--text3);margin-top:8px;line-height:1.6;border-top:1px solid var(--g100);padding-top:8px}
+.fiches-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.fiche-card{background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:18px 20px;cursor:pointer;box-shadow:var(--sh-sm);transition:all .2s}
+.fiche-card:hover{border-color:var(--bordeaux);box-shadow:var(--sh-md);transform:translateY(-2px)}
+.fiche-hd{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fiche-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.fiche-title{font-size:13px;font-weight:600;color:var(--text)}
+.fiche-meta{font-size:10px;color:var(--text3);font-family:var(--ff-mono)}
+.fiche-resume{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:12px}
+.fiche-ft{display:flex;align-items:center;justify-content:space-between}
+.fiche-tag{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--bordeaux);background:var(--bordeaux-pale);padding:3px 8px;border-radius:10px;font-family:var(--ff-mono)}
+.fiche-arr{color:var(--bordeaux);font-size:16px;font-weight:600}
+.lex-card{background:var(--white);border:1px solid var(--g200);border-radius:10px;padding:14px 16px;box-shadow:var(--sh-sm)}
+.lex-cat{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--bordeaux);font-family:var(--ff-mono);margin-bottom:5px}
+.lex-term{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.lex-def{font-size:12px;color:var(--text2);line-height:1.65}
+.lex-tab{padding:5px 12px;border-radius:20px;border:1px solid var(--g300);background:var(--white);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--ff-mono);color:var(--text2)}
+.lex-tab.active{background:var(--bordeaux);color:#fff;border-color:var(--bordeaux)}
+.tpl-card{background:var(--white);border:1px solid var(--g200);border-radius:12px;padding:18px 20px;margin-bottom:12px;box-shadow:var(--sh-sm)}
+.tpl-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tpl-title{font-size:13px;font-weight:600;color:var(--text)}
+.tpl-copy-btn{font-size:11px;padding:5px 12px;border:1px solid var(--g300);border-radius:6px;background:var(--white);cursor:pointer;font-family:var(--ff-body);font-weight:600}
+.tpl-copy-btn:hover{background:var(--bordeaux);color:#fff;border-color:var(--bordeaux)}
+.tpl-body{font-size:12px;color:var(--text2);line-height:1.8;white-space:pre-wrap;background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:14px;max-height:200px;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -357,6 +403,57 @@ tr:hover td{background:var(--g50)}
           <div class="card" style="margin-bottom:0"><div class="card-label">Par gestionnaire</div><div id="ch-gv"></div></div>
         </div>
       </div>
+
+      <!-- ÉQUIPE -->
+      <div class="page" id="page-guide-equipe">
+        <div class="page-eyebrow">Guide</div>
+        <div class="page-title">L'<em>équipe</em></div>
+        <div class="page-sub">Tous les collaborateurs Hera Groupe.</div>
+        <div class="team-grid" id="guide-team-grid"></div>
+      </div>
+
+      <!-- OUTILS -->
+      <div class="page" id="page-guide-outils">
+        <div class="page-eyebrow">Guide</div>
+        <div class="page-title">Outils & <em>accès</em></div>
+        <div class="page-sub">Identifiants et accès aux plateformes utilisées.</div>
+        <div class="tools-grid" id="guide-tools-grid"></div>
+      </div>
+
+      <!-- FICHES PROCESS -->
+      <div class="page" id="page-guide-fiches">
+        <div class="page-eyebrow">Guide</div>
+        <div class="page-title">Fiches <em>process</em></div>
+        <div class="page-sub">Les étapes clés de nos missions d'optimisation sociale.</div>
+        <div class="fiches-grid" id="guide-fiches-grid"></div>
+        <div id="fiche-modal-wrap" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;padding:2rem">
+          <div style="background:#fff;border-radius:14px;padding:2rem;max-width:680px;width:100%;max-height:80vh;overflow-y:auto;position:relative">
+            <button onclick="closeFicheModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--g400)">✕</button>
+            <div id="fiche-modal-title" style="font-family:var(--ff-serif);font-size:22px;font-weight:400;margin-bottom:1rem"></div>
+            <div id="fiche-modal-body" style="font-size:13px;color:var(--text2);line-height:1.8"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEXIQUE -->
+      <div class="page" id="page-guide-lex">
+        <div class="page-eyebrow">Guide</div>
+        <div class="page-title">Lexique <em>métier</em></div>
+        <div class="page-sub">Les termes clés de l'optimisation sociale.</div>
+        <div class="filters" style="margin-bottom:1rem">
+          <input type="text" id="lex-search" placeholder="Rechercher un terme..." oninput="filterLex(this.value)"/>
+          <div id="lex-tabs" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+        </div>
+        <div id="lex-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+      </div>
+
+      <!-- TEMPLATES -->
+      <div class="page" id="page-guide-tpl">
+        <div class="page-eyebrow">Guide</div>
+        <div class="page-title">Templates <em>emails</em></div>
+        <div class="page-sub">Modèles de messages prêts à l'emploi.</div>
+        <div id="tpl-list"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -500,6 +597,15 @@ function buildApp(){
       {id:'fact',icon:'◉',lbl:'Facturation'},
       {id:'alertes',icon:'⚑',lbl:'Alertes'},
       {id:'charge',icon:'◎',lbl:'Charge équipe'},
+      {id:'__sep',icon:'',lbl:'Guide'},
+      {id:'__sep',icon:'',lbl:'Guide'},
+      {id:'__sep',icon:'',lbl:'Guide'},
+      {id:'__sep',icon:'',lbl:'Guide'},
+      {id:'guide-equipe',icon:'◑',lbl:'Équipe'},
+      {id:'guide-outils',icon:'◐',lbl:'Outils & accès'},
+      {id:'guide-fiches',icon:'◈',lbl:'Fiches process'},
+      {id:'guide-lex',icon:'◎',lbl:'Lexique'},
+      {id:'guide-tpl',icon:'◉',lbl:'Templates'},
     ],
     mgr:[
       {id:'accueil',icon:'⌂',lbl:'Accueil'},
@@ -508,23 +614,38 @@ function buildApp(){
       {id:'leviers',icon:'◈',lbl:'Leviers'},
       {id:'alertes',icon:'⚑',lbl:'Alertes'},
       {id:'charge',icon:'◎',lbl:'Charge équipe'},
+      {id:'guide-equipe',icon:'◑',lbl:'Équipe'},
+      {id:'guide-outils',icon:'◐',lbl:'Outils & accès'},
+      {id:'guide-fiches',icon:'◈',lbl:'Fiches process'},
+      {id:'guide-lex',icon:'◎',lbl:'Lexique'},
+      {id:'guide-tpl',icon:'◉',lbl:'Templates'},
     ],
     clt:[
       {id:'accueil',icon:'⌂',lbl:'Accueil'},
       {id:'kanban',icon:'⊞',lbl:'Mes tâches'},
       {id:'dossiers',icon:'◫',lbl:'Mes dossiers'},
       {id:'leviers',icon:'◈',lbl:'Mes leviers'},
+      {id:'guide-equipe',icon:'◑',lbl:'Équipe'},
+      {id:'guide-outils',icon:'◐',lbl:'Outils & accès'},
+      {id:'guide-fiches',icon:'◈',lbl:'Fiches process'},
+      {id:'guide-lex',icon:'◎',lbl:'Lexique'},
+      {id:'guide-tpl',icon:'◉',lbl:'Templates'},
     ],
     aud:[
       {id:'accueil',icon:'⌂',lbl:'Accueil'},
       {id:'dossiers',icon:'◫',lbl:'Dossiers'},
       {id:'alertes',icon:'⚑',lbl:'Alertes'},
+      {id:'guide-equipe',icon:'◑',lbl:'Équipe'},
+      {id:'guide-outils',icon:'◐',lbl:'Outils & accès'},
+      {id:'guide-fiches',icon:'◈',lbl:'Fiches process'},
+      {id:'guide-lex',icon:'◎',lbl:'Lexique'},
+      {id:'guide-tpl',icon:'◉',lbl:'Templates'},
     ],
   };
   const items=navConfig[CU.role]||navConfig.aud;
   document.getElementById('sb-nav').innerHTML=
     '<div class="nav-sect">Navigation</div>'+
-    items.map((n,i)=>`<div class="nav-item${i===0?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="nav-icon">${n.icon}</span>${n.lbl}${n.badge?`<span class="nav-badge" id="badge-val">0</span>`:''}</div>`).join('');
+    items.map((n,i)=>n.id==='__sep'?`<div class="nav-sect" style="margin-top:8px">${n.lbl}</div>`:`<div class="nav-item${i===0?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="nav-icon">${n.icon}</span>${n.lbl}${n.badge?`<span class="nav-badge" id="badge-val">0</span>`:''}</div>`).join('');
 
   // Setup thead dossiers
   const th=document.getElementById('dos-thead');
@@ -553,6 +674,9 @@ function showPage(id,btn){
     kanban:buildKanban, validations:buildValidations,
     leviers:buildLeviers, fact:buildFact,
     alertes:buildAlertes, charge:buildCharge,
+    'guide-equipe':buildGuideEquipe, 'guide-outils':buildGuideOutils,
+    'guide-fiches':buildGuideFiches, 'guide-lex':buildGuideLex,
+    'guide-tpl':buildGuideTpl,
   };
   if(render[id])render[id]();
 }
@@ -896,6 +1020,162 @@ function maybeClose(e){if(e.target===document.getElementById('pov'))closeP();}
 function refreshAll(){
   const active=document.querySelector('.page.on')?.id?.replace('page-','');
   if(active)showPage(active,document.getElementById('ni-'+active));
+}
+
+// ── GUIDE DATA ────────────────────────────────────────────────────────────────
+var TEAM = [
+  {i:"ED",name:"Edouard DECHELETTE",role:"Associé",dept:"Optimisation & Performance RH",email:"edouard.dechelette@groupe-hera.com"},
+  {i:"TM",name:"Tom MEZONNIAUD",role:"Associé",dept:"Optimisation & Performance RH",email:"tom.mezonniaud@groupe-hera.com"},
+  {i:"RM",name:"Raphaël MARTEAU",role:"Associé",dept:"Finance d'Entreprise",email:"raphael.marteau@groupe-hera.com"},
+  {i:"PB",name:"Pierre-Louis BOYET",role:"Associé",dept:"Finance d'Entreprise",email:"pierre-louis.boyet@groupe-hera.com"},
+  {i:"RB",name:"Romane BASLE",role:"Manager",dept:"Social / Fiscal / RH",email:"romane.basle@groupe-hera.com"},
+  {i:"MJ",name:"Margaux JOUANIN",role:"Consultante Senior",dept:"Social & RH",email:"margaux.jouanin@groupe-hera.com"},
+  {i:"MF",name:"Myriam FOCK-YEE",role:"Consultante Senior",dept:"Social & RH",email:"myriam.fock-yee@groupe-hera.com"},
+  {i:"LH",name:"Laura HERMANS",role:"Consultante",dept:"Social & RH",email:"laura.hermans@groupe-hera.com"},
+  {i:"ZG",name:"Zélie GERBAL",role:"Consultante",dept:"Social & RH",email:"zelie.gerbal@groupe-hera.com"},
+  {i:"CP",name:"Clément PERRIN",role:"Chargé d'affaires",dept:"Finance",email:"clement.perrin@groupe-hera.com"},
+  {i:"NL",name:"Nino LEJEUNE",role:"Analyste",dept:"Finance",email:"nino.lejeune@groupe-hera.com"},
+  {i:"PG",name:"Paul GUENDAFA",role:"Directeur Commercial",dept:"Commercial",email:"paul.guendafa@groupe-hera.com"},
+  {i:"NF",name:"Natacha FIENO",role:"Commerciale",dept:"Commercial",email:"natacha.fieno@groupe-hera.com"},
+  {i:"VJ",name:"Valérie JEAN-BAPTISTE",role:"Chargée gestion admin.",dept:"Transverse",email:"valerie.jean-baptiste@groupe-hera.com"},
+];
+
+var TOOLS = [
+  {ico:"🏛️",name:"Portail URSSAF",cat:"Déclarations sociales",fields:[{l:"Identifiant",v:"911533818",cp:true},{l:"Mot de passe",v:"M QSbi,4n9#3",pw:true}],url:"https://www.urssaf.fr/accueil/se-connecter.html",urlLabel:"Accéder à l'URSSAF",note:"Compte HERA en tant que tiers mandaté. Les comptes clients sont rattachés à ce portefeuille après signature de la convention."},
+  {ico:"✍️",name:"DocuSign",cat:"Signature électronique",fields:[{l:"Identifiant",v:"tom.mezonniaud@groupe-hera.com",cp:true},{l:"Mot de passe",v:"Hera2025!",pw:true}],url:"https://account.docusign.com/",urlLabel:"Accéder à DocuSign",note:"Utilisé pour : lettres de mission, conventions tiers mandaté, demandes de remboursement."},
+  {ico:"📮",name:"La Poste Professionnelle",cat:"Envoi de courriers LRAR",fields:[{l:"Identifiant",v:"tom.mezonniaud@vulcain-oi.com",cp:true},{l:"Mot de passe",v:"Vulcain2022!",pw:true}],url:"https://www.laposte.fr/professionnel",urlLabel:"Accéder à La Poste Pro",note:"Attention : vérifier que le compte est bien en mode Professionnel (peut basculer sur Particulier)."},
+  {ico:"📚",name:"RF Paye",cat:"Base de données paie",fields:[{l:"Identifiant",v:"30426833678512",cp:true},{l:"Mot de passe",v:"Hera2025",pw:true}],url:"https://fde.grouperf.com/login",urlLabel:"Accéder à RF Paye",note:""},
+  {ico:"⚖️",name:"EL NET",cat:"Base juridique",fields:[{l:"Identifiant",v:"E6MWF3",cp:true},{l:"Mot de passe",v:"T6L2FU",pw:true}],url:"https://securega.gestion-des-acces.fr/login",urlLabel:"Accéder à EL NET",note:""},
+  {ico:"🎓",name:"BU Université de La Réunion",cat:"Base de données droit",fields:[{l:"Identifiant",v:"43007382",cp:true},{l:"Mot de passe",v:"wudypobipipu/hysu",pw:true}],url:"https://bu.univ-reunion.fr/chercher-trouver/bases-en-ligne/bdd-droit",urlLabel:"Accéder à la BU",note:""},
+  {ico:"📶",name:"WiFi Bureau",cat:"Réseau",fields:[{l:"HERA GROUPE",v:"Her@Wifi974$$",pw:true},{l:"Livebox 9270",v:"pXTvQjjsmXSVuj6dRg",pw:true}],url:null,note:""},
+  {ico:"⚙️",name:"GENERATOR v5",cat:"Outil génération documents",fields:[{l:"Emplacement",v:"1. Interne > 10. IT > NDA & LM GENERATOR"},{l:"Activer les macros",v:"Excel — Oui à l'ouverture"}],url:null,note:"Génère NDA, LM et Conventions tiers mandaté automatiquement. Contacter Paul GUENDAFA pour une démo. Copier GENERATORv5.xlsm + templates Word dans vos Documents locaux."},
+];
+
+var FICHES = [
+  {ico:"🔍",bg:"#EBF8FF",ic:"#3182CE",title:"Étape 1 — Audit Préalable",meta:"Phase commerciale · Optimisation Sociale",tag:"Commercial",resume:"Analyse des fichiers de paie pour identifier les leviers d'optimisation et estimer les montants récupérables. Objectif : transformer le prospect en client.",content:'<h3>Objectif</h3><p>Transformer le prospect en client en présentant une estimation crédible des économies potentielles.</p><h4>Tâches Consultant</h4><ul><li>Participer au RDV de prospection</li><li>Analyser les fichiers Excel de paie transmis par le client</li><li>Identifier les leviers et estimer les montants récupérables</li><li>Rédiger le support PPT de restitution (sans fondements juridiques — uniquement estimations)</li><li>Animer le RDV de restitution audit préalable</li></ul><h4>Tâches Administration</h4><ul><li>Demande de documents de paie (emails et relances)</li><li>Rédaction et gestion du NDA (envoi, signature, classement)</li><li>Organisation du RDV de restitution</li><li>Rédaction lettre de mission + envoi support</li></ul><div class="info">Le support PPT ne contient PAS de fondements juridiques à ce stade — uniquement des estimations (catégorie du levier, fait générateur, montants estimés).</div>'},
+  {ico:"📊",bg:"#FFFAF0",ic:"#C4982A",title:"Étape 2 — Audit Définitif",meta:"Phase d'audit · Optimisation Sociale",tag:"Audit",resume:"Analyse complète sur 3 ans avec croisement DSN / journaux de paie. Fondements juridiques et économies définitives chiffrées.",content:'<h3>Objectif</h3><p>Réaliser l\'analyse complète et chiffrée des 3 dernières années, avec base légale. Arbitrer avec le client les leviers à mettre en oeuvre.</p><h4>Tâches Consultant</h4><ul><li>Réaliser l\'analyse complète du passé (Excel) sur les 3 dernières années</li><li>Cadrer les données : croiser les BRC avec les journaux de paie pour identifier les écarts</li><li>Rédiger le support PPT avec fondements juridiques et économies définitives chiffrées</li><li>Animer le RDV de restitution audit définitif</li><li>Arbitrer avec le client quels leviers il souhaite mettre en oeuvre</li></ul><h4>Tâches Administration</h4><ul><li>Email de lancement de mission et demande de pièces complémentaires</li><li>Rédaction convention tiers mandaté + envoi DocuSign + rattachement portail URSSAF</li><li>Organisation du RDV de restitution</li><li>Collecte des BRC sur le portail URSSAF + intégration fichier de cadrage</li></ul>'},
+  {ico:"📝",bg:"#F0FFF4",ic:"#38A169",title:"Étape 3 — Mise en Oeuvre Passé",meta:"Demande de remboursement · URSSAF / CGSS",tag:"URSSAF",resume:"Rédaction de la demande de remboursement et des annexes. Envoi LRAR et dépôt sur le portail URSSAF.",content:'<h3>Objectif</h3><p>Constituer et déposer le dossier de demande de remboursement auprès de la CGSS/URSSAF pour les exercices passés.</p><h4>Tâches Consultant</h4><ul><li>Cadrage DSN/paie : vérification BRC vs journaux de paie, identification et correction des écarts</li><li>Elaboration des tableaux récapitulatifs (par levier, par établissement)</li><li>Rédaction de la demande de remboursement et des annexes</li><li>Rédaction des courriers complémentaires éventuels</li></ul><h4>Tâches Administration</h4><ul><li>Envoi des documents pour signature (mail + DocuSign) + classement</li><li>Fusion et compression du dossier complet (DR signée + annexes + liasses fiscales)</li><li>Envoi LRAR + dépôt sur le portail URSSAF + suivi tableau</li><li>Relances administratives simples auprès de l\'URSSAF</li></ul><h4>Liasses fiscales requises</h4><table><tr><th>Formulaire</th><th>Document</th></tr><tr><td>2050</td><td>Bilan actif</td></tr><tr><td>2051</td><td>Bilan passif</td></tr><tr><td>2052/2053</td><td>Compte de résultat</td></tr><tr><td>2059-E</td><td>Effectifs et valeur ajoutée</td></tr><tr><td>2065</td><td>Impôt sur les sociétés</td></tr></table>'},
+  {ico:"⚙️",bg:"#FFF5F5",ic:"#9B1C31",title:"Étape 4 — Mise en Oeuvre Futur",meta:"Paramétrage paie · Facturation",tag:"Futur",resume:"Notification au gestionnaire de paie, vérification de la conformité et établissement de l'état récapitulatif des économies.",content:'<h3>Objectif</h3><p>S\'assurer que les leviers identifiés sont bien appliqués sur les paies futures et établir la facturation.</p><h4>Tâches Consultant</h4><ul><li>Notification au gestionnaire de paie : mail détaillant les leviers avec fondement juridique</li><li>Relances concernant la modification du paramétrage</li><li>Contrôle de la conformité du paramétrage modifié (vérification DSN du mois suivant)</li><li>Etablissement de l\'état récapitulatif des économies générées</li></ul><h4>Tâches Administration</h4><ul><li>Mail de demande de documents de paie pour vérification + relances</li><li>Mail de facturation + suivi règlement</li></ul><div class="warn">Ne pas valider la facturation sans avoir contrôlé la conformité sur les BP/LP ou la DSN du mois suivant.</div>'},
+  {ico:"⚓",bg:"#FAF5FF",ic:"#7C3AED",title:"Mission RPA — Perfectionnement Actif",meta:"Mission spécifique · 6 phases · Partenaire DELTAPRO",tag:"RPA",resume:"Régime douanier permettant de bénéficier du barème LODEOM compétitivité renforcée (CTP 463). Mission en 6 phases.",content:'<h3>Principe</h3><p>Le perfectionnement actif est un régime douanier applicable lorsqu\'on importe des marchandises hors UE. Disposer d\'une autorisation douanière permet de bénéficier du barème LODEOM compétitivité renforcée (CTP 463) à l\'ensemble des salariés.</p><h4>Contacts clés</h4><table><tr><th>Interlocuteur</th><th>Contact</th></tr><tr><td>DELTAPRO — Jamil MOUSSA</td><td>jmoussa@deltapro.re</td></tr><tr><td>DELTAPRO — Yann GAUDIEUX</td><td>ygaudieux@deltapro.re</td></tr><tr><td>CGSS — Direction Recouvrement</td><td>Destinataire du rescrit social LRAR</td></tr></table><h4>Phase 1 — Ouverture</h4><ul><li>Mail récapitulatif de début de mission</li><li>Mandat DELTAPRO + rescrit social LRAR à la CGSS</li></ul><h4>Phase 2 — Compte Pro Douane</h4><ul><li>Création ou récupération des identifiants douane.gouv.fr</li><li>Certification du compte via DocuSign</li></ul><h4>Phase 3 — Ateliers & Instruction</h4><ul><li>Ateliers avec le client : marchandises, code NC, taux de rendement, délai d\'apurement</li></ul><h4>Phase 4 — Demande d\'autorisation</h4><ul><li>Courrier de demande + Annexe 12 (formulaire UE)</li><li>Envoi dossier complet à DELTAPRO pour dépôt Douane</li></ul><h4>Phase 5 — Paramétrage paie</h4><ul><li>Instructions au gestionnaire de paie (barème LODEOM renforcé)</li><li>Vérification conformité sur DSN</li></ul><h4>Phase 6 — Clôture & suivi annuel</h4><ul><li>Facturation + rappel annuel pour renouvellement</li></ul>'},
+  {ico:"🔧",bg:"#F0F4FF",ic:"#4E87C4",title:"GENERATOR v5 — Outil de génération",meta:"Outil IT · Paul GUENDAFA",tag:"IT / Admin",resume:"Outil Excel avec macros développé par Paul pour générer automatiquement NDA, Lettres de mission et Conventions tiers mandaté.",content:'<h3>Présentation</h3><p>Paul GUENDAFA a développé un outil Excel avec macros qui génère automatiquement les principaux documents contractuels en quelques clics.</p><h4>Documents générés</h4><table><tr><th>#</th><th>Document</th><th>Usage</th></tr><tr><td>1</td><td>Convention tiers mandaté</td><td>Autorise HERA à agir au nom du client auprès de l\'URSSAF</td></tr><tr><td>2</td><td>NDA Social</td><td>Confidentialité — missions optimisation sociale</td></tr><tr><td>3</td><td>NDA Fiscal</td><td>Confidentialité — missions optimisation fiscale</td></tr><tr><td>4</td><td>LM Sociale</td><td>Lettre de mission — optimisation sociale</td></tr><tr><td>5</td><td>LM Fiscale</td><td>Lettre de mission — optimisation fiscale</td></tr></table><h4>Mise en place</h4><ul><li>Copier GENERATORv5.xlsm depuis : 1. Interne &gt; 10. IT &gt; NDA &amp; LM GENERATOR &gt; GENERATOR V5</li><li>Copier tous les fichiers Word du même dossier dans votre Documents local</li><li>Ouvrir le fichier et activer les macros</li><li>Dans l\'onglet "Ref." : remplacer le nom de Paul GUENDAFA par votre nom</li></ul><div class="warn">Les chemins pointent par défaut vers C:\\Users\\Paul GUENDAFA\\Documents\\ — assurez-vous d\'avoir copié les templates dans votre propre dossier Documents. Contacter Paul pour une démo.</div>'},
+];
+
+var TEMPLATES = [
+  {title:"Mail NDA & pièces pour audit préalable",body:"Bonjour Madame/Monsieur,\n\nNous vous remercions pour notre échange.\n\nComme convenu, vous trouverez en pièce jointe l'engagement de confidentialité.\n\nAfin de débuter nos travaux, pourriez-vous nous adresser les éléments suivants :\n• Sous format Excel, les extractions de paie de l'année 2025, faisant état, pour chaque salarié, de l'ensemble des rubriques de paie (y compris les heures travaillées et les cotisations patronales) avec les colonnes intitulées « base » « salarial » « patronal » ;\n• Les bulletins de paie de décembre 2025 et de janvier 2026 ;\n• L'extraction des effectifs disponible sur le site de l'URSSAF (capture d'écran via l'onglet « Compte », rubrique « Embauche », volet « Effectifs »).\n\nDans l'hypothèse où vous disposeriez uniquement des bulletins de paie dans un premier temps, n'hésitez pas à nous les transmettre afin que nous puissions commencer notre analyse.\n\nDès réception de ces éléments, nous serons en mesure de vous présenter rapidement nos conclusions lors d'un rendez-vous de restitution d'audit.\n\nD'ici-là, nous restons à votre disposition pour toutes précisions complémentaires.\n\nBien cordialement,"},
+  {title:"Mail suite à restitution audit préalable",body:"Bonjour Madame/Monsieur,\n\nSuite à la restitution des conclusions de l'audit préalable et comme évoqué lors de notre réunion, vous trouverez ci-joint :\n• La présentation de l'audit préalable projetée ;\n• La lettre de mission. Nous vous la transmettons via DocuSign par mail pour signature.\n\nSi cette dernière emporte votre adhésion, nous reviendrons vers vous pour solliciter les documents complémentaires nécessaires à la réalisation de l'audit définitif.\n\nNous restons à votre disposition pour toute question.\n\nBien cordialement,"},
+  {title:"Mail suite à la signature de la LM & convention tiers mandaté",body:"Bonjour Madame/Monsieur,\n\nNous accusons réception de la lettre de mission et vous remercions pour votre confiance. Vous trouverez ci-joint la lettre signée par Monsieur MEZONNIAUD.\n\nAfin que nous puissions vous présenter en détail les leviers d'économies identifiés, pourriez-vous nous adresser le journal de paie annuel pour les exercices 2023 et 2024, faisant état, pour chaque salarié, de l'état cumulé des rubriques de paie (y compris heures travaillées et des cotisations patronales), sous format Excel ?\n\nPar ailleurs, nous vous transmettons une convention de tiers mandaté, via DocuSign, pour signature afin que nous puissions vous rajouter à notre portail URSSAF. À ce titre, nous vous remercions de bien vouloir nous communiquer :\n• Le montant à payer figurant sur la DSN du mois précédent ;\n• Votre numéro de compte URSSAF.\n\nN'hésitez pas à nous contacter pour toute question.\n\nBien cordialement,"},
+  {title:"Rattachement — Portail URSSAF",body:"Bonjour,\n\nNous sommes désignés tiers déclarant pour le compte de la société suivante :\n\nSOCIETE : [Raison sociale]\nSIREN : [SIREN]\nCompte URSSAF : [Numéro]\nDernier montant DSN : [Montant]\n\nNous souhaiterions procéder au rattachement de ce compte à notre portefeuille URSSAF HERA GROUPE (SIRET 91153381800017 / Compte URSSAF : 974 000000004578225).\n\nPourriez-vous svp l'effectuer ?\n\nMerci,"},
+  {title:"Mail 0 économie — Fin de mission",body:"Bonjour Madame/Monsieur,\n\nNous tenons à vous remercier pour la confiance que vous nous avez accordée dans le cadre de notre mission d'audit.\n\nAprès analyse des documents, nous n'avons malheureusement pas identifié de leviers d'économies significatifs qui pourraient être mis en oeuvre. En conséquence, et conformément à nos engagements, nous mettons fin à notre mission à ce stade.\n\nToutefois, nous restons attentifs aux évolutions législatives et réglementaires susceptibles d'impacter votre secteur d'activité. Si de nouveaux dispositifs d'allègement de charges venaient à émerger, seriez-vous d'accord pour que nous vous recontactions ?\n\nNous souhaitons également savoir si vous souhaitez que nous conservions temporairement vos données ou si vous préférez que nous les supprimions.\n\nBien cordialement,"},
+  {title:"Relance — Insatisfaction portail URSSAF",body:"Bonjour,\n\nNous avons formulé en date du [DATE] une demande de remboursement de cotisations sociales indûment versées.\n\nOr, à ce jour, nous n'avons toujours pas eu de retour concernant notre demande.\n\nBien cordialement,"},
+];
+
+var LEXIQUE = [
+  {t:"DSN",c:"Réglementaire",d:"Déclaration Sociale Nominative — déclaration mensuelle obligatoire transmise à l'URSSAF, récapitulant les cotisations sociales de chaque salarié."},
+  {t:"CTP",c:"Réglementaire",d:"Code Type de Personnel — libellé de cotisation dans la DSN. 668 = réduction générale, 462 = LODEOM compétitivité, 463 = LODEOM compétitivité renforcée."},
+  {t:"JP / LP",c:"Paie",d:"Journal de Paie / Livre de Paie — extraction Excel cumulée par salarié. Document central pour le cadrage et les analyses."},
+  {t:"BP",c:"Paie",d:"Bulletins de Paie — documents individuels remis à chaque salarié chaque mois."},
+  {t:"BRC",c:"Réglementaire",d:"Bordereau Annuel Récapitulatif des Cotisations — document annuel de synthèse des cotisations versées. À collecter sur le portail URSSAF pour le cadrage."},
+  {t:"BOSS",c:"Réglementaire",d:"Bulletin Officiel de la Sécurité Sociale — référence réglementaire pour l'interprétation des règles de cotisations. Notre bible réglementaire."},
+  {t:"CGSS",c:"Institutions",d:"Caisse Générale de Sécurité Sociale = URSSAF à La Réunion. Interlocuteur principal pour les demandes de remboursement."},
+  {t:"CRC",c:"Institutions",d:"Caisse de Retraite Complémentaire (AGIRC-ARRCO) — gère la retraite complémentaire, distincte des cotisations URSSAF."},
+  {t:"LODEOM",c:"Dispositif",d:"Loi pour le développement économique des outre-mer — dispositif spécifique aux DOM permettant des exonérations de charges renforcées. Coeur de notre activité."},
+  {t:"Tiers mandaté",c:"Contrat",d:"Convention par laquelle une entreprise autorise HERA à agir en son nom auprès de l'URSSAF pour accéder aux DSN et déposer des demandes."},
+  {t:"Rescrit social",c:"Procédure",d:"Procédure permettant à un employeur de demander à l'URSSAF une position officielle sur l'application d'une règle. Sécurise les pratiques."},
+  {t:"LM",c:"Contrat",d:"Lettre de Mission — contrat encadrant la prestation HERA, signé via DocuSign avant le démarrage de toute mission."},
+  {t:"NDA",c:"Contrat",d:"Non-Disclosure Agreement / Accord de confidentialité — signé dès le début de la relation avec un prospect."},
+  {t:"RPA",c:"Dispositif",d:"Régime de Perfectionnement Actif — régime douanier permettant de bénéficier du barème LODEOM compétitivité renforcée (CTP 463)."},
+  {t:"VDD",c:"Mission",d:"Vendor Due Diligence — analyse sociale préalable réalisée à l'initiative du vendeur pour sécuriser une opération de cession."},
+  {t:"Liasses fiscales",c:"Documents",d:"Formulaires fiscaux annuels : 2050 (bilan actif), 2051 (bilan passif), 2052/2053 (compte de résultat), 2059-E (effectifs), 2065 (IS)."},
+  {t:"Code NAF / APE",c:"Réglementaire",d:"Code attribué par l'INSEE identifiant l'activité principale de l'entreprise. Détermine les exonérations applicables."},
+  {t:"CCN",c:"Réglementaire",d:"Convention Collective Nationale — accord fixant les règles de travail d'une branche professionnelle (salaires, classification, conditions)."},
+  {t:"DELTAPRO",c:"Partenaire",d:"Transitaire partenaire HERA pour les missions RPA. Contacts : Jamil MOUSSA (jmoussa@deltapro.re) et Yann GAUDIEUX (ygaudieux@deltapro.re)."},
+  {t:"Coefficient T",c:"Calcul",d:"Taux maximal de cotisations patronales pouvant être exonérées dans le cadre d'un dispositif d'allègement de charges sociales."},
+];
+
+// ── GUIDE RENDER ──────────────────────────────────────────────────────────────
+function buildGuideEquipe(){
+  document.getElementById('guide-team-grid').innerHTML=TEAM.map(t=>`
+    <div class="team-card">
+      <div class="team-av">${t.i}</div>
+      <div class="team-name">${t.name}</div>
+      <div class="team-role">${t.role}</div>
+      <div class="team-dept">${t.dept}</div>
+      <div class="team-email">${t.email}</div>
+    </div>`).join('');
+}
+
+function buildGuideOutils(){
+  document.getElementById('guide-tools-grid').innerHTML=TOOLS.map(t=>{
+    let html=`<div class="tool-card"><div class="tool-head"><div class="tool-ico">${t.ico}</div><div><div class="tool-name">${t.name}</div><div class="tool-cat">${t.cat}</div></div></div>`;
+    t.fields.forEach(f=>{
+      html+=`<div class="tool-field-lbl">${f.l}</div><div class="tool-field-val${f.pw?' pw':''}${f.cp?' cp':''}"${f.cp?' onclick="copyTxt(\''+f.v+'\',this)" title="Cliquer pour copier"':''}>${f.v}${f.cp?'<span style="color:var(--bordeaux);font-size:11px"> ⎘</span>':''}</div>`;
+    });
+    if(t.url)html+=`<a class="tool-url" href="${t.url}" target="_blank">${t.urlLabel} ↗</a>`;
+    if(t.note)html+=`<div class="tool-note">${t.note}</div>`;
+    html+='</div>';
+    return html;
+  }).join('');
+}
+
+function buildGuideFiches(){
+  document.getElementById('guide-fiches-grid').innerHTML=FICHES.map((f,i)=>`
+    <div class="fiche-card" onclick="openFiche(${i})">
+      <div class="fiche-hd"><div class="fiche-ico" style="background:${f.bg};color:${f.ic}">${f.ico}</div>
+      <div><div class="fiche-title">${f.title}</div><div class="fiche-meta">${f.meta}</div></div></div>
+      <div class="fiche-resume">${f.resume}</div>
+      <div class="fiche-ft"><span class="fiche-tag">${f.tag}</span><span class="fiche-arr">→</span></div>
+    </div>`).join('');
+}
+
+function openFiche(i){
+  document.getElementById('fiche-modal-title').textContent=FICHES[i].title;
+  document.getElementById('fiche-modal-body').innerHTML=FICHES[i].content;
+  const w=document.getElementById('fiche-modal-wrap');
+  w.style.display='flex';
+}
+function closeFicheModal(){document.getElementById('fiche-modal-wrap').style.display='none';}
+
+let currentLexCat='Tous';
+function buildGuideLex(){
+  filterLex('');
+}
+function filterLex(search){
+  const s=(search||'').toLowerCase();
+  const cats=['Tous'];
+  LEXIQUE.forEach(e=>{if(cats.indexOf(e.c)<0)cats.push(e.c);});
+  document.getElementById('lex-tabs').innerHTML=cats.map(c=>`<button class="lex-tab${c===currentLexCat?' active':''}" onclick="setLexCat('${c}')">${c}</button>`).join('');
+  const filtered=LEXIQUE.filter(e=>{
+    const catOk=currentLexCat==='Tous'||e.c===currentLexCat;
+    const searchOk=!s||e.t.toLowerCase().includes(s)||e.d.toLowerCase().includes(s);
+    return catOk&&searchOk;
+  });
+  document.getElementById('lex-grid').innerHTML=filtered.map(e=>`
+    <div class="lex-card">
+      <div class="lex-cat">${e.c}</div>
+      <div class="lex-term">${e.t}</div>
+      <div class="lex-def">${e.d}</div>
+    </div>`).join('');
+}
+function setLexCat(c){currentLexCat=c;filterLex(document.getElementById('lex-search')?.value||'');}
+
+function buildGuideTpl(){
+  document.getElementById('tpl-list').innerHTML=TEMPLATES.map((t,i)=>`
+    <div class="tpl-card">
+      <div class="tpl-hd"><div class="tpl-title">${t.title}</div>
+      <button class="tpl-copy-btn" onclick="copyTpl(${i},this)">📋 Copier</button></div>
+      <div class="tpl-body">${t.body}</div>
+    </div>`).join('');
+}
+
+function copyTpl(i,btn){
+  navigator.clipboard.writeText(TEMPLATES[i].body).then(()=>{btn.textContent='✅ Copié!';setTimeout(()=>btn.textContent='📋 Copier',2000);});
+}
+function copyTxt(txt,el){
+  navigator.clipboard.writeText(txt).then(()=>{
+    const orig=el.innerHTML;
+    el.style.background='var(--bordeaux-pale)';
+    setTimeout(()=>el.style.background='',1500);
+  });
 }
 
 buildLoginGrid();
