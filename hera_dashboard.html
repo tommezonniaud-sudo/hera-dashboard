@@ -245,6 +245,27 @@ tr:hover td{background:var(--bg)}
 /* ── ECO ── */
 .eco{font-weight:500;color:#16a34a}
 
+/* ── SIMULATEUR ── */
+.simu-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.simu-field{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:16px}
+.simu-field-lbl{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:var(--ff-mono);margin-bottom:8px}
+.simu-field-inp{width:100%;font-size:18px;font-family:var(--ff-serif);font-weight:300;color:var(--ink);background:transparent;border:none;outline:none;padding:0}
+.simu-field-unit{font-size:11px;color:var(--ink4);margin-top:4px;font-family:var(--ff-mono)}
+.simu-toggle{display:flex;gap:6px;margin-top:6px}
+.simu-toggle-btn{padding:4px 12px;border-radius:20px;border:1px solid var(--line2);font-size:11px;cursor:pointer;font-family:var(--ff-mono);background:var(--white);color:var(--ink3);transition:all .15s}
+.simu-toggle-btn.on{background:var(--bx);color:#fff;border-color:var(--bx)}
+.simu-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.simu-result{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:18px;position:relative;overflow:hidden;transition:all .2s;cursor:default}
+.simu-result:hover{box-shadow:var(--sh2);border-color:var(--line2)}
+.simu-result.best{border-color:var(--bx);background:var(--bx-pale)}
+.simu-result.best::before{content:'Meilleur';position:absolute;top:10px;right:10px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--bx);font-family:var(--ff-mono)}
+.sr-name{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);font-family:var(--ff-mono);margin-bottom:6px}
+.sr-total{font-family:var(--ff-serif);font-size:32px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:4px}
+.sr-total.hi{color:var(--bx)}
+.sr-detail{font-size:10px;color:var(--ink4);line-height:1.7;font-family:var(--ff-mono)}
+.sr-na{font-size:12px;color:var(--ink4);font-style:italic;margin-top:8px}
+.simu-ref{background:var(--bg2);border-radius:var(--r10);padding:12px 16px;font-size:11px;color:var(--ink3);font-family:var(--ff-mono);line-height:1.8;margin-bottom:16px}
+
 /* ── GUIDE ── */
 .g-hero{background:linear-gradient(135deg,var(--bx) 0%,var(--bx3) 100%);border-radius:var(--r20);padding:24px 28px 20px;margin-bottom:20px;position:relative;overflow:hidden}
 .g-hero::after{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04)}
@@ -496,6 +517,7 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-leviers"><div id="g-leviers-content"></div></div>
         <div class="page" id="page-g-templates"><div id="g-templates-content"></div></div>
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
+        <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
       </div>
     </div>
   </div>
@@ -635,9 +657,60 @@ const GUIDE_TEAM_DATA=[
   {id:'VDP',name:'Valérie Dit Parny',role:"Chargé d'audit",email:'v.ditparny@groupehera.fr',cls:'li-au'},
 ];
 const GUIDE_TOOLS=[
-  {name:'Portail URSSAF',note:'Compte HERA tiers mandaté — SIRET 91153381800017 / Compte URSSAF : 974 000000004578225'},
-  {name:'DocuSign',note:'Lettres de mission, conventions tiers mandaté, demandes de remboursement'},
-  {name:'La Poste Professionnelle',note:'⚠️ Vérifier que le compte est bien en mode Professionnel (peut basculer sur Particulier)'},
+  {
+    name:'Portail URSSAF',
+    url:'https://www.urssaf.fr',
+    badge:'Tiers mandaté',
+    badgeCls:'li-c',
+    desc:"Plateforme principale de gestion des cotisations. Compte HERA en tant que tiers déclarant rattaché au portefeuille client.",
+    fields:[
+      {l:'SIRET HERA',v:'91153381800017'},
+      {l:'Compte URSSAF HERA',v:'974 000000004578225'},
+    ],
+    warn:"Ce compte est le compte HERA en tant que tiers mandaté. Les comptes clients sont rattachés à ce portefeuille une fois la convention signée.",
+  },
+  {
+    name:'DocuSign',
+    url:'https://www.docusign.fr',
+    badge:'Signature électronique',
+    badgeCls:'li-m',
+    desc:"Utilisé pour toutes les signatures électroniques de documents contractuels et officiels.",
+    fields:[],
+    usages:['Lettres de mission','Conventions de tiers mandaté','Demandes de remboursement','Mandats DELTAPRO (RPA)'],
+    warn:null,
+  },
+  {
+    name:'La Poste Professionnelle',
+    url:'https://www.laposte.fr/professionnel',
+    badge:'Envoi courriers',
+    badgeCls:'li-au',
+    desc:"Utilisé pour les envois de courriers recommandés (LRAR) notamment pour les rescrits sociaux et demandes de remboursement URSSAF.",
+    fields:[],
+    usages:['Envois LRAR vers CGSS / URSSAF','Demandes de rescrit social','Relances officielles'],
+    warn:"Vérifier que le compte est bien en mode Professionnel — il peut basculer automatiquement sur Particulier.",
+  },
+  {
+    name:'DELTAPRO',
+    url:null,
+    badge:'Partenaire Douanes',
+    badgeCls:'li-a',
+    desc:"Partenaire douanier chargé du dépôt des dossiers de Perfectionnement Actif (RPA) auprès des Douanes françaises.",
+    fields:[
+      {l:'Contact 1',v:'Jamil'},
+      {l:'Contact 2',v:'Yann'},
+    ],
+    usages:['Dépôt demande autorisation PA','Suivi du dossier auprès des Douanes'],
+    warn:null,
+  },
+  {
+    name:'WiFi Bureau',
+    url:null,
+    badge:'Infrastructure',
+    badgeCls:'li-c',
+    desc:"Connexion internet du bureau — à récupérer auprès de l'équipe à l'arrivée.",
+    fields:[],
+    warn:null,
+  },
 ];
 const GUIDE_PROCESS=[
   {n:1,t:"Audit préalable",sub:"Identification des leviers et estimation des montants récupérables",tasks:["Analyser les fichiers Excel de paie transmis par le client","Identifier les leviers d'optimisation et estimer les montants","Rédiger le support PPT de restitution (estimations et projections, sans fondements juridiques)","Participer au RDV de restitution avec le prospect (optionnel)"]},
@@ -728,7 +801,17 @@ function buildGEquipe(){
     <div class="card"><div class="card-ttl">Pôle Optimisation & Performance RH</div><div class="g-team-grid">${GUIDE_TEAM_DATA.filter(u=>['TME','EDE','RBA','MJO','MFY','LHE','ZGE','VDP'].includes(u.id)).map(u=>`
       <div class="g-team-card"><div class="g-av ${u.cls}">${u.id}</div><div class="g-tname">${u.name}</div><div class="g-trole">${u.role}</div></div>`).join('')}</div></div>
     <div class="card"><div class="card-ttl">Outils & accès</div>${GUIDE_TOOLS.map(t=>`
-      <div class="ar"><div class="ar-dot dg"></div><div style="flex:1"><div class="ar-name">${t.name}</div><div class="ar-det">${t.note}</div></div></div>`).join('')}</div>`;
+      <div style="padding:14px 0;border-bottom:1px solid var(--line)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <div style="font-size:13px;font-weight:600">${t.name}</div>
+          <span class="bx ${t.badgeCls}" style="font-size:8px;padding:2px 8px">${t.badge}</span>
+          ${t.url?`<a href="${t.url}" target="_blank" style="margin-left:auto;font-size:10px;color:var(--bx);font-family:var(--ff-mono);text-decoration:none">↗ Accéder</a>`:''}
+        </div>
+        <div style="font-size:12px;color:var(--ink3);line-height:1.6;margin-bottom:8px">${t.desc}</div>
+        ${t.fields&&t.fields.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">${t.fields.map(f=>`<div style="background:var(--bg2);border-radius:var(--r6);padding:4px 10px;font-size:11px"><span style="color:var(--ink4);font-family:var(--ff-mono)">${f.l} : </span><span style="font-weight:500">${f.v}</span></div>`).join('')}</div>`:''}
+        ${t.usages&&t.usages.length?`<div style="font-size:11px;color:var(--ink3)">${t.usages.map(u=>`<span style="margin-right:10px">→ ${u}</span>`).join('')}</div>`:''}
+        ${t.warn?`<div style="font-size:11px;color:var(--or);background:var(--or-pale);border:1px solid rgba(184,137,31,.2);border-radius:var(--r6);padding:6px 10px;margin-top:8px">⚠ ${t.warn}</div>`:''}
+      </div>`).join('')}</div>`;
 }
 function buildGProcess(){
   document.getElementById('g-process-content').innerHTML=`
@@ -771,6 +854,265 @@ function buildGRpa(){
       <div style="flex:1"><div class="g-step-title">${d.t}</div><div class="g-step-sub">${d.desc}</div>
       <div style="margin-top:8px;font-size:11px;color:var(--bx);font-family:var(--ff-mono)">→ ${d.action}</div>
       </div></div>`).join('')}</div>`;
+}
+
+// ── SIMULATEUR DONNÉES ───────────────────────────────────────────────────────
+const REF_DATA={
+  "2020 1":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 2":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 3":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 4":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 5":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 6":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 7":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 8":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 9":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 10":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 11":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2020 12":{smic:10.15,coefT50p:0.3245,coefT50m:0.3205,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 1":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 2":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 3":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 4":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 5":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 6":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 7":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 8":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 9":{smic:10.25,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 10":{smic:10.48,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 11":{smic:10.48,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2021 12":{smic:10.48,coefT50p:0.3246,coefT50m:0.3206,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 1":{smic:10.57,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 2":{smic:10.57,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 3":{smic:10.57,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 4":{smic:10.57,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 5":{smic:10.85,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 6":{smic:10.85,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 7":{smic:10.85,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 8":{smic:11.07,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 9":{smic:11.07,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 10":{smic:11.07,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 11":{smic:11.07,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2022 12":{smic:11.07,coefT50p:0.3235,coefT50m:0.3195,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 1":{smic:11.27,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 2":{smic:11.27,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 3":{smic:11.27,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 4":{smic:11.27,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 5":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 6":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 7":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 8":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 9":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 10":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 11":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2023 12":{smic:11.52,coefT50p:0.3231,coefT50m:0.3191,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 1":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 2":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 3":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 4":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 5":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 6":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 7":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 8":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 9":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 10":{smic:11.64,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 11":{smic:11.88,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2024 12":{smic:11.88,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 1":{smic:11.88,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 2":{smic:11.88,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 3":{smic:11.88,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 4":{smic:11.88,coefT50p:0.3234,coefT50m:0.3194,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 5":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 6":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 7":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 8":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 9":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 10":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 11":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2025 12":{smic:11.88,coefT50p:0.3233,coefT50m:0.3193,tauCRC:0.0601,tmin50m:null,tdelta50m:null,tmax50m:null,tmin50p:null,tdelta50p:null,tmax50p:null},
+  "2026 1":{smic:12.02,coefT50p:0.3241,coefT50m:0.3201,tauCRC:0.0601,tmin50m:0.02,tdelta50m:0.3781,tmax50m:0.3981,tmin50p:0.02,tdelta50p:0.3821,tmax50p:0.4021},
+};
+
+// ── LOGIQUE DE CALCUL ─────────────────────────────────────────────────────────
+function calcExo(brut, heures, annee, mois, ema50p) {
+  const key = `${annee} ${mois}`;
+  const ref = REF_DATA[key];
+  if (!ref) return null;
+
+  const smic = ref.smic;
+  const coefT = ema50p ? ref.coefT50p : ref.coefT50m;
+  const smicRef = heures * smic;
+  const ratio = smicRef > 0 ? brut / smicRef : 0; // brut / SMIC de référence
+
+  const tauAM = 0.06;
+  const tauAF = 0.018;
+
+  // Exonération LODEOM droit commun (base commune B1/B2/B3)
+  function calcLodeomBase(plancher, plafond, coefDeg) {
+    const seuilPlancher = plancher * smicRef;
+    const seuilPlafond = plafond * smicRef;
+    if (brut <= seuilPlancher) {
+      // Exonération totale
+      const exo = coefT * brut;
+      const am = tauAM * brut;
+      const af = tauAF * brut;
+      return { exo: exo + am + af, detail: "Totale" };
+    } else if (brut < seuilPlafond) {
+      // Exonération dégressive
+      const coefExo = (coefT / ((plafond - plancher) * smicRef)) * (seuilPlafond - brut);
+      const exo = coefExo * brut;
+      const am = tauAM * brut;
+      const af = tauAF * brut;
+      return { exo: exo + am + af, detail: "Dégressive" };
+    } else {
+      return { exo: 0, detail: "Hors plafond" };
+    }
+  }
+
+  // B1 - Compétitivité (plancher 1.3, plafond 2.2)
+  const b1 = calcLodeomBase(1.3, 2.2, 0.9);
+
+  // B2 - Compétitivité renforcée (plancher 2.0, plafond 2.7)
+  const b2 = calcLodeomBase(2.0, 2.7, 0.7);
+
+  // B3 - Innovation & Croissance (plancher 1.7, plafond 3.5)
+  const b3 = (() => {
+    const plancher = 1.7, plafond = 3.5, maintien = 2.5;
+    const seuilPlancher = plancher * smicRef;
+    const seuilPlafond = plafond * smicRef;
+    const seuilMaintien = maintien * smicRef;
+    if (brut <= seuilPlancher) {
+      return { exo: (coefT + tauAM + tauAF) * brut, detail: "Totale" };
+    } else if (brut <= seuilMaintien) {
+      return { exo: (coefT + tauAM + tauAF) * brut, detail: "Maintien" };
+    } else if (brut < seuilPlafond) {
+      const coefExo = (coefT / ((plafond - maintien) * smicRef)) * (seuilPlafond - brut);
+      return { exo: (coefExo + tauAM + tauAF) * brut, detail: "Dégressive" };
+    } else {
+      return { exo: 0, detail: "Hors plafond" };
+    }
+  })();
+
+  // B0bis - RGDU (à partir du 01/01/2026)
+  const b0bis = (() => {
+    if (annee < 2026) return { exo: 0, detail: "N/A avant 2026" };
+    const tmin = ema50p ? ref.tmin50p : ref.tmin50m;
+    const tdelta = ema50p ? ref.tdelta50p : ref.tdelta50m;
+    const tmax = ema50p ? ref.tmax50p : ref.tmax50m;
+    if (!tmin) return { exo: 0, detail: "N/A" };
+    const plancher = 1 * smicRef;
+    const plafond = 3 * smicRef;
+    if (brut > plafond) return { exo: 0, detail: "Hors plafond" };
+    let coefExo;
+    if (brut <= plancher) {
+      coefExo = tmax;
+    } else {
+      coefExo = tmax * Math.pow((plafond / brut - 1) / (plafond / plancher - 1), 1.75);
+    }
+    coefExo = Math.max(tmin, Math.min(tmax, coefExo));
+    return { exo: coefExo * brut, detail: "RGDU" };
+  })();
+
+  // B0 - RGCP (jusqu'au 31/12/2025)
+  const b0 = (() => {
+    if (annee >= 2026) return { exo: 0, detail: "Remplacé par RGDU en 2026" };
+    const plancher = 1 * smicRef;
+    const plafond = 1.6 * smicRef;
+    if (brut > plafond) return { exo: (tauAM + tauAF) * brut, detail: "AM+AF seulement" };
+    const coefExo = brut <= plancher ? 0.3195 : (0.3195 / (0.6 * smicRef)) * (plafond - brut);
+    return { exo: (coefExo + tauAM + tauAF) * brut, detail: "Dégressive" };
+  })();
+
+  return { smicRef: Math.round(smicRef*100)/100, smic, coefT, ratio: Math.round(ratio*100)/100, b1, b2, b3, b0bis, b0 };
+}
+
+// ── UI SIMULATEUR ─────────────────────────────────────────────────────────────
+let simuState = { brut: 3500, heures: 151.67, annee: 2026, mois: 1, ema50p: false };
+
+function buildGSimu() {
+  const moisNoms = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const annees = [...new Set(Object.keys(REF_DATA).map(k => parseInt(k.split(' ')[0])))].sort((a,b)=>b-a);
+
+  document.getElementById('g-simu-content').innerHTML = `
+    <div class="g-hero">
+      <div class="g-hero-ey">Outils · Simulateur</div>
+      <div class="g-hero-title">Comparateur <em>exonérations</em></div>
+      <div class="g-hero-sub">Calcul instantané des exonérations de charges patronales pour tous les barèmes LODEOM et RGDU/RGCP.</div>
+    </div>
+
+    <div class="simu-inputs">
+      <div class="simu-field">
+        <div class="simu-field-lbl">Salaire brut mensuel</div>
+        <input class="simu-field-inp" type="number" id="s-brut" value="${simuState.brut}" step="100" oninput="simuState.brut=+this.value;runSimu()"/>
+        <div class="simu-field-unit">€ brut</div>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Heures travaillées</div>
+        <input class="simu-field-inp" type="number" id="s-h" value="${simuState.heures}" step="1" oninput="simuState.heures=+this.value;runSimu()"/>
+        <div class="simu-field-unit">heures / mois</div>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Année</div>
+        <select class="simu-field-inp" id="s-an" style="font-size:18px;font-family:var(--ff-serif)" onchange="simuState.annee=+this.value;runSimu()">
+          ${annees.map(a=>`<option value="${a}" ${a===simuState.annee?'selected':''}>${a}</option>`).join('')}
+        </select>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Mois</div>
+        <select class="simu-field-inp" id="s-mo" style="font-size:15px;font-family:var(--ff-serif)" onchange="simuState.mois=+this.value;runSimu()">
+          ${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i+1===simuState.mois?'selected':''}>${moisNoms[i+1]}</option>`).join('')}
+        </select>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Effectif > 50 ?</div>
+        <div class="simu-toggle">
+          <button class="simu-toggle-btn ${!simuState.ema50p?'on':''}" onclick="simuState.ema50p=false;document.querySelectorAll('.simu-toggle-btn').forEach((b,i)=>{b.classList.toggle('on',i===0)});runSimu()">Non</button>
+          <button class="simu-toggle-btn ${simuState.ema50p?'on':''}" onclick="simuState.ema50p=true;document.querySelectorAll('.simu-toggle-btn').forEach((b,i)=>{b.classList.toggle('on',i===1)});runSimu()">Oui</button>
+        </div>
+        <div class="simu-field-unit">EMA > 50 salariés</div>
+      </div>
+    </div>
+
+    <div id="simu-ref-bar" class="simu-ref"></div>
+    <div class="simu-results" id="simu-results"></div>
+  `;
+  runSimu();
+}
+
+function runSimu() {
+  const r = calcExo(simuState.brut, simuState.heures, simuState.annee, simuState.mois, simuState.ema50p);
+  if (!r) {
+    document.getElementById('simu-results').innerHTML = '<p style="color:var(--ink4);font-style:italic">Données non disponibles pour cette période.</p>';
+    return;
+  }
+
+  document.getElementById('simu-ref-bar').innerHTML =
+    `SMIC horaire : <strong>${r.smic} €</strong> &nbsp;·&nbsp; SMIC de référence : <strong>${fmt(r.smicRef)}</strong> &nbsp;·&nbsp; Coeff. T : <strong>${r.coefT}</strong> &nbsp;·&nbsp; Ratio brut/SMIC : <strong>${r.ratio}x</strong>`;
+
+  const baremes = [
+    { id:'b1', name:'B1 — Compétitivité',         res:r.b1,   annees:'Tous', note:'Plancher 1.3 · Plafond 2.2' },
+    { id:'b2', name:'B2 — Compétitivité renforcée',res:r.b2,   annees:'Tous', note:'Plancher 2.0 · Plafond 2.7' },
+    { id:'b3', name:'B3 — Innovation & Croissance', res:r.b3,   annees:'Tous', note:'Plancher 1.7 · Plafond 3.5' },
+    { id:'b0bis', name:'B0bis — RGDU',             res:r.b0bis,annees:'2026+', note:'Remplace RGCP au 01/01/2026' },
+    { id:'b0', name:'B0 — RGCP',                   res:r.b0,   annees:'≤2025', note:"Jusqu'au 31/12/2025" },
+  ];
+
+  const maxExo = Math.max(...baremes.map(b => b.res.exo || 0));
+
+  document.getElementById('simu-results').innerHTML = baremes.map(b => {
+    const isBest = b.res.exo > 0 && b.res.exo === maxExo;
+    const na = b.res.exo === 0;
+    return `<div class="simu-result ${isBest ? 'best' : ''}">
+      <div class="sr-name">${b.name}</div>
+      <div class="sr-total ${isBest ? 'hi' : ''}">${b.res.exo > 0 ? fmt(b.res.exo) : '—'}</div>
+      <div class="sr-detail">
+        ${b.res.detail}<br>
+        ${b.note}<br>
+        ${b.annees}
+      </div>
+      ${na && b.res.detail !== 'Hors plafond' ? `<div class="sr-na">${b.res.detail}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 function buildLogin(){
@@ -827,9 +1169,9 @@ function buildApp(){
   document.getElementById('sb-role').textContent=CU.lbl;
 
   const navCfg={
-    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}],
-    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}],
-    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}],
+    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
     aud:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'}],
   };
   const items=navCfg[CU.role]||navCfg.aud;
@@ -859,11 +1201,11 @@ function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu};
   if(renders[id])renders[id]();
 }
 
