@@ -118,8 +118,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ff-body);font-size:
 .sb-group-label{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:var(--ff-mono)}
 .sb-group-arrow{font-size:9px;color:rgba(255,255,255,.25);transition:transform .2s}
 .sb-group.open .sb-group-arrow{transform:rotate(90deg)}
-.sb-group-items{overflow:hidden;max-height:0;transition:max-height .25s ease}
-.sb-group.open .sb-group-items{max-height:400px}
+
+.sb-group.open 
 
 /* ── TOPBAR ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;background:var(--white);border-bottom:1px solid var(--line);flex-shrink:0;position:sticky;top:0;z-index:10}
@@ -266,11 +266,13 @@ tr:hover td{background:var(--bg)}
 
 /* ── SIDEBAR GROUPS ── */
 .sb-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 4px;cursor:pointer;user-select:none}
+.sb-group-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.sb-group-items.open{max-height:600px}
 .sb-group-label{font-size:8px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);font-family:var(--ff-mono);transition:color .15s}
 .sb-group-header:hover .sb-group-label{color:rgba(255,255,255,.6)}
 .sb-group-arrow{font-size:8px;color:rgba(255,255,255,.25);transition:transform .2s}
-.sb-group-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
-.sb-group-items.open{max-height:500px}
+
+
 
 /* ── SIMULATEUR ── */
 .simu-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
@@ -1162,12 +1164,12 @@ function runSimu() {
 }
 
 function toggleGroup(gi){
-  const grp = document.getElementById('sbg-'+gi);
   const items = document.getElementById('sbgi-'+gi);
-  if(!grp||!items) return;
-  const isOpen = grp.classList.contains('open');
-  grp.classList.toggle('open', !isOpen);
-  items.style.maxHeight = isOpen ? '0' : '400px';
+  const arrow = document.getElementById('sba-'+gi);
+  if(!items) return;
+  const isOpen = items.classList.contains('open');
+  items.classList.toggle('open', !isOpen);
+  if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(90deg)';
 }
 
 // ── LEXIQUE ───────────────────────────────────────────────────────────────────
@@ -1261,18 +1263,7 @@ function buildGLex() {
       </div>`).join('')}`;
 }
 
-function toggleGroup(gi){
-  const items = document.getElementById('sbgi-'+gi);
-  const arrow = document.getElementById('sba-'+gi);
-  const isOpen = items.classList.contains('open');
-  if(!isOpen){
-    items.classList.add('open');
-    if(arrow) arrow.style.transform = 'rotate(90deg)';
-  } else {
-    items.classList.remove('open');
-    if(arrow) arrow.style.transform = '';
-  }
-}
+
 
 function openGroupForPage(pageId){
   document.querySelectorAll('.sb-group-items').forEach((el,gi) => {
@@ -1374,12 +1365,7 @@ function buildNavHTML(items) {
   return html;
 }
 
-function toggleGroup(gid) {
-  const hdr = document.getElementById(gid+'-hdr');
-  const items = document.getElementById(gid+'-items');
-  hdr.classList.toggle('open');
-  items.classList.toggle('open');
-}
+
 
 function buildApp(){
   const av=document.getElementById('sb-av');
