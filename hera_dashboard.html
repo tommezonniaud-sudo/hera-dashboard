@@ -1771,23 +1771,20 @@ function buildLogin(){
   function renderGroup(id,users){
     var el=document.getElementById(id);
     if(!el)return;
-    var html='';
+    el.innerHTML='';
     users.forEach(function(u){
-      html+='<div class="l-card" id="lc-'+u.id+'" data-uid="'+u.id+'">';
-      html+='<div class="l-init '+u.cls+'">'+u.id+'</div>';
-      html+='<div class="l-role">'+u.lbl+'</div>';
-      html+='<div class="l-name">'+u.name.split(' ')[0]+'</div>';
-      html+='</div>';
+      var div=document.createElement('div');
+      div.className='l-card';
+      div.id='lc-'+u.id;
+      div.innerHTML='<div class="l-init '+u.cls+'">'+u.id+'</div><div class="l-role">'+u.lbl+'</div><div class="l-name">'+u.name.split(' ')[0]+'</div>';
+      div.addEventListener('click',function(){selU(div,u.id);});
+      el.appendChild(div);
     });
-    el.innerHTML=html;
   }
   renderGroup('lg-a',groups.assoc);
   renderGroup('lg-m',groups.mgr);
   renderGroup('lg-c',groups.clt);
   renderGroup('lg-au',groups.aud);
-  document.querySelectorAll('.l-card').forEach(function(card){
-    card.addEventListener('click',function(){selU(card,card.getAttribute('data-uid'));});
-  });
 }
 let selUid=null;
 function selU(elOrId, maybeId){
