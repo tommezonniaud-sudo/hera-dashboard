@@ -264,6 +264,15 @@ tr:hover td{background:var(--bg)}
 /* ── ECO ── */
 .eco{font-weight:500;color:#16a34a}
 
+/* ── SIDEBAR GROUPS ── */
+.sb-group{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 4px;cursor:pointer;user-select:none}
+.sb-group-label{font-size:8px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);font-family:var(--ff-mono);transition:color .15s}
+.sb-group:hover .sb-group-label{color:rgba(255,255,255,.6)}
+.sb-group-arrow{font-size:8px;color:rgba(255,255,255,.25);transition:transform .2s}
+.sb-group.open .sb-group-arrow{transform:rotate(90deg)}
+.sb-group-items{overflow:hidden;max-height:0;transition:max-height .25s ease}
+.sb-group-items.open{max-height:400px}
+
 /* ── SIMULATEUR ── */
 .simu-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
 .simu-field{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:16px}
@@ -1253,6 +1262,32 @@ function buildGLex() {
       </div>`).join('')}`;
 }
 
+function toggleGroup(gi){
+  const grp = document.getElementById('sbg-'+gi);
+  const items = document.getElementById('sbgi-'+gi);
+  const isOpen = items.classList.contains('open');
+  // Ouvrir le groupe cliqué, fermer les autres si déjà ouvert
+  if(!isOpen){
+    items.classList.add('open');
+    grp.classList.add('open');
+  } else {
+    items.classList.remove('open');
+    grp.classList.remove('open');
+  }
+}
+
+function openGroupForPage(pageId){
+  // Trouver quel groupe contient cette page et l'ouvrir
+  document.querySelectorAll('.sb-group-items').forEach((el,gi) => {
+    const hasPage = el.querySelector(`#ni-${pageId}`);
+    if(hasPage){
+      el.classList.add('open');
+      const grp = document.getElementById('sbg-'+gi);
+      if(grp) grp.classList.add('open');
+    }
+  });
+}
+
 function buildLogin(){
   const br={assoc:[],mgr:[],clt:[],aud:[]};
   USERS.forEach(u=>br[u.role].push(u));
@@ -1413,6 +1448,9 @@ function buildApp(){
   document.getElementById('sbg-0').classList.add('open');
   const firstItems = document.getElementById('sbgi-0');
   if(firstItems) firstItems.style.maxHeight = '400px';
+  // Ouvrir le premier groupe par défaut
+  const _fi = document.getElementById('sbgi-0');
+  if(_fi){ _fi.classList.add('open'); }
   showPage('accueil',document.getElementById('ni-accueil'));
 }
 
@@ -1420,6 +1458,7 @@ function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
+  openGroupForPage(id);
   const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-lexique':'Guide'};
   const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-lexique':'<em>Lexique</em> métier'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
