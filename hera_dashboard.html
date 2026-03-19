@@ -88,12 +88,22 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ff-body);font-size:
 .sb-urole{font-size:9px;color:rgba(255,255,255,.4);font-family:var(--ff-mono);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
 .sb-nav{flex:1;padding:6px 0;overflow-y:auto;position:relative;z-index:1}
 .sb-nav-sect{font-size:8px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:12px 20px 4px;font-family:var(--ff-mono)}
-.ni{display:flex;align-items:center;gap:9px;padding:9px 20px;cursor:pointer;font-size:12px;font-weight:400;color:rgba(255,255,255,.5);transition:all .15s;border-left:2px solid transparent;user-select:none}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 20px;cursor:pointer;font-size:12px;font-weight:400;color:rgba(255,255,255,.5);transition:all .15s;border-left:2px solid transparent;user-select:none}
 .ni:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.06)}
 .ni.on{color:#fff;border-left-color:var(--or2);background:rgba(255,255,255,.1);font-weight:500}
 .ni-ic{font-size:13px;width:16px;text-align:center;flex-shrink:0;opacity:.6}
 .ni.on .ni-ic{opacity:1;color:var(--or2)}
 .ni-badge{margin-left:auto;background:rgba(255,255,255,.9);color:var(--bx);font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px;font-family:var(--ff-mono)}
+/* Groupes dépliables */
+.ni-group{cursor:pointer;user-select:none}
+.ni-group-header{display:flex;align-items:center;gap:9px;padding:8px 20px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);transition:all .15s;letter-spacing:.3px}
+.ni-group-header:hover{color:rgba(255,255,255,.95);background:rgba(255,255,255,.04)}
+.ni-group-header.open{color:#fff}
+.ni-group-arrow{margin-left:auto;font-size:9px;color:rgba(255,255,255,.3);transition:transform .2s}
+.ni-group-header.open .ni-group-arrow{transform:rotate(90deg);color:var(--or2)}
+.ni-group-items{overflow:hidden;max-height:0;transition:max-height .25s ease}
+.ni-group-items.open{max-height:400px}
+.ni-sub{padding-left:12px}
 .sb-bottom{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);position:relative;z-index:1}
 .sb-ver{font-size:8px;color:rgba(255,255,255,.2);font-family:var(--ff-mono);letter-spacing:1px;margin-bottom:8px}
 .sb-out{font-size:10px;color:rgba(255,255,255,.35);cursor:pointer;font-family:var(--ff-mono);transition:color .15s;letter-spacing:.3px}
@@ -101,6 +111,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ff-body);font-size:
 
 /* ── MAIN ── */
 .main{flex:1;height:100vh;overflow-y:auto;background:var(--bg);display:flex;flex-direction:column}
+
+/* ── SIDEBAR GROUPES ── */
+.sb-group{cursor:pointer;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:background .15s}
+.sb-group:hover{background:rgba(255,255,255,.04)}
+.sb-group-label{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:var(--ff-mono)}
+.sb-group-arrow{font-size:9px;color:rgba(255,255,255,.25);transition:transform .2s}
+.sb-group.open .sb-group-arrow{transform:rotate(90deg)}
+.sb-group-items{overflow:hidden;max-height:0;transition:max-height .25s ease}
+.sb-group.open .sb-group-items{max-height:400px}
 
 /* ── TOPBAR ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;background:var(--white);border-bottom:1px solid var(--line);flex-shrink:0;position:sticky;top:0;z-index:10}
@@ -416,9 +435,7 @@ tr:hover td{background:var(--bg)}
           <div class="topbar-title" id="tb-ti">Tableau de <em>bord</em></div>
         </div>
         <div class="topbar-right">
-          <div class="guide-btn" onclick="openGuide()">
-            <span>📖</span><span>Guide</span>
-          </div>
+
           <div class="sync-chip" onclick="syncData()">
             <div class="sdot loading" id="sdot"></div>
             <span id="smsg">Chargement...</span>
@@ -517,7 +534,9 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-leviers"><div id="g-leviers-content"></div></div>
         <div class="page" id="page-g-templates"><div id="g-templates-content"></div></div>
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
+        <div class="page" id="page-g-lexique"><div id="g-lexique-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
+        <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
     </div>
   </div>
@@ -539,22 +558,7 @@ tr:hover td{background:var(--bg)}
 </div>
 </div>
 
-<!-- GUIDE OVERLAY -->
-<div class="guide-overlay" id="guide-ov" onclick="maybeCloseGuide(event)">
-<div class="guide-panel">
-  <div class="gp-top">
-    <div class="gp-eyebrow">Hera Groupe</div>
-    <div class="gp-title">Guide d'<em>équipe</em></div>
-    <button class="gp-cls" onclick="closeGuide()">✕</button>
-  </div>
-  <div class="gp-body">
-    <div class="gp-sect">Équipe</div>
-    <div class="team-grid" id="guide-team"></div>
-    <div class="gp-sect">Lexique métier</div>
-    <div class="lex-grid" id="guide-lex"></div>
-  </div>
-</div>
-</div>
+
 
 <script>
 const JSON_URL='https://tommezonniaud-sudo.github.io/hera-dashboard/data.json';
@@ -933,97 +937,112 @@ const REF_DATA={
   "2026 1":{smic:12.02,coefT50p:0.3241,coefT50m:0.3201,tauCRC:0.0601,tmin50m:0.02,tdelta50m:0.3781,tmax50m:0.3981,tmin50p:0.02,tdelta50p:0.3821,tmax50p:0.4021},
 };
 
-// ── LOGIQUE DE CALCUL ─────────────────────────────────────────────────────────
+// ── LOGIQUE DE CALCUL (formules vérifiées sur exemple Excel 2465.56€) ─────────
 function calcExo(brut, heures, annee, mois, ema50p) {
   const key = `${annee} ${mois}`;
   const ref = REF_DATA[key];
-  if (!ref) return null;
+  if (!ref || !brut || !heures) return null;
 
-  const smic = ref.smic;
-  const coefT = ema50p ? ref.coefT50p : ref.coefT50m;
+  const smic    = ref.smic;
+  const coefT   = ema50p ? ref.coefT50p : ref.coefT50m;
   const smicRef = heures * smic;
-  const ratio = smicRef > 0 ? brut / smicRef : 0; // brut / SMIC de référence
+  const ratio   = smicRef > 0 ? brut / smicRef : 0;
+  const tauAM   = 0.06;
+  const tauAF   = 0.018;
 
-  const tauAM = 0.06;
-  const tauAF = 0.018;
-
-  // Exonération LODEOM droit commun (base commune B1/B2/B3)
-  function calcLodeomBase(plancher, plafond, coefDeg) {
-    const seuilPlancher = plancher * smicRef;
-    const seuilPlafond = plafond * smicRef;
-    if (brut <= seuilPlancher) {
-      // Exonération totale
-      const exo = coefT * brut;
-      const am = tauAM * brut;
-      const af = tauAF * brut;
-      return { exo: exo + am + af, detail: "Totale" };
-    } else if (brut < seuilPlafond) {
-      // Exonération dégressive
-      const coefExo = (coefT / ((plafond - plancher) * smicRef)) * (seuilPlafond - brut);
-      const exo = coefExo * brut;
-      const am = tauAM * brut;
-      const af = tauAF * brut;
-      return { exo: exo + am + af, detail: "Dégressive" };
+  // Fonction LODEOM générique : plancher, plafond, coefDeg
+  // Formule : coef_exo = coefT * coefDeg * (seuilPlafond - brut) / ((plafond - plancher) * smicRef)
+  function lodeom(plancher, plafond, coefDeg) {
+    const sp  = plancher * smicRef;  // seuil plancher
+    const spl = plafond  * smicRef;  // seuil plafond
+    if (brut <= sp) {
+      const coefExo = coefT;
+      const exoL    = Math.round(coefExo * brut * 100) / 100;
+      const am      = Math.round(tauAM * brut * 100) / 100;
+      const af      = Math.round(tauAF * brut * 100) / 100;
+      return { statut:"Totale", coefExo, exoL, am, af, total: exoL+am+af };
+    } else if (brut < spl) {
+      const coefExo = coefT * coefDeg * (spl - brut) / ((plafond - plancher) * smicRef);
+      const exoL    = Math.round(coefExo * brut * 100) / 100;
+      const am      = Math.round(tauAM * brut * 100) / 100;
+      const af      = Math.round(tauAF * brut * 100) / 100;
+      return { statut:"Dégressive", coefExo, exoL, am, af, total: exoL+am+af };
     } else {
-      return { exo: 0, detail: "Hors plafond" };
+      return { statut:"Hors plafond", coefExo:0, exoL:0, am:0, af:0, total:0 };
     }
   }
 
-  // B1 - Compétitivité (plancher 1.3, plafond 2.2)
-  const b1 = calcLodeomBase(1.3, 2.2, 0.9);
+  // B1 - Compétitivité (plancher 1.3, plafond 2.2, coefDeg 0.9)
+  const b1 = lodeom(1.3, 2.2, 0.9);
 
-  // B2 - Compétitivité renforcée (plancher 2.0, plafond 2.7)
-  const b2 = calcLodeomBase(2.0, 2.7, 0.7);
+  // B2 - Compétitivité renforcée (plancher 2.0, plafond 2.7, coefDeg 0.7)
+  const b2 = lodeom(2.0, 2.7, 0.7);
 
-  // B3 - Innovation & Croissance (plancher 1.7, plafond 3.5)
+  // B3 - Innovation & Croissance (plancher 1.7, maintien 2.5, plafond 3.5, coefDeg 1.0)
   const b3 = (() => {
-    const plancher = 1.7, plafond = 3.5, maintien = 2.5;
-    const seuilPlancher = plancher * smicRef;
-    const seuilPlafond = plafond * smicRef;
-    const seuilMaintien = maintien * smicRef;
-    if (brut <= seuilPlancher) {
-      return { exo: (coefT + tauAM + tauAF) * brut, detail: "Totale" };
-    } else if (brut <= seuilMaintien) {
-      return { exo: (coefT + tauAM + tauAF) * brut, detail: "Maintien" };
-    } else if (brut < seuilPlafond) {
-      const coefExo = (coefT / ((plafond - maintien) * smicRef)) * (seuilPlafond - brut);
-      return { exo: (coefExo + tauAM + tauAF) * brut, detail: "Dégressive" };
+    const sp   = 1.7 * smicRef;
+    const sm   = 2.5 * smicRef;
+    const spl  = 3.5 * smicRef;
+    if (brut <= sp) {
+      const exoL = Math.round(coefT * brut * 100)/100;
+      const am   = Math.round(tauAM * brut * 100)/100;
+      const af   = Math.round(tauAF * brut * 100)/100;
+      return { statut:"Totale", coefExo:coefT, exoL, am, af, total:exoL+am+af };
+    } else if (brut <= sm) {
+      const exoL = Math.round(coefT * brut * 100)/100;
+      const am   = Math.round(tauAM * brut * 100)/100;
+      const af   = Math.round(tauAF * brut * 100)/100;
+      return { statut:"Maintien (≤2.5 SMIC)", coefExo:coefT, exoL, am, af, total:exoL+am+af };
+    } else if (brut < spl) {
+      const coefExo = coefT * 1.0 * (spl - brut) / ((3.5 - 2.5) * smicRef);
+      const exoL = Math.round(coefExo * brut * 100)/100;
+      const am   = Math.round(tauAM * brut * 100)/100;
+      const af   = Math.round(tauAF * brut * 100)/100;
+      return { statut:"Dégressive", coefExo, exoL, am, af, total:exoL+am+af };
     } else {
-      return { exo: 0, detail: "Hors plafond" };
+      return { statut:"Hors plafond", coefExo:0, exoL:0, am:0, af:0, total:0 };
     }
   })();
 
-  // B0bis - RGDU (à partir du 01/01/2026)
+  // B0bis - RGDU (2026+)
   const b0bis = (() => {
-    if (annee < 2026) return { exo: 0, detail: "N/A avant 2026" };
-    const tmin = ema50p ? ref.tmin50p : ref.tmin50m;
-    const tdelta = ema50p ? ref.tdelta50p : ref.tdelta50m;
-    const tmax = ema50p ? ref.tmax50p : ref.tmax50m;
-    if (!tmin) return { exo: 0, detail: "N/A" };
-    const plancher = 1 * smicRef;
-    const plafond = 3 * smicRef;
-    if (brut > plafond) return { exo: 0, detail: "Hors plafond" };
+    if (annee < 2026) return { statut:"N/A avant 2026", coefExo:0, exoL:0, am:0, af:0, total:0, na:true };
+    const tmin   = ema50p ? ref.tmin50p   : ref.tmin50m;
+    const tdelta = ema50p ? ref.tdelta50p  : ref.tdelta50m;
+    const tmax   = ema50p ? ref.tmax50p   : ref.tmax50m;
+    if (!tmin) return { statut:"Données manquantes", coefExo:0, exoL:0, am:0, af:0, total:0, na:true };
+    const sp  = 1 * smicRef;
+    const spl = 3 * smicRef;
+    if (brut > spl) return { statut:"Hors plafond", coefExo:0, exoL:0, am:0, af:0, total:0 };
     let coefExo;
-    if (brut <= plancher) {
+    if (brut <= sp) {
       coefExo = tmax;
     } else {
-      coefExo = tmax * Math.pow((plafond / brut - 1) / (plafond / plancher - 1), 1.75);
+      coefExo = tmax * Math.pow((spl / brut - 1) / (spl / sp - 1), 1.75);
     }
     coefExo = Math.max(tmin, Math.min(tmax, coefExo));
-    return { exo: coefExo * brut, detail: "RGDU" };
+    const exoL = Math.round(coefExo * brut * 100)/100;
+    return { statut:"RGDU", coefExo, exoL, am:0, af:0, total:exoL };
   })();
 
-  // B0 - RGCP (jusqu'au 31/12/2025)
+  // B0 - RGCP (≤2025)
   const b0 = (() => {
-    if (annee >= 2026) return { exo: 0, detail: "Remplacé par RGDU en 2026" };
-    const plancher = 1 * smicRef;
-    const plafond = 1.6 * smicRef;
-    if (brut > plafond) return { exo: (tauAM + tauAF) * brut, detail: "AM+AF seulement" };
-    const coefExo = brut <= plancher ? 0.3195 : (0.3195 / (0.6 * smicRef)) * (plafond - brut);
-    return { exo: (coefExo + tauAM + tauAF) * brut, detail: "Dégressive" };
+    if (annee >= 2026) return { statut:"Remplacé par RGDU", coefExo:0, exoL:0, am:0, af:0, total:0, na:true };
+    const sp  = 1   * smicRef;
+    const spl = 1.6 * smicRef;
+    if (brut > spl) {
+      const am = Math.round(tauAM * brut * 100)/100;
+      const af = Math.round(tauAF * brut * 100)/100;
+      return { statut:"AM+AF uniquement", coefExo:0, exoL:0, am, af, total:am+af };
+    }
+    const coefExo = brut <= sp ? (ema50p?0.3235:0.3195) : (ema50p?0.3235:0.3195) * 0.6 * (spl - brut) / (0.6 * smicRef);
+    const exoL = Math.round(coefExo * brut * 100)/100;
+    const am   = Math.round(tauAM * brut * 100)/100;
+    const af   = Math.round(tauAF * brut * 100)/100;
+    return { statut:"Dégressive", coefExo, exoL, am, af, total:exoL+am+af };
   })();
 
-  return { smicRef: Math.round(smicRef*100)/100, smic, coefT, ratio: Math.round(ratio*100)/100, b1, b2, b3, b0bis, b0 };
+  return { smicRef:Math.round(smicRef*100)/100, smic, coefT, ratio:Math.round(ratio*1000)/1000, b1, b2, b3, b0bis, b0 };
 }
 
 // ── UI SIMULATEUR ─────────────────────────────────────────────────────────────
@@ -1090,29 +1109,148 @@ function runSimu() {
     `SMIC horaire : <strong>${r.smic} €</strong> &nbsp;·&nbsp; SMIC de référence : <strong>${fmt(r.smicRef)}</strong> &nbsp;·&nbsp; Coeff. T : <strong>${r.coefT}</strong> &nbsp;·&nbsp; Ratio brut/SMIC : <strong>${r.ratio}x</strong>`;
 
   const baremes = [
-    { id:'b1', name:'B1 — Compétitivité',         res:r.b1,   annees:'Tous', note:'Plancher 1.3 · Plafond 2.2' },
-    { id:'b2', name:'B2 — Compétitivité renforcée',res:r.b2,   annees:'Tous', note:'Plancher 2.0 · Plafond 2.7' },
-    { id:'b3', name:'B3 — Innovation & Croissance', res:r.b3,   annees:'Tous', note:'Plancher 1.7 · Plafond 3.5' },
-    { id:'b0bis', name:'B0bis — RGDU',             res:r.b0bis,annees:'2026+', note:'Remplace RGCP au 01/01/2026' },
-    { id:'b0', name:'B0 — RGCP',                   res:r.b0,   annees:'≤2025', note:"Jusqu'au 31/12/2025" },
+    { id:'b1',    name:'B1 — Compétitivité',          res:r.b1,    annees:'Tous' },
+    { id:'b2',    name:'B2 — Compétitivité renforcée', res:r.b2,    annees:'Tous' },
+    { id:'b3',    name:'B3 — Innovation & Croissance',  res:r.b3,    annees:'Tous' },
+    { id:'b0bis', name:'B0bis — RGDU',                 res:r.b0bis, annees:'2026+' },
+    { id:'b0',    name:'B0 — RGCP',                    res:r.b0,    annees:'≤2025' },
   ];
 
-  const maxExo = Math.max(...baremes.map(b => b.res.exo || 0));
+  const maxExo = Math.max(...baremes.map(b => b.res.total || 0));
 
   document.getElementById('simu-results').innerHTML = baremes.map(b => {
-    const isBest = b.res.exo > 0 && b.res.exo === maxExo;
-    const na = b.res.exo === 0;
+    const res = b.res;
+    const isBest = res.total > 0 && res.total === maxExo && !res.na;
+    if (res.na) return `<div class="simu-result" style="opacity:.45">
+      <div class="sr-name">${b.name}</div>
+      <div class="sr-total" style="font-size:18px;color:var(--ink4)">N/A</div>
+      <div class="sr-detail">${res.mode}</div>
+    </div>`;
     return `<div class="simu-result ${isBest ? 'best' : ''}">
       <div class="sr-name">${b.name}</div>
-      <div class="sr-total ${isBest ? 'hi' : ''}">${b.res.exo > 0 ? fmt(b.res.exo) : '—'}</div>
+      <div class="sr-total ${isBest ? 'hi' : ''}">${res.total > 0 ? fmt(res.total) : '—'}</div>
+      <div style="margin:8px 0;padding:8px 0;border-top:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-mono);margin-bottom:4px">
+          <span style="color:var(--ink4)">Exo. LODEOM</span>
+          <span style="font-weight:600;color:var(--ink)">${res.exoLodeom > 0 ? fmt(res.exoLodeom) : '—'}</span>
+        </div>
+        ${res.am > 0 ? `<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-mono);margin-bottom:4px">
+          <span style="color:var(--ink4)">Réd. Ass. Maladie</span>
+          <span style="font-weight:500">${fmt(res.am)}</span>
+        </div>` : ''}
+        ${res.af > 0 ? `<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-mono);margin-bottom:4px">
+          <span style="color:var(--ink4)">Réd. Alloc. Fam.</span>
+          <span style="font-weight:500">${fmt(res.af)}</span>
+        </div>` : ''}
+      </div>
       <div class="sr-detail">
-        ${b.res.detail}<br>
-        ${b.note}<br>
+        Mode : <strong>${res.mode}</strong><br>
+        Coeff. exo : <strong>${res.coef}</strong><br>
+        ${res.sPlanche ? `Planche : ${new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(res.sPlanche)} € · Plafond : ${new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(res.sPlafond)} €` : ''}<br>
         ${b.annees}
       </div>
-      ${na && b.res.detail !== 'Hors plafond' ? `<div class="sr-na">${b.res.detail}</div>` : ''}
     </div>`;
   }).join('');
+}
+
+function toggleGroup(gi){
+  const grp = document.getElementById('sbg-'+gi);
+  const items = document.getElementById('sbgi-'+gi);
+  if(!grp||!items) return;
+  const isOpen = grp.classList.contains('open');
+  grp.classList.toggle('open', !isOpen);
+  items.style.maxHeight = isOpen ? '0' : '400px';
+}
+
+// ── LEXIQUE ───────────────────────────────────────────────────────────────────
+const LEXIQUE=[
+  {c:'LODEOM',t:'LODEOM',d:"Loi pour le Développement Économique des Outre-Mer (2009). Dispositif d'exonérations de cotisations patronales spécifique aux DOM. Constitue le socle de la quasi-totalité des missions d'optimisation sociale d'Hera.",codes:['Art. L.752-3-2 CSS']},
+  {c:'LODEOM',t:'Barème Compétitivité (B1)',d:"Barème d'exonération applicable aux entreprises de moins de 11 salariés ou relevant de secteurs éligibles. Plancher 1.3x SMIC, plafond 2.2x SMIC. CTP 462.",codes:['CTP 462']},
+  {c:'LODEOM',t:'Barème Compétitivité Renforcée (B2)',d:"Barème renforcé applicable aux secteurs spécifiques éligibles ou aux entreprises bénéficiant du Perfectionnement Actif. Plancher 2.0x SMIC, plafond 2.7x SMIC. CTP 463.",codes:['CTP 463']},
+  {c:'LODEOM',t:'Barème Innovation & Croissance (B3)',d:"Barème le plus favorable, réservé aux entreprises innovantes et en forte croissance. Plancher 1.7x SMIC, maintien jusqu'à 2.5x, plafond 3.5x SMIC.",codes:['CTP 463']},
+  {c:'RPA',t:'Perfectionnement Actif (RPA)',d:"Régime douanier permettant d'importer des marchandises hors UE pour les transformer avant mise à la consommation ou réexportation. L'obtention de l'autorisation PA ouvre droit au barème LODEOM renforcé pour l'ensemble des salariés. Autorisation déposée par DELTAPRO auprès des Douanes.",codes:['Art. L.752-3-2 CSS','Règlement UE 952/2013']},
+  {c:'Cotisations',t:'RGDU',d:"Réduction Générale Dégressive Unique. Remplace la RGCP à compter du 01/01/2026. Couvre l'ensemble des cotisations patronales de manière dégressive de 1x à 3x le SMIC. Non cumulable avec LODEOM.",codes:[]},
+  {c:'Cotisations',t:'RGCP',d:"Réduction Générale des Cotisations Patronales. En vigueur jusqu'au 31/12/2025, remplacée par la RGDU. Applicable de 1x à 1.6x le SMIC.",codes:[]},
+  {c:'Cotisations',t:'CTP',d:"Code Type de Personnel. Code utilisé dans les DSN pour identifier le régime d'exonération applicable à chaque salarié. Essentiel pour le contrôle de conformité des bulletins de paie.",codes:['CTP 462 — Compétitivité','CTP 463 — Compétitivité renforcée']},
+  {c:'Cotisations',t:'FNAL',d:"Fonds National d'Aide au Logement. Cotisation patronale dont le taux varie selon l'effectif (0.1% < 50 salariés, 0.5% >= 50). Concernée par la neutralisation de franchissement de seuil.",codes:[]},
+  {c:'Process',t:'BRC',d:"Bordereau Récapitulatif de Cotisations. Document URSSAF récapitulant les cotisations déclarées et payées. Utilisé pour le cadrage avec les journaux de paie lors de l'audit définitif.",codes:[]},
+  {c:'Process',t:'DSN',d:"Déclaration Sociale Nominative. Déclaration mensuelle dématérialisée remplaçant l'ensemble des déclarations sociales. Transmise à l'URSSAF par le gestionnaire de paie. Source principale pour la vérification de conformité.",codes:[]},
+  {c:'Process',t:'Lettre de mission',d:"Document contractuel signé via DocuSign définissant le périmètre de la mission, les honoraires (% des économies identifiées) et les engagements mutuels. Déclencheur de l'audit définitif.",codes:[]},
+  {c:'Process',t:'Convention tiers mandaté',d:"Convention signée par le client autorisant Hera à se connecter au portail URSSAF pour obtenir les DSN sur la période auditée. Indispensable pour l'audit définitif.",codes:[]},
+  {c:'Process',t:'Restitution',d:"Présentation au client des résultats de l'audit avec les économies identifiées, les fondements juridiques et les leviers à mettre en oeuvre. Étape clé de la relation client.",codes:[]},
+  {c:'Seuils',t:'Neutralisation de seuil',d:"Mécanisme légal permettant d'ignorer le franchissement d'un seuil d'effectif pendant 5 années consécutives en matière de cotisations sociales. Cotisations concernées : FNAL, versement mobilité, forfait social.",codes:['Art. L.131-4-2 CSS']},
+  {c:'Seuils',t:'EMA',d:"Effectif Moyen Annuel. Indicateur utilisé pour déterminer le barème LODEOM applicable (seuil 50 salariés). Calculé sur l'ensemble de l'entreprise.",codes:[]},
+  {c:'Organismes',t:'URSSAF',d:"Union de Recouvrement des cotisations de Sécurité Sociale et d'Allocations Familiales. Organisme collectant les cotisations sociales. Interlocuteur principal pour les demandes de remboursement.",codes:[]},
+  {c:'Organismes',t:'CGSS',d:"Caisse Générale de Sécurité Sociale. Équivalent de la CPAM et de l'URSSAF pour les DOM. Interlocuteur pour les rescrits sociaux dans le cadre des missions RPA.",codes:[]},
+  {c:'Organismes',t:'DELTAPRO',d:"Partenaire douanier d'Hera Groupe, chargé du dépôt et du suivi des dossiers de Perfectionnement Actif auprès des Douanes françaises. Contacts : Jamil et Yann.",codes:[]},
+];
+
+const LEX_CATS = [...new Set(LEXIQUE.map(e=>e.c))];
+
+function buildGLexique(){
+  let currentCat = 'Tous';
+  const render = (cat) => {
+    const filtered = cat === 'Tous' ? LEXIQUE : LEXIQUE.filter(e=>e.c===cat);
+    return filtered.map(e=>`
+      <div class="g-levier-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <div class="g-levier-num">${e.c}</div>
+          ${e.codes&&e.codes.length?e.codes.map(c=>`<span class="bx b-gray" style="font-size:8px">${c}</span>`).join(''):''}
+        </div>
+        <div class="g-levier-title">${e.t}</div>
+        <div class="g-levier-body">${e.d}</div>
+      </div>`).join('');
+  };
+
+  document.getElementById('g-lexique-content').innerHTML=`
+    <div class="g-hero">
+      <div class="g-hero-ey">Guide · Lexique</div>
+      <div class="g-hero-title">Lexique <em>métier</em></div>
+      <div class="g-hero-sub">${LEXIQUE.length} termes clés — cotisations, process, organismes, seuils.</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="lex-tabs">
+      ${['Tous',...LEX_CATS].map(c=>`<button class="btn${c==='Tous'?' pri':''} sml" onclick="filterLex('${c}',this)">${c}</button>`).join('')}
+    </div>
+    <div id="lex-cards">${render('Tous')}</div>`;
+}
+
+function filterLex(cat, btn){
+  document.querySelectorAll('#lex-tabs .btn').forEach(b=>{b.classList.remove('pri');b.style.background='';b.style.color='';b.style.borderColor='';});
+  btn.classList.add('pri');
+  const filtered = cat==='Tous' ? LEXIQUE : LEXIQUE.filter(e=>e.c===cat);
+  document.getElementById('lex-cards').innerHTML = filtered.map(e=>`
+    <div class="g-levier-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div class="g-levier-num">${e.c}</div>
+        ${e.codes&&e.codes.length?e.codes.map(c=>`<span class="bx b-gray" style="font-size:8px">${c}</span>`).join(''):''}
+      </div>
+      <div class="g-levier-title">${e.t}</div>
+      <div class="g-levier-body">${e.d}</div>
+    </div>`).join('');
+}
+
+function buildGLex() {
+  const cats = [...new Set(GUIDE_LEX.map(e => e.c))];
+  document.getElementById('g-lex-content').innerHTML = `
+    <div class="g-hero">
+      <div class="g-hero-ey">Guide · Lexique</div>
+      <div class="g-hero-title">Lexique <em>métier</em></div>
+      <div class="g-hero-sub">Tous les termes, abréviations et codes utilisés chez Hera Groupe.</div>
+    </div>
+    ${cats.map(cat => `
+      <div style="margin-bottom:16px">
+        <div class="card-ttl" style="margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line)">${cat}</div>
+        <div class="lex-grid">
+          ${GUIDE_LEX.filter(e=>e.c===cat).map(e=>`
+            <div class="lex-card">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                <div class="lex-term">${e.t}</div>
+                ${e.code?`<span class="bx b-ko" style="font-size:8px">${e.code}</span>`:''}
+              </div>
+              <div class="lex-def">${e.d}</div>
+            </div>`).join('')}
+        </div>
+      </div>`).join('')}`;
 }
 
 function buildLogin(){
@@ -1161,6 +1299,56 @@ function logout(){
 }
 
 // ── BUILD APP ─────────────────────────────────────────────────────────────────
+function buildNavHTML(items) {
+  // Grouper les items par section
+  let html = '<div class="sb-nav-sect">Navigation</div>';
+  let currentGroup = null;
+  let groupItems = [];
+
+  const flushGroup = () => {
+    if (!currentGroup) return '';
+    const gid = 'grp-' + currentGroup.replace(/\s+/g,'-').toLowerCase();
+    let out = `<div class="ni-group">
+      <div class="ni-group-header" id="${gid}-hdr" onclick="toggleGroup('${gid}')">
+        <span>${currentGroup}</span>
+        <span class="ni-group-arrow">▶</span>
+      </div>
+      <div class="ni-group-items" id="${gid}-items">
+        ${groupItems.map(n=>`<div class="ni ni-sub" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('')}
+      </div>
+    </div>`;
+    groupItems = [];
+    currentGroup = null;
+    return out;
+  };
+
+  let i = 0;
+  while (i < items.length) {
+    const n = items[i];
+    if (n.sect) {
+      html += flushGroup();
+      currentGroup = n.sect;
+      groupItems = [];
+    } else if (!currentGroup) {
+      // Items directs (avant la 1ère section)
+      const isFirst = items.findIndex(x => x.id) === i;
+      html += `<div class="ni${isFirst?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`;
+    } else {
+      groupItems.push(n);
+    }
+    i++;
+  }
+  html += flushGroup();
+  return html;
+}
+
+function toggleGroup(gid) {
+  const hdr = document.getElementById(gid+'-hdr');
+  const items = document.getElementById(gid+'-items');
+  hdr.classList.toggle('open');
+  items.classList.toggle('open');
+}
+
 function buildApp(){
   const av=document.getElementById('sb-av');
   av.textContent=CU.id;av.className='sb-av '+CU.cls;
@@ -1169,18 +1357,45 @@ function buildApp(){
   document.getElementById('sb-role').textContent=CU.lbl;
 
   const navCfg={
-    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
-    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
-    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lex',ic:'❐',l:'Lexique métier'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lex',ic:'❐',l:'Lexique métier'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lex',ic:'❐',l:'Lexique métier'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
     aud:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'}],
   };
   const items=navCfg[CU.role]||navCfg.aud;
-  document.getElementById('sb-nav').innerHTML='<div class="sb-nav-sect">Navigation</div>'+
-    items.map((n,i)=>{
-      if(n.sect) return `<div class="sb-nav-sect">${n.sect}</div>`;
-      const isFirst = items.findIndex(x=>x.id) === i;
-      return `<div class="ni${isFirst?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`;
-    }).join('');
+  // Construire sidebar avec groupes repliables
+  const groups = {
+    assoc:[
+      {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
+      {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+    ],
+    mgr:[
+      {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
+      {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+    ],
+    clt:[
+      {label:'Mes dossiers', ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+    ],
+    aud:[
+      {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'}]},
+    ],
+  };
+  const roleGroups = groups[CU.role] || groups.aud;
+  document.getElementById('sb-nav').innerHTML = roleGroups.map((g,gi) => `
+    <div class="sb-group${gi===0?' open':''}" id="sbg-${gi}" onclick="toggleGroup(${gi})">
+      <div class="sb-group-label">${g.label}</div>
+      <span class="sb-group-arrow">▶</span>
+    </div>
+    <div class="sb-group-items" id="sbgi-${gi}">
+      ${g.items.map(n=>`<div class="ni" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('')}
+    </div>`).join('');
 
   const th=document.getElementById('d-th');
   if(isFull()||CU.role==='aud'){
@@ -1194,6 +1409,10 @@ function buildApp(){
   }
   const lsel=document.getElementById('l-lv');
   if(lsel.children.length<=1)LEVIERS.forEach(lv=>{const o=document.createElement('option');o.value=lv;o.textContent=lv;lsel.appendChild(o);});
+  // Ouvrir le premier groupe par défaut
+  document.getElementById('sbg-0').classList.add('open');
+  const firstItems = document.getElementById('sbgi-0');
+  if(firstItems) firstItems.style.maxHeight = '400px';
   showPage('accueil',document.getElementById('ni-accueil'));
 }
 
@@ -1201,11 +1420,11 @@ function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-lexique':'Guide'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-lexique':'<em>Lexique</em> métier'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-lexique':buildGLexique};
   if(renders[id])renders[id]();
 }
 
