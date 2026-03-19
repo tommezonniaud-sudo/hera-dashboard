@@ -264,6 +264,36 @@ tr:hover td{background:var(--bg)}
 /* ── ECO ── */
 .eco{font-weight:500;color:#16a34a}
 
+/* ── ANALYSE PAIE ── */
+.ap-upload{border:2px dashed var(--line2);border-radius:var(--r14);padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--white);margin-bottom:20px}
+.ap-upload:hover,.ap-upload.drag{border-color:var(--bx);background:var(--bx-pale)}
+.ap-upload-ic{font-size:32px;margin-bottom:12px}
+.ap-upload-title{font-family:var(--ff-serif);font-size:18px;font-weight:300;margin-bottom:6px}
+.ap-upload-sub{font-size:12px;color:var(--ink4)}
+.ap-params{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.ap-param{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:14px 16px}
+.ap-param-lbl{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:var(--ff-mono);margin-bottom:8px}
+.ap-param-inp{width:100%;font-size:15px;font-family:var(--ff-serif);font-weight:300;background:transparent;border:none;outline:none;color:var(--ink)}
+.ap-table{width:100%;border-collapse:collapse;font-size:11px}
+.ap-table thead tr{border-bottom:2px solid var(--bx)}
+.ap-table thead th{padding:8px 10px;text-align:left;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--bx);font-family:var(--ff-mono);white-space:nowrap}
+.ap-table thead th.r{text-align:right}
+.ap-table tbody tr{border-bottom:1px solid var(--line);transition:background .1s}
+.ap-table tbody tr:hover{background:var(--bg2)}
+.ap-table tbody td{padding:8px 10px;color:var(--ink2);white-space:nowrap}
+.ap-table tbody td.r{text-align:right;font-family:var(--ff-mono);font-size:10px}
+.ap-table tbody td.gain{color:#16a34a;font-weight:600;font-family:var(--ff-mono);text-align:right}
+.ap-table tbody td.loss{color:var(--bx);font-weight:600;font-family:var(--ff-mono);text-align:right}
+.ap-table tfoot tr{border-top:2px solid var(--bx);background:var(--bx-pale)}
+.ap-table tfoot td{padding:10px;font-weight:600;font-family:var(--ff-mono);font-size:11px}
+.ap-table tfoot td.r{text-align:right}
+.ap-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:600;font-family:var(--ff-mono)}
+.ap-badge.lodeom{background:rgba(139,26,44,.1);color:var(--bx)}
+.ap-badge.rgcp{background:rgba(30,64,175,.1);color:#1e40af}
+.ap-badge.rgdu{background:rgba(21,128,61,.1);color:#15803d}
+.ap-badge.none{background:var(--bg2);color:var(--ink4)}
+.ap-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+
 /* ── SIDEBAR GROUPS ── */
 .sb-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 4px;cursor:pointer;user-select:none}
 .sb-group-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
@@ -374,6 +404,7 @@ tr:hover td{background:var(--bg)}
 .lex-term{font-size:13px;font-weight:500;margin-bottom:4px}
 .lex-def{font-size:11px;color:var(--ink3);line-height:1.5}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -546,6 +577,8 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-templates"><div id="g-templates-content"></div></div>
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
+        <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
         <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
     </div>
@@ -742,6 +775,8 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-templates"><div id="g-templates-content"></div></div>
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
+        <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
         <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
     </div>
@@ -1311,8 +1346,9 @@ function calcExo(brut, heures, annee, mois, ema50p) {
   if (annee < 2026) {
     b0bis = { exo: 0, am: 0, af: 0, total: 0, coef: 0, mode: 'N/A avant 2026' };
   } else {
-    const tmin = ema50p ? ref.tmin50p : ref.tmin50m;
-    const tmax = ema50p ? ref.tmax50p : ref.tmax50m;
+    const tmin   = ema50p ? ref.tmin50p   : ref.tmin50m;
+    const tdelta = ema50p ? ref.tdelta50p : ref.tdelta50m;
+    const tmax   = ema50p ? ref.tmax50p   : ref.tmax50m;
     if (!tmax) {
       b0bis = { exo: 0, am: 0, af: 0, total: 0, coef: 0, mode: 'N/A' };
     } else {
@@ -1320,10 +1356,15 @@ function calcExo(brut, heures, annee, mois, ema50p) {
       const pf = 3.0 * smicRef;
       const pl = 1.0 * smicRef;
       let c;
-      if (brut > pf)       c = 0;
-      else if (brut <= pl) c = tmax;
-      else                 c = Math.max(tmin, tmax * Math.pow((pf/brut - 1) / (pf/pl - 1), P));
-      b0bis = { exo: c*brut, am: 0, af: 0, total: c*brut, coef: c, mode: 'Dégressive' };
+      if (brut > pf)       { c = 0; }
+      else if (brut <= pl) { c = tmax; }
+      else {
+        // Formule Excel exacte : Tmin + Tdelta * ((0.5 * (plafond*smicRef/brut - 1))^P)
+        var inner = 0.5 * (pf / brut - 1);
+        c = tmin + tdelta * Math.pow(inner, P);
+        c = Math.round(c * 10000) / 10000;
+      }
+      b0bis = { exo: c*brut, am: 0, af: 0, total: c*brut, coef: c, mode: brut <= pl ? 'Totale' : (brut > pf ? 'Nulle' : 'Dégressive') };
     }
   }
 
@@ -1479,6 +1520,251 @@ function openGroupForPage(pageId){
   });
 }
 
+// ── ANALYSE PAIE ─────────────────────────────────────────────────────────────
+var analyseData = null; // Données parsées du fichier Silae
+var analyseParams = {annee:2025, mois:'Périmètre annuel', ema50p:false};
+
+function buildGAnalyse(){
+  document.getElementById('g-analyse-content').innerHTML =
+    '<div class="g-hero">' +
+      '<div class="g-hero-ey">Outils · Analyse</div>' +
+      '<div class="g-hero-title">Analyse <em>paie Silae</em></div>' +
+      '<div class="g-hero-sub">Importez un export récapitulatif Silae (xlsx) pour analyser les exonérations existantes et calculer les économies potentielles sur tous les barèmes.</div>' +
+    '<div class="ap-upload" id="ap-drop">' +
+      '<div class="ap-upload-ic">📂</div>' +
+      '<div class="ap-upload-title">Glisser le fichier Silae ici</div>' +
+      '<div class="ap-upload-sub">Récapitulatif de paie détaillé (.xlsx) — ou cliquez pour parcourir</div>' +
+      '<input type="file" id="ap-file" accept=".xlsx" style="display:none" onchange="loadSilaeFile(this.files[0])">' +
+    '</div>' +
+    '<div class="ap-params">' +
+      '<div class="ap-param"><div class="ap-param-lbl">Année</div>' +
+        '<select class="ap-param-inp" id="ap-annee" onchange="analyseParams.annee=+this.value;runAnalyse()">' +
+        [2026,2025,2024,2023,2022].map(function(y){return '<option value="'+y+'"'+(y===2025?' selected':'')+'>'+y+'</option>';}).join('') +
+        '</select></div>' +
+      '<div class="ap-param"><div class="ap-param-lbl">EMA &gt; 50 ?</div>' +
+        '<select class="ap-param-inp" id="ap-ema" onchange="analyseParams.ema50p=this.selectedIndex===1;runAnalyse()">' +
+        '<option>Non</option><option>Oui</option>' +
+        '</select></div>' +
+    '</div>' +
+    '<div id="ap-results"></div>';
+
+  var drop = document.getElementById('ap-drop');
+  drop.addEventListener('click', function(e){
+    if(e.target.tagName!=='INPUT' && e.target.tagName!=='SPAN') document.getElementById('ap-file').click();
+  });
+  drop.addEventListener('dragover', function(e){e.preventDefault();drop.classList.add('drag');});
+  drop.addEventListener('dragleave', function(){drop.classList.remove('drag');});
+  drop.addEventListener('drop', function(e){
+    e.preventDefault();drop.classList.remove('drag');
+    if(e.dataTransfer.files[0]) loadSilaeFile(e.dataTransfer.files[0]);
+  });
+}
+
+function loadSilaeFile(file){
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      parseSilaeXlsx(e.target.result, file.name);
+    } catch(err) {
+      document.getElementById('ap-results').innerHTML =
+        '<div style="padding:16px;color:var(--bx);background:var(--bx-pale);border-radius:var(--r10)">Erreur de lecture : ' + err.message + '</div>';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseSilaeXlsx(buffer, filename){
+  // Parser XLSX avec SheetJS
+  var wb = XLSX.read(buffer, {type:'array'});
+  var ws = wb.Sheets[wb.SheetNames[0]];
+  var rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+
+  // Ligne 3 (index 2) = noms salariés, col 2, 5, 8...
+  var nomRow = rows[2] || [];
+  var salaries = [];
+  for(var j=2; j<nomRow.length; j+=3){
+    var val = nomRow[j];
+    if(val && typeof val === 'string' && val.trim() && val.indexOf('TOTAL')===-1){
+      salaries.push({col:j, nom:val.trim()});
+    }
+  }
+
+  if(salaries.length === 0){
+    document.getElementById('ap-results').innerHTML =
+      '<div style="padding:16px;color:var(--bx);background:var(--bx-pale);border-radius:var(--r10)">Format non reconnu. Vérifiez que c\'est bien un récapitulatif de paie Silae.</div>';
+    return;
+  }
+
+  // Trouver les lignes clés par code et libellé
+  function findLines(code, libSubstr, excludeStr){
+    var result = [];
+    for(var i=0;i<rows.length;i++){
+      var r = rows[i];
+      var c = r && r[0] ? String(r[0]).trim() : '';
+      var l = r && r[1] ? String(r[1]).trim() : '';
+      if(c===code && l.indexOf(libSubstr)!==-1){
+        if(!excludeStr || l.indexOf(excludeStr)===-1) result.push(i);
+      }
+    }
+    return result;
+  }
+  function findLine(code, libSubstr){
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i];
+      var c=r&&r[0]?String(r[0]).trim():'';
+      var l=r&&r[1]?String(r[1]).trim():'';
+      if(c===code && l.indexOf(libSubstr)!==-1) return i;
+    }
+    return -1;
+  }
+
+  var lineH = findLine('','Total heures travaillées');
+  var lineB = findLine('','Salaire Brut');
+  var linesS019 = findLines('SS019','LODEOM','');
+  var linesA302 = findLines('AA302','LODEOM','');
+  var linesS011 = [];
+  var linesA311 = [];
+  for(var i=0;i<rows.length;i++){
+    var c=rows[i]&&rows[i][0]?String(rows[i][0]).trim():'';
+    if(c.indexOf('SS011')===0) linesS011.push(i);
+    if(c.indexOf('AA311')===0) linesA311.push(i);
+  }
+
+  function sumLines(lineIdxs, col){
+    var t=0;
+    for(var k=0;k<lineIdxs.length;k++){
+      var v = rows[lineIdxs[k]][col];
+      if(v && typeof v==='number') t+=v;
+    }
+    return Math.round(t*100)/100;
+  }
+  function vn(x){ return (x && typeof x==='number') ? Math.round(x*100)/100 : 0; }
+
+  var data = [];
+  for(var si=0;si<salaries.length;si++){
+    var s=salaries[si]; var cb=s.col;
+    data.push({
+      nom: s.nom,
+      h: vn(lineH>=0?rows[lineH][cb]:null),
+      brut: vn(lineB>=0?rows[lineB][cb+1]:null),
+      lodeom_u: sumLines(linesS019, cb+2),
+      lodeom_r: sumLines(linesA302, cb+2),
+      rgcp_u: sumLines(linesS011, cb+2),
+      rgcp_r: sumLines(linesA311, cb+2),
+    });
+  }
+
+  analyseData = {filename:filename, salaries:data};
+  // Ajouter listener sur "Changer de fichier" après rendu
+  setTimeout(function(){
+    var chg = document.getElementById('ap-change-file');
+    if(chg) chg.addEventListener('click', function(){ document.getElementById('ap-file').click(); });
+  }, 100);
+  document.getElementById('ap-drop').innerHTML =
+    '<div class="ap-upload-ic">✓</div>' +
+    '<div class="ap-upload-title">' + filename + '</div>' +
+    '<div class="ap-upload-sub">' + data.length + ' salariés détectés — <span style="color:var(--bx);cursor:pointer" id="ap-change-file">Changer de fichier</span></div>' +
+    '<input type="file" id="ap-file" accept=".xlsx" style="display:none" onchange="loadSilaeFile(this.files[0])">';
+  runAnalyse();
+}
+
+function runAnalyse(){
+  if(!analyseData) return;
+  var annee = analyseParams.annee;
+  var mois = 'Périmètre annuel';
+  var ema50p = analyseParams.ema50p;
+  var sal = analyseData.salaries;
+
+  // Calculer les projections pour chaque salarié
+  var rows_calc = sal.map(function(s){
+    if(!s.brut || !s.h) return null;
+    var proj = calcExo(s.brut, s.h, annee, mois, ema50p);
+    if(!proj) return null;
+
+    var exo_actuelle = Math.abs(s.lodeom_u)+Math.abs(s.lodeom_r)+Math.abs(s.rgcp_u)+Math.abs(s.rgcp_r);
+    var bareme_actuel = (Math.abs(s.lodeom_u)+Math.abs(s.lodeom_r))>0 ? 'LODEOM' : ((Math.abs(s.rgcp_u)+Math.abs(s.rgcp_r))>0 ? 'RGCP' : 'Aucun');
+
+    // Meilleur barème projeté
+    var projections = [
+      {id:'b1', label:'B1', val:proj.b1.total},
+      {id:'b2', label:'B2', val:proj.b2.total},
+      {id:'b3', label:'B3', val:proj.b3.total},
+      {id:'b0bis', label:'RGDU', val:proj.b0bis.total},
+    ];
+    if(annee < 2026) projections.push({id:'b0', label:'RGCP', val:proj.b0.total});
+    
+    var best = projections.reduce(function(a,b){return b.val>a.val?b:a;});
+    var ecart = best.val - exo_actuelle;
+
+    return {
+      nom: s.nom, h:s.h, brut:s.brut,
+      exo_act: exo_actuelle, bareme_act: bareme_actuel,
+      proj_b1:proj.b1.total, proj_b2:proj.b2.total, proj_b3:proj.b3.total,
+      proj_b0bis:proj.b0bis.total, proj_b0:proj.b0.total,
+      best_label:best.label, best_val:best.val, ecart:ecart,
+    };
+  }).filter(Boolean);
+
+  // KPIs
+  var total_brut = rows_calc.reduce(function(s,r){return s+r.brut;},0);
+  var total_act = rows_calc.reduce(function(s,r){return s+r.exo_act;},0);
+  var total_best = rows_calc.reduce(function(s,r){return s+r.best_val;},0);
+  var total_ecart = total_best - total_act;
+  var nb_gain = rows_calc.filter(function(r){return r.ecart>10;}).length;
+
+  function fe(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n); }
+  function nom_court(n){ var parts=n.replace(/^\d+\s*/,'').split(' '); return parts.slice(0,2).join(' '); }
+
+  var html = '<div class="ap-kpis">' +
+    '<div class="kpi-card"><div class="kpi-label">Salariés analysés</div><div class="kpi-val">' + rows_calc.length + '</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Masse salariale</div><div class="kpi-val">' + fe(total_brut) + '</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Exo actuelle</div><div class="kpi-val">' + fe(total_act) + '</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Exo optimale</div><div class="kpi-val" style="color:var(--bx)">' + fe(total_best) + '</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Économies potentielles</div><div class="kpi-val" style="color:' + (total_ecart>0?'#16a34a':'var(--ink)') + '">' + (total_ecart>0?'+':'') + fe(total_ecart) + '</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Salariés avec gain potentiel</div><div class="kpi-val">' + nb_gain + ' / ' + rows_calc.length + '</div></div>' +
+    '</div>';
+
+  html += '<div class="card" style="overflow-x:auto"><div class="card-ttl">Détail par salarié</div><table class="ap-table"><thead><tr>' +
+    '<th>Salarié</th><th class="r">Heures</th><th class="r">Brut</th><th>Barème actuel</th><th class="r">Exo actuelle</th>' +
+    '<th class="r">B1</th><th class="r">B2</th><th class="r">B3</th><th class="r">RGDU</th>' +
+    (annee<2026?'<th class="r">RGCP</th>':'') +
+    '<th class="r">Meilleur</th><th class="r">Écart</th>' +
+    '</tr></thead><tbody>';
+
+  rows_calc.sort(function(a,b){return b.ecart-a.ecart;}).forEach(function(r){
+    var badgeCls = r.bareme_act==='LODEOM'?'lodeom':r.bareme_act==='RGCP'?'rgcp':r.bareme_act==='RGDU'?'rgdu':'none';
+    html += '<tr>' +
+      '<td style="font-weight:500">' + nom_court(r.nom) + '</td>' +
+      '<td class="r">' + r.h.toFixed(2) + 'h</td>' +
+      '<td class="r">' + fe(r.brut) + '</td>' +
+      '<td><span class="ap-badge ' + badgeCls + '">' + r.bareme_act + '</span></td>' +
+      '<td class="r">' + fe(r.exo_act) + '</td>' +
+      '<td class="r">' + fe(r.proj_b1) + '</td>' +
+      '<td class="r">' + fe(r.proj_b2) + '</td>' +
+      '<td class="r">' + fe(r.proj_b3) + '</td>' +
+      '<td class="r">' + fe(r.proj_b0bis) + '</td>' +
+      (annee<2026?'<td class="r">'+fe(r.proj_b0)+'</td>':'') +
+      '<td class="r" style="font-weight:600;color:var(--bx)">' + r.best_label + ' ' + fe(r.best_val) + '</td>' +
+      '<td class="' + (r.ecart>10?'gain':r.ecart<-10?'loss':'r') + '">' + (r.ecart>0?'+':'') + fe(r.ecart) + '</td>' +
+      '</tr>';
+  });
+
+  html += '</tbody><tfoot><tr>' +
+    '<td colspan="4">TOTAL</td>' +
+    '<td class="r">' + fe(total_act) + '</td>' +
+    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b1;},0)) + '</td>' +
+    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b2;},0)) + '</td>' +
+    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b3;},0)) + '</td>' +
+    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b0bis;},0)) + '</td>' +
+    (annee<2026?'<td class="r">'+fe(rows_calc.reduce(function(s,r){return s+r.proj_b0;},0))+'</td>':'') +
+    '<td class="r">' + fe(total_best) + '</td>' +
+    '<td class="' + (total_ecart>0?'gain':'r') + '">' + (total_ecart>0?'+':'') + fe(total_ecart) + '</td>' +
+    '</tr></tfoot></table></div>';
+
+  document.getElementById('ap-results').innerHTML = html;
+}
+
 function buildLogin(){
   var groups={assoc:[],mgr:[],clt:[],aud:[]};
   USERS.forEach(function(u){groups[u.role].push(u);});
@@ -1504,14 +1790,16 @@ function buildLogin(){
   });
 }
 let selUid=null;
-function selU(id){
-  selUid=id;
-  document.querySelectorAll('.l-card').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('lc-'+id).classList.add('sel');
-  document.getElementById('l-sub').classList.add('ready');
-  document.getElementById('l-err').style.display='none';
-  document.getElementById('l-pwd').style.borderColor='';
-  document.getElementById('l-pwd').focus();
+function selU(elOrId, maybeId){
+  var id = maybeId !== undefined ? maybeId : elOrId;
+  var el = maybeId !== undefined ? elOrId : null;
+  selUid = id;
+  document.querySelectorAll('.l-card').forEach(function(c){c.classList.remove('sel');});
+  if(el) el.classList.add('sel');
+  else { var lc = document.getElementById('lc-'+id); if(lc) lc.classList.add('sel'); }
+  var sub = document.getElementById('l-sub'); if(sub) sub.classList.add('ready');
+  var err = document.getElementById('l-err'); if(err) err.style.display='none';
+  var pwd = document.getElementById('l-pwd'); if(pwd){ pwd.style.borderColor=''; pwd.focus(); }
 }
 function doLogin(){
   if(!selUid)return;
@@ -1591,9 +1879,9 @@ function buildApp(){
   document.getElementById('sb-role').textContent=CU.lbl;
 
   const navCfg={
-    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
-    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
-    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'}],
+    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'}],
+    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'}],
     aud:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'}],
   };
   const items=navCfg[CU.role]||navCfg.aud;
@@ -1658,11 +1946,11 @@ function showPage(id,btn){
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
   openGroupForPage(id);
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-analyse':'Outils','g-analyse':'Outils'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-analyse':'Analyse <em>paie</em>','g-analyse':'Analyse <em>paie</em>'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-analyse':buildGAnalyse};
   if(renders[id])renders[id]();
 }
 
