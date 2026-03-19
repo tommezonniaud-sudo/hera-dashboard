@@ -255,7 +255,7 @@ const canFull=()=>currentUser&&['associe','manager'].includes(currentUser.role);
 const myDos=()=>canFull()?DB:DB.filter(d=>d.suivi===currentUser.id||d.gestion===currentUser.id);
 
 
-const JSON_URL = 'https://groupehera.sharepoint.com/sites/VULCAIN-Optimisationsociale/Documents%20partages/Dashboard/data.json?download=1';
+const JSON_URL = 'https://tommezonniaud-sudo.github.io/hera-dashboard/data.json';
 
 async function syncData(){
   setSyncState('loading','Chargement des données...');
