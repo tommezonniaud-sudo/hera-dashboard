@@ -540,6 +540,7 @@ tr:hover td{background:var(--bg)}
         </div>
 
         <div class="page" id="page-g-equipe"><div id="g-equipe-content"></div></div>
+        <div class="page" id="page-g-outils"><div id="g-outils-content"></div></div>
         <div class="page" id="page-g-process"><div id="g-process-content"></div></div>
         <div class="page" id="page-g-leviers"><div id="g-leviers-content"></div></div>
         <div class="page" id="page-g-templates"><div id="g-templates-content"></div></div>
@@ -811,22 +812,110 @@ const GUIDE_RPA=[
 
 function buildGEquipe(){
   document.getElementById('g-equipe-content').innerHTML=`
-    <div class="g-hero"><div class="g-hero-ey">Guide · Équipe</div><div class="g-hero-title">L'<em>équipe</em> Hera Groupe</div><div class="g-hero-sub">33 rue du Kerval, Mont-Roquefeuil — 97434 Saint-Paul, La Réunion</div></div>
-    <div class="card"><div class="card-ttl">Pôle Optimisation & Performance RH</div><div class="g-team-grid">${GUIDE_TEAM_DATA.filter(u=>['TME','EDE','RBA','MJO','MFY','LHE','ZGE','VDP'].includes(u.id)).map(u=>`
-      <div class="g-team-card"><div class="g-av ${u.cls}">${u.id}</div><div class="g-tname">${u.name}</div><div class="g-trole">${u.role}</div></div>`).join('')}</div></div>
-    <div class="card"><div class="card-ttl">Outils & accès</div>${GUIDE_TOOLS.map(t=>`
-      <div style="padding:14px 0;border-bottom:1px solid var(--line)">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-          <div style="font-size:13px;font-weight:600">${t.name}</div>
-          <span class="bx ${t.badgeCls}" style="font-size:8px;padding:2px 8px">${t.badge}</span>
-          ${t.url?`<a href="${t.url}" target="_blank" style="margin-left:auto;font-size:10px;color:var(--bx);font-family:var(--ff-mono);text-decoration:none">↗ Accéder</a>`:''}
+    <div class="g-hero">
+      <div class="g-hero-ey">Guide · Équipe</div>
+      <div class="g-hero-title">L'<em>équipe</em> Hera Groupe</div>
+      <div class="g-hero-sub">33 rue du Kerval, Mont-Roquefeuil — 97434 Saint-Paul, La Réunion</div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-ttl">Associés</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
+        ${[{id:'TME',name:'Tom Mezonniaud',role:'Associé',pole:'Optimisation & Performance RH',cls:'li-a'},
+           {id:'EDE',name:'Edouard Dechelette',role:'Associé',pole:'Optimisation & Performance RH',cls:'li-a'},
+           {id:'RMA',name:'Raphaël Marteau',role:'Associé',pole:"Finance d'Entreprise",cls:'li-a'},
+           {id:'PLB',name:'Pierre-Louis Boyet',role:'Associé',pole:"Finance d'Entreprise",cls:'li-a'}
+        ].map(u=>`<div class="g-team-card">
+          <div class="g-av ${u.cls}">${u.id}</div>
+          <div class="g-tname">${u.name}</div>
+          <div class="g-trole">${u.role}</div>
+          <div style="font-size:9px;color:var(--bx);font-family:var(--ff-mono);margin-top:4px">${u.pole}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-ttl">Pôle Optimisation & Performance RH</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink4);font-family:var(--ff-mono);margin-bottom:10px">Piloté par TME & EDE</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${[{id:'RBA',name:'Romane Basle',role:'Manager',cls:'li-m'},
+             {id:'MJO',name:'Margaux Jouanin',role:'Consultant Senior',cls:'li-c'},
+             {id:'MFY',name:'Myriam Fock-Yee',role:'Consultant Senior',cls:'li-c'},
+             {id:'LHE',name:'Laura Hermans',role:'Consultante',cls:'li-c'},
+             {id:'ZGE',name:'Zélie Gerbal',role:'Consultante',cls:'li-c'},
+             {id:'VDP',name:'Valérie Dit Parny',role:"Chargé d'audit",cls:'li-au'}
+          ].map(u=>`<div style="display:flex;align-items:center;gap:10px">
+            <div class="g-av ${u.cls}" style="width:32px;height:32px;font-size:10px;flex-shrink:0">${u.id}</div>
+            <div>
+              <div style="font-size:12px;font-weight:500">${u.name}</div>
+              <div style="font-size:10px;color:var(--ink4);font-family:var(--ff-mono)">${u.role}</div>
+            </div>
+          </div>`).join('')}
         </div>
-        <div style="font-size:12px;color:var(--ink3);line-height:1.6;margin-bottom:8px">${t.desc}</div>
-        ${t.fields&&t.fields.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">${t.fields.map(f=>`<div style="background:var(--bg2);border-radius:var(--r6);padding:4px 10px;font-size:11px"><span style="color:var(--ink4);font-family:var(--ff-mono)">${f.l} : </span><span style="font-weight:500">${f.v}</span></div>`).join('')}</div>`:''}
-        ${t.usages&&t.usages.length?`<div style="font-size:11px;color:var(--ink3)">${t.usages.map(u=>`<span style="margin-right:10px">→ ${u}</span>`).join('')}</div>`:''}
-        ${t.warn?`<div style="font-size:11px;color:var(--or);background:var(--or-pale);border:1px solid rgba(184,137,31,.2);border-radius:var(--r6);padding:6px 10px;margin-top:8px">⚠ ${t.warn}</div>`:''}
-      </div>`).join('')}</div>`;
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-ttl">Pôle Finance d'Entreprise</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink4);font-family:var(--ff-mono);margin-bottom:10px">Piloté par RMA & PLB</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${[{id:'CPE',name:'Clément Perrin',role:"Chargé d'affaires",cls:'li-m'},
+             {id:'NLE',name:'Nino Lejeune',role:'Analyste',cls:'li-c'}
+          ].map(u=>`<div style="display:flex;align-items:center;gap:10px">
+            <div class="g-av ${u.cls}" style="width:32px;height:32px;font-size:10px;flex-shrink:0">${u.id}</div>
+            <div>
+              <div style="font-size:12px;font-weight:500">${u.name}</div>
+              <div style="font-size:10px;color:var(--ink4);font-family:var(--ff-mono)">${u.role}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
+          <div class="card-ttl">Transverse</div>
+          ${[{id:'PGU',name:'Paul Guendafa',role:'Directeur Commercial',cls:'li-m'},
+             {id:'NTF',name:'Natacha Fieno',role:'Commerciale',cls:'li-c'},
+             {id:'VJB',name:'Valérie Jean-Baptiste',role:'Gestionnaire administrative',cls:'li-au'}
+          ].map(u=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div class="g-av ${u.cls}" style="width:32px;height:32px;font-size:10px;flex-shrink:0">${u.id}</div>
+            <div>
+              <div style="font-size:12px;font-weight:500">${u.name}</div>
+              <div style="font-size:10px;color:var(--ink4);font-family:var(--ff-mono)">${u.role}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
 }
+
+function buildGOutils(){
+  document.getElementById('g-outils-content').innerHTML=`
+    <div class="g-hero">
+      <div class="g-hero-ey">Guide · Outils</div>
+      <div class="g-hero-title">Outils & <em>accès</em></div>
+      <div class="g-hero-sub">Plateformes utilisées au quotidien. Identifiants et accès à récupérer auprès de l'équipe.</div>
+    </div>
+    ${GUIDE_TOOLS.map(t=>`
+    <div class="g-levier-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="font-family:var(--ff-serif);font-size:18px;font-weight:300">${t.name}</div>
+        <span class="bx ${t.badgeCls}" style="font-size:8px">${t.badge}</span>
+        ${t.url?`<a href="${t.url}" target="_blank" style="margin-left:auto;font-size:10px;color:var(--bx);font-family:var(--ff-mono);text-decoration:none;border:1px solid rgba(139,26,44,.2);padding:3px 10px;border-radius:20px">↗ Accéder</a>`:''}
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65;margin-bottom:10px">${t.desc}</div>
+      ${t.fields&&t.fields.length?`
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+          ${t.fields.map(f=>`
+          <div style="background:var(--bg2);border:1px solid var(--line);border-radius:var(--r6);padding:5px 12px">
+            <div style="font-size:9px;color:var(--ink4);font-family:var(--ff-mono);margin-bottom:2px">${f.l}</div>
+            <div style="font-size:12px;font-weight:500;font-family:var(--ff-mono)">${f.v}</div>
+          </div>`).join('')}
+        </div>`:''}
+      ${t.usages&&t.usages.length?`
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:8px">
+          ${t.usages.map(u=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0"><span style="color:var(--bx);font-size:10px">→</span>${u}</div>`).join('')}
+        </div>`:''}
+      ${t.warn?`<div class="g-levier-warn">⚠ ${t.warn}</div>`:''}
+    </div>`).join('')}`;
+}
+
 function buildGProcess(){
   document.getElementById('g-process-content').innerHTML=`
     <div class="g-hero"><div class="g-hero-ey">Guide · Process</div><div class="g-hero-title">Séquençage d'une <em>mission</em></div><div class="g-hero-sub">Une mission d'optimisation sociale suit toujours le même séquençage en 5 étapes.</div></div>
@@ -1386,23 +1475,23 @@ function buildApp(){
     assoc:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
       {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
-      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
       {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
     ],
     mgr:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
       {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
-      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
       {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
     ],
     clt:[
       {label:'Mes dossiers', ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'}]},
-      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
       {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
     ],
     aud:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'}]},
-      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe & outils'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'}]},
     ],
   };
   const roleGroups = groups[CU.role] || groups.aud;
@@ -1442,11 +1531,745 @@ function showPage(id,btn){
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
   openGroupForPage(id);
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-lexique':'Guide'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-lexique':'<em>Lexique</em> métier'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-lexique':'Guide'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-lexique':'<em>Lexique</em> métier'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-lexique':buildGLexique};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-lexique':buildGLexique};
+  if(renders[id])renders[id]();
+}
+
+// ── ACCUEIL ───────────────────────────────────────────────────────────────────
+function buildAccueil(){
+  const h=new Date().getHours(),g=h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
+  const dos=myDos(),al=dos.filter(isAl),vp=valPend();
+  document.getElementById('hh-ey').textContent=`${g}, ${CU.prenom}`;
+  document.getElementById('hh-ti').innerHTML=`${g<18?'Bonjour':'Bonsoir'} <em>${CU.prenom}</em>`;
+  const subs={assoc:`${dos.length} dossiers actifs · ${al.length} alerte${al.length>1?'s':''} · ${vp.length} validation${vp.length>1?'s':''} en attente`,mgr:`${dos.length} dossiers dans votre pôle · ${vp.length} tâche${vp.length>1?'s':''} à valider`,clt:`${dos.length} dossier${dos.length>1?'s':''} · ${myTasks().filter(t=>['À faire','En cours'].includes(t.statut)).length} tâche${myTasks().filter(t=>['À faire','En cours'].includes(t.statut)).length>1?'s':''} actives`,aud:`${dos.length} dossiers · ${al.length} alerte${al.length>1?'s':''} d'inactivité`};
+  document.getElementById('hh-sub').textContent=subs[CU.role]||'';
+
+  const kd=isFull()?[
+    {l:'Dossiers',v:dos.length,cls:'',hi:false},{l:'OK',v:dos.filter(d=>d.statut==='OK').length,cls:'grn',hi:false},
+    {l:'En attente',v:dos.filter(d=>d.statut==='En attente').length,cls:'amb',hi:false},
+    {l:'KO',v:dos.filter(d=>d.statut==='KO').length,cls:'red',hi:true},
+    {l:'Inactifs ≥15j',v:al.length,cls:al.length>0?'red':'',hi:al.length>0,s:'règle auto'},
+    {l:'À valider',v:vp.length,cls:vp.length>0?'amb':'',hi:vp.length>0},
+  ]:[
+    {l:'Mes dossiers',v:dos.length,cls:'',hi:false},{l:'Tâches actives',v:myTasks().filter(t=>['À faire','En cours'].includes(t.statut)).length,cls:'amb',hi:false},
+    {l:'Soumises',v:myTasks().filter(t=>t.statut==='En attente validation').length,cls:'',hi:false},{l:'Terminées',v:myTasks().filter(t=>t.statut==='Terminé').length,cls:'grn',hi:false},
+  ];
+  document.getElementById('kpi-h').innerHTML=kd.map(k=>`<div class="kpi${k.hi?' hi':''}"><div class="kpi-accent-bar"></div><div class="kpi-l">${k.l}</div><div class="kpi-v ${k.cls||''}">${k.v}</div>${k.s?`<div class="kpi-s">${k.s}</div>`:''}</div>`).join('');
+
+  const navCfg={
+    assoc:[{ic:'◫',t:'Dossiers',s:'Tous les dossiers actifs',p:'dossiers',cnt:dos.length+' dossiers',urg:false},{ic:'✓',t:'Validations',s:'Décisions en attente',p:'validations',cnt:vp.length+' en attente',urg:vp.length>0},{ic:'◈',t:'Leviers',s:'Économies identifiées',p:'leviers',cnt:'',urg:false},{ic:'◉',t:'Facturation',s:'Suivi des honoraires',p:'fact',cnt:'',urg:false},{ic:'⚑',t:'Alertes',s:'Dossiers inactifs',p:'alertes',cnt:al.length+' alertes',urg:al.length>0},{ic:'◎',t:'Charge équipe',s:'Répartition',p:'charge',cnt:'',urg:false}],
+    mgr:[{ic:'◫',t:'Dossiers',s:'Dossiers de votre pôle',p:'dossiers',cnt:dos.length+' dossiers',urg:false},{ic:'✓',t:'Validations',s:'Tâches à valider',p:'validations',cnt:vp.length+' en attente',urg:vp.length>0},{ic:'◈',t:'Leviers',s:'Économies identifiées',p:'leviers',cnt:'',urg:false},{ic:'⚑',t:'Alertes',s:'Dossiers inactifs',p:'alertes',cnt:al.length+' alertes',urg:al.length>0},{ic:'◎',t:'Charge équipe',s:'Répartition',p:'charge',cnt:'',urg:false}],
+    clt:[{ic:'⊞',t:'Mes tâches',s:'Kanban de vos tâches',p:'kanban',cnt:myTasks().filter(t=>t.statut!=='Terminé').length+' actives',urg:false},{ic:'◫',t:'Mes dossiers',s:'Vos dossiers',p:'dossiers',cnt:dos.length+' dossiers',urg:false},{ic:'◈',t:'Mes leviers',s:'Économies',p:'leviers',cnt:'',urg:false}],
+    aud:[{ic:'◫',t:'Dossiers',s:'Tous les dossiers',p:'dossiers',cnt:DB.length+' dossiers',urg:false},{ic:'⚑',t:'Alertes',s:'Dossiers inactifs',p:'alertes',cnt:al.length+' alertes',urg:al.length>0}],
+  };
+  document.getElementById('nav-grid').innerHTML=(navCfg[CU.role]||navCfg.aud).map(n=>`
+    <div class="nc${n.urg?' urg':''}" onclick="showPage('${n.p}',document.getElementById('ni-${n.p}'))">
+      <div class="nc-ic">${n.ic}</div>
+      <div class="nc-title">${n.t}</div>
+      <div class="nc-sub">${n.s}</div>
+      ${n.cnt?`<div class="nc-cnt${n.urg?' urg':''}">${n.cnt}</div>`:''}
+    </div>`).join('');
+
+  const alerts=[...al,...DB.filter(d=>d.statut==='KO'&&!isAl(d))].slice(0,5);
+  document.getElementById('h-alerts').innerHTML=alerts.length?alerts.map(d=>`
+    <div class="ar"><div class="ar-dot ${d.statut==='KO'?'dr':'da'}"></div>
+    <div style="flex:1;min-width:0"><div class="ar-name">${d.client}</div>
+    <div class="ar-det">${d.societe.substring(0,38)} · ${d.statut==='KO'?'Bloqué':d.joursInactif+'j inactif'}</div></div>
+    <span class="bx ${d.statut==='KO'?'b-ko':'b-att'}">${d.statut==='KO'?'KO':d.joursInactif+'j'}</span></div>`)
+    .join(''):'<p style="font-size:12px;color:var(--ink4);padding:8px 0">Aucune alerte active</p>';
+
+  document.getElementById('h-val-ttl').textContent=isFull()?'Validations en attente':'Tâches soumises';
+  const vals=isFull()?valPend():myTasks().filter(t=>t.statut==='En attente validation');
+  document.getElementById('h-val').innerHTML=vals.length?vals.slice(0,4).map(t=>`
+    <div class="ar"><div class="ar-dot da"></div>
+    <div style="flex:1;min-width:0"><div class="ar-name">${t.client}</div><div class="ar-det">${t.etape}</div></div>
+    ${isFull()?`<div style="display:flex;gap:5px"><button class="btn sec sml" onclick="valTask('${t.id}',true)">Valider</button><button class="btn sml" style="color:var(--bx);border-color:var(--bx)" onclick="valTask('${t.id}',false)">Refuser</button></div>`:'<span class="bx b-val">En attente</span>'}
+    </div>`).join(''):'<p style="font-size:12px;color:var(--ink4);padding:8px 0">Aucune validation en attente</p>';
+
+  const b=document.getElementById('bdg-val');if(b)b.textContent=valPend().length||'';
+}
+
+// ── DOSSIERS ──────────────────────────────────────────────────────────────────
+function buildKPIsD(){
+  const d=myDos(),al=d.filter(isAl).length;
+  document.getElementById('kpi-d').innerHTML=`
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Dossiers</div><div class="kpi-v">${d.length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">OK</div><div class="kpi-v grn">${d.filter(x=>x.statut==='OK').length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">En attente</div><div class="kpi-v amb">${d.filter(x=>x.statut==='En attente').length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">KO</div><div class="kpi-v red">${d.filter(x=>x.statut==='KO').length}</div></div>
+    <div class="kpi${al>0?' hi':''}"><div class="kpi-accent-bar"></div><div class="kpi-l">Inactifs ≥15j</div><div class="kpi-v ${al>0?'red':''}">${al}</div><div class="kpi-s">règle auto</div></div>`;
+}
+function renderD(){
+  const s=document.getElementById('d-s').value.toLowerCase(),st=document.getElementById('d-st').value,sv=document.getElementById('d-sv').value;
+  dFil=myDos().filter(d=>{if(st&&d.statut!==st)return false;if(sv&&d.suivi!==sv)return false;if(s&&!(d.client.toLowerCase().includes(s)||d.societe.toLowerCase().includes(s)))return false;return true;});
+  dFil.sort((a,b)=>{let va=a[dSK]??'',vb=b[dSK]??'';if(typeof va==='number')return dSA?va-vb:vb-va;return dSA?String(va).localeCompare(String(vb)):String(vb).localeCompare(String(va));});
+  const s2=(dP-1)*PS,en=Math.min(s2+PS,dFil.length);
+  const ro=CU.role==='aud';
+  document.getElementById('d-tb').innerHTML=dFil.slice(s2,en).map(d=>{
+    const al=isAl(d),nb=(d.leviers||[]).filter(l=>l.passe.actif).length;
+    const bg=al?'background:rgba(254,249,195,.35)':'';
+    const stB=`<span class="bx ${d.statut==='OK'?'b-ok':d.statut==='KO'?'b-ko':'b-att'}">${d.statut||'—'}</span>`;
+    const alB=al?`<span class="bx b-ko">${d.joursInactif}j</span>`:`<span style="font-size:10px;color:var(--ink4);font-family:var(--ff-mono)">${d.joursInactif}j</span>`;
+    const mt=TASKS.find(t=>t.dosId==d.id&&t.ref===CU.id);
+    if(isFull()||ro)return`<tr style="${bg}"><td style="font-weight:500">${d.client}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink3)">${d.societe}</td><td style="font-family:var(--ff-mono);font-size:10px;font-weight:500">${d.suivi}</td><td style="font-family:var(--ff-mono);font-size:10px;color:var(--ink4)">${d.gestion}</td><td>${stB}</td><td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink3)">${d.action||'—'}</td><td>${alB}</td><td style="font-size:10px;color:var(--bx);font-family:var(--ff-mono)">${nb?nb+'×':'—'}</td><td>${!ro?`<button class="btn sml" onclick="openDos(${d.id})">Ouvrir</button>`:''}</td></tr>`;
+    return`<tr style="${bg}"><td style="font-weight:500">${d.client}</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink3)">${d.societe}</td><td>${stB}</td><td style="font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink3)">${d.action||'—'}</td><td>${alB}</td><td>${mt?`<span class="bx ${mt.statut==='En attente validation'?'b-val':mt.statut==='Terminé'?'b-ok':'b-att'}">${mt.etape}</span>`:'—'}</td><td><button class="btn sml" onclick="openDos(${d.id})">Màj</button></td></tr>`;
+  }).join('');
+  document.getElementById('d-pgi').textContent=`${s2+1}–${en} / ${dFil.length}`;
+  document.getElementById('d-pp').disabled=dP===1;document.getElementById('d-pn').disabled=en>=dFil.length;
+}
+function pgD(d){dP+=d;renderD();}
+function resetD(){['d-s','d-st','d-sv'].forEach(id=>document.getElementById(id).value='');dP=1;renderD();}
+function filterAl(){dFil=DB.filter(isAl);dP=1;renderD();}
+
+// ── KANBAN ────────────────────────────────────────────────────────────────────
+function buildKanban(){
+  const cols=['À faire','En cours','En attente validation','Terminé'];
+  const cfg={'À faire':{c:'var(--ink4)'},'En cours':{c:'var(--or)'},'En attente validation':{c:'var(--bx)'},'Terminé':{c:'#16a34a'}};
+  document.getElementById('kanban').innerHTML=cols.map(col=>{
+    const tasks=myTasks().filter(t=>t.statut===col);
+    return`<div class="kb-col" style="border-top:2px solid ${cfg[col].c}">
+      <div class="kb-head"><div class="kb-col-title" style="color:${cfg[col].c}">${col}</div><div class="kb-col-cnt">${tasks.length}</div></div>
+      ${tasks.map(t=>`<div class="kb-card ${col==='En attente validation'?'al':col==='En cours'?'wa':''}">
+        <div class="kb-client">${t.client}</div><div class="kb-task">${t.etape}</div>
+        <div class="kb-meta"><span class="kb-ref">${t.ref}</span>
+          <div style="display:flex;gap:4px">
+            ${t.statut==='À faire'?`<button class="btn sml" style="font-size:9px;padding:2px 8px" onclick="startTask('${t.id}')">Démarrer</button>`:''}
+            ${t.statut==='En cours'?`<button class="btn sec sml" style="font-size:9px;padding:2px 8px" onclick="submitTask('${t.id}')">Soumettre</button>`:''}
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+function startTask(id){const t=TASKS.find(x=>x.id===id);if(t){t.statut='En cours';buildKanban();buildAccueil();}}
+function submitTask(id){const t=TASKS.find(x=>x.id===id);if(t){t.statut='En attente validation';buildKanban();buildAccueil();updB();}}
+function valTask(id,ok){const t=TASKS.find(x=>x.id===id);if(t){t.statut=ok?'Terminé':'En cours';if(!ok)t.commentaire='Refusé';buildAccueil();if(document.getElementById('page-validations').classList.contains('on'))buildVal();updB();}}
+function updB(){const b=document.getElementById('bdg-val');if(b)b.textContent=valPend().length||'';}
+
+// ── VALIDATIONS ───────────────────────────────────────────────────────────────
+function buildVal(){
+  const vp=valPend();
+  document.getElementById('kpi-v').innerHTML=`
+    <div class="kpi${vp.length>0?' hi':''}"><div class="kpi-accent-bar"></div><div class="kpi-l">En attente</div><div class="kpi-v ${vp.length>0?'amb':''}">${vp.length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Validées</div><div class="kpi-v grn">${TASKS.filter(t=>t.statut==='Terminé').length}</div></div>`;
+  document.getElementById('val-list').innerHTML=vp.length?vp.map(t=>`
+    <div class="vr"><div class="vr-dot"></div>
+    <div style="flex:1;min-width:0"><div class="vr-name">${t.client} <span style="font-weight:400;color:var(--ink3)">— ${t.societe.substring(0,35)}</span></div>
+    <div class="vr-det">${t.etape} · Ref. ${t.ref}</div></div>
+    <div class="vr-btns"><button class="btn or sml" onclick="valTask('${t.id}',true)">✓ Valider</button><button class="btn sml" style="color:var(--bx);border-color:var(--bx)" onclick="valTask('${t.id}',false)">Refuser</button></div>
+    </div>`).join(''):'<p style="text-align:center;font-size:14px;color:var(--ink4);padding:28px 0;font-family:var(--ff-serif);font-style:italic">Aucune validation en attente.</p>';
+}
+
+// ── LEVIERS ───────────────────────────────────────────────────────────────────
+function buildLev(){
+  let rows=[];
+  myDos().forEach(d=>(d.leviers||[]).forEach(l=>{if(l.passe.actif)rows.push({client:d.client,societe:d.societe,levier:l.nom,periode:'Passé',annees:l.passe.annees,eco:l.passe.eco,taux:l.passe.taux??TAUX,honoraires:l.passe.eco?Math.round(l.passe.eco*(l.passe.taux??TAUX)/100):null,statut:l.passe.statut||''});}));
+  const eT=rows.reduce((s,r)=>s+(r.eco||0),0),hT=rows.reduce((s,r)=>s+(r.honoraires||0),0);
+  document.getElementById('kpi-l').innerHTML=`
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Lignes</div><div class="kpi-v">${rows.length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Économies</div><div class="kpi-v grn">${fmt(eT)}</div></div>
+    <div class="kpi hi"><div class="kpi-accent-bar"></div><div class="kpi-l">Honoraires HT</div><div class="kpi-v grn">${fmt(hT)}</div></div>`;
+  const s=document.getElementById('l-s').value.toLowerCase(),lv=document.getElementById('l-lv').value,pr=document.getElementById('l-pr').value;
+  document.getElementById('l-tb').innerHTML=rows.filter(r=>{if(lv&&r.levier!==lv)return false;if(pr&&r.periode!==pr)return false;if(s&&!(r.client.toLowerCase().includes(s)||r.levier.toLowerCase().includes(s)))return false;return true;}).map(r=>`<tr>
+    <td style="font-weight:500">${r.client}</td>
+    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink3)">${r.societe}</td>
+    <td style="font-size:11px">${r.levier}</td>
+    <td><span class="bx b-gray">${r.periode}</span></td>
+    <td style="font-size:10px;color:var(--ink4);font-family:var(--ff-mono)">${r.annees||'—'}</td>
+    <td><span class="eco">${fmt(r.eco)}</span></td>
+    <td>${fmt(r.honoraires)}</td>
+    <td><span class="bx ${r.statut==='OK'?'b-ok':r.statut==='KO'?'b-ko':r.statut?'b-att':''}">${r.statut||'—'}</span></td>
+  </tr>`).join('');
+}
+
+// ── FACTURATION ───────────────────────────────────────────────────────────────
+function getFact(){
+  const rows=[];
+  DB.forEach(d=>(d.leviers||[]).forEach(l=>{
+    if(!l.passe.actif||!l.passe.eco)return;
+    const ex=FACT_DB.find(f=>f.dosId==d.id&&f.levier===l.nom)||{};
+    const taux=ex.taux??l.passe.taux??TAUX;
+    rows.push({client:d.client,societe:d.societe,levier:l.nom,eco:l.passe.eco,taux,honoraires:Math.round(l.passe.eco*taux/100),statut:ex.statut||'À facturer',numFacture:ex.numFacture||''});
+  }));
+  return rows;
+}
+function buildFact(){
+  const fr=getFact();
+  const aF=fr.filter(r=>r.statut==='À facturer'),fa=fr.filter(r=>r.statut==='Facturé');
+  const tA=aF.reduce((s,r)=>s+r.honoraires,0),tF=fa.reduce((s,r)=>s+r.honoraires,0);
+  document.getElementById('kpi-f').innerHTML=`
+    <div class="kpi hi"><div class="kpi-accent-bar"></div><div class="kpi-l">À facturer</div><div class="kpi-v amb">${fmt(tA)}</div><div class="kpi-s">${aF.length} lignes</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Facturé</div><div class="kpi-v">${fmt(tF)}</div></div>
+    <div class="kpi hi"><div class="kpi-accent-bar"></div><div class="kpi-l">Total honoraires</div><div class="kpi-v grn">${fmt(tA+tF)}</div></div>`;
+  const byC={},byL={};fr.forEach(r=>{byC[r.client]=(byC[r.client]||0)+r.honoraires;byL[r.levier]=(byL[r.levier]||0)+r.honoraires;});
+  const COLS=['var(--bx)','var(--or)','#1e40af','#16a34a','#7c3aed'];
+  const sC=Object.entries(byC).sort((a,b)=>b[1]-a[1]).slice(0,8),mC=sC[0]?.[1]||1;
+  document.getElementById('f-cl').innerHTML=sC.map(([k,v])=>`<div class="br"><div class="br-lbl">${k}</div><div class="br-track"><div class="br-fill" style="width:${Math.round(v/mC*100)}%;background:var(--bx)"></div></div><div class="br-val">${fmt(v)}</div></div>`).join('');
+  const sL=Object.entries(byL).sort((a,b)=>b[1]-a[1]),mL=sL[0]?.[1]||1;
+  document.getElementById('f-lv').innerHTML=sL.map(([k,v],i)=>`<div class="br"><div class="br-lbl" title="${k}">${k.length>16?k.substring(0,16)+'…':k}</div><div class="br-track"><div class="br-fill" style="width:${Math.round(v/mL*100)}%;background:${COLS[i%COLS.length]}"></div></div><div class="br-val">${fmt(v)}</div></div>`).join('');
+  const s=document.getElementById('f-s').value.toLowerCase(),st=document.getElementById('f-st').value;
+  document.getElementById('f-tb').innerHTML=fr.filter(r=>{if(st&&r.statut!==st)return false;if(s&&!r.client.toLowerCase().includes(s))return false;return true;}).map(r=>`<tr>
+    <td style="font-weight:500">${r.client}</td>
+    <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink3)">${r.societe}</td>
+    <td style="font-size:11px;color:var(--ink3)">${r.levier}</td>
+    <td><span class="eco">${fmt(r.eco)}</span></td>
+    <td style="color:var(--ink4);font-family:var(--ff-mono);font-size:10px">${r.taux}%</td>
+    <td style="font-weight:500">${fmt(r.honoraires)}</td>
+    <td><span class="bx ${r.statut==='Facturé'?'b-inf':'b-att'}">${r.statut}</span></td>
+    <td style="font-size:10px;color:var(--ink4);font-family:var(--ff-mono)">${r.numFacture||'—'}</td>
+  </tr>`).join('');
+}
+
+// ── ALERTES ───────────────────────────────────────────────────────────────────
+function buildAl(){
+  const al=DB.filter(isAl).sort((a,b)=>b.joursInactif-a.joursInactif);
+  document.getElementById('kpi-a').innerHTML=`
+    <div class="kpi hi"><div class="kpi-accent-bar"></div><div class="kpi-l">Inactifs ≥15j</div><div class="kpi-v red">${al.length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">KO</div><div class="kpi-v red">${DB.filter(d=>d.statut==='KO').length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">En attente</div><div class="kpi-v amb">${DB.filter(d=>d.statut==='En attente').length}</div></div>`;
+  document.getElementById('a-list').innerHTML=al.map(d=>`
+    <div class="ar"><div class="ar-dot ${d.statut==='KO'?'dr':'da'}"></div>
+    <div style="flex:1;min-width:0"><div class="ar-name">${d.client} <span style="font-weight:400;color:var(--ink3)">— ${d.societe.substring(0,40)}</span></div>
+    <div class="ar-det">${d.suivi} · ${d.gestion} · ${d.action||'—'}</div></div>
+    <span class="bx ${d.statut==='KO'?'b-ko':'b-att'}" style="margin-right:6px">${d.statut}</span>
+    <span class="bx b-ko">${d.joursInactif}j</span></div>`).join('');
+}
+
+// ── CHARGE ────────────────────────────────────────────────────────────────────
+function buildCh(){
+  const bs={},bg={};DB.forEach(d=>{bs[d.suivi]=(bs[d.suivi]||0)+1;bg[d.gestion]=(bg[d.gestion]||0)+1;});
+  const mS=Math.max(...Object.values(bs)),mG=Math.max(...Object.values(bg));
+  const col=v=>v>40?'var(--bx)':v>20?'var(--or)':'#16a34a';
+  document.getElementById('kpi-c').innerHTML=`
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Référents</div><div class="kpi-v">${Object.keys(bs).length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Gestionnaires</div><div class="kpi-v">${Object.keys(bg).length}</div></div>
+    <div class="kpi"><div class="kpi-accent-bar"></div><div class="kpi-l">Moy./référent</div><div class="kpi-v">${Math.round(DB.length/Math.max(Object.keys(bs).length,1))}</div></div>`;
+  document.getElementById('c-sv').innerHTML=Object.entries(bs).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="br"><div class="br-lbl">${k}</div><div class="br-track"><div class="br-fill" style="width:${Math.round(v/mS*100)}%;background:${col(v)}"></div></div><div class="br-val">${v}</div></div>`).join('');
+  document.getElementById('c-gv').innerHTML=Object.entries(bg).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="br"><div class="br-lbl">${k}</div><div class="br-track"><div class="br-fill" style="width:${Math.round(v/mG*100)}%;background:${col(v)}"></div></div><div class="br-val">${v}</div></div>`).join('');
+}
+
+// ── PANEL ─────────────────────────────────────────────────────────────────────
+function openDos(id){
+  const d=DB.find(x=>x.id==id);if(!d)return;
+  editId=id;
+  document.getElementById('p-ttl').textContent=d.client;
+  document.getElementById('p-sub').textContent=d.societe;
+  let fields='';
+  if(isFull()){
+    fields=`<div class="fl"><div><div class="fl-lbl">Statut</div><select class="fsp" id="p-st"><option ${d.statut==='OK'?'selected':''}>OK</option><option ${d.statut==='En attente'?'selected':''}>En attente</option><option ${d.statut==='KO'?'selected':''}>KO</option></select></div>
+    <div><div class="fl-lbl">Jours sans màj</div><input type="number" class="fip" id="p-ji" value="${d.joursInactif||0}" min="0"/></div></div>
+    <div class="fl1"><div class="fl-lbl">Action</div><select class="fsp" id="p-ac"><option value="">—</option><option>Néant</option><option>En production chez HERA</option><option>En attente client</option><option>En instruction organisme tiers</option><option>Relance nécessaire</option><option>Dossier clôturé</option></select></div>`;
+  }else{
+    const t=TASKS.find(x=>x.dosId==id&&x.ref===CU.id)||{etape:ETAPES[0],statut:'À faire',commentaire:''};
+    fields=`<div class="fl1"><div class="fl-lbl">Étape en cours</div><select class="fsp" id="p-etape">${ETAPES.map(e=>`<option ${e===t.etape?'selected':''}>${e}</option>`).join('')}</select></div>
+    <div class="fl1"><div class="fl-lbl">Statut tâche</div><select class="fsp" id="p-tst"><option ${t.statut==='À faire'?'selected':''}>À faire</option><option ${t.statut==='En cours'?'selected':''}>En cours</option><option ${t.statut==='En attente validation'?'selected':''}>En attente validation</option></select></div>
+    <div class="fl1"><div class="fl-lbl">Commentaire</div><textarea class="ftap" id="p-co">${t.commentaire||''}</textarea></div>`;
+  }
+  document.getElementById('p-fields').innerHTML=fields;
+  if(isFull()&&document.getElementById('p-ac'))document.getElementById('p-ac').value=d.action||'';
+  document.getElementById('pov').classList.add('open');
+}
+function saveP(){
+  const d=DB.find(x=>x.id==editId);if(!d)return;
+  if(isFull()){d.statut=document.getElementById('p-st').value;d.action=document.getElementById('p-ac').value;d.joursInactif=parseInt(document.getElementById('p-ji').value)||0;}
+  else{let t=TASKS.find(x=>x.dosId==editId&&x.ref===CU.id);if(!t){t={id:'T'+Date.now(),dosId:editId,client:d.client,societe:d.societe,etape:'',statut:'À faire',ref:CU.id,commentaire:''};TASKS.push(t);}t.etape=document.getElementById('p-etape').value;t.statut=document.getElementById('p-tst').value;t.commentaire=document.getElementById('p-co').value;}
+  closeP();refresh();updB();
+}
+function closeP(){document.getElementById('pov').classList.remove('open');}
+function maybeClose(e){if(e.target===document.getElementById('pov'))closeP();}
+
+// ── GUIDE ─────────────────────────────────────────────────────────────────────
+function openGuide(){
+  document.getElementById('guide-team').innerHTML=GUIDE_TEAM.map(u=>`
+    <div class="team-card">
+      <div class="team-av ${u.cls}">${u.id}</div>
+      <div class="team-name">${u.name}</div>
+      <div class="team-role">${u.role}</div>
+    </div>`).join('');
+  document.getElementById('guide-lex').innerHTML=GUIDE_LEX.map(e=>`
+    <div class="lex-card">
+      <div class="lex-cat">${e.c}</div>
+      <div class="lex-term">${e.t}</div>
+      <div class="lex-def">${e.d}</div>
+    </div>`).join('');
+  document.getElementById('guide-ov').classList.add('open');
+}
+function closeGuide(){document.getElementById('guide-ov').classList.remove('open');}
+function maybeCloseGuide(e){if(e.target===document.getElementById('guide-ov'))closeGuide();}
+
+function refresh(){
+  const id=document.querySelector('.page.on')?.id?.replace('page-','');
+  if(id)showPage(id,document.getElementById('ni-'+id));
+}
+
+buildLogin();
+</script>
+</body>
+</html>// ── LOGIQUE DE CALCUL ─────────────────────────────────────────────────────────
+function calcExo(brut, heures, annee, mois, ema50p) {
+  const key = `${annee} ${mois}`;
+  const ref = REF_DATA[key];
+  if (!ref || !brut || !heures) return null;
+
+  const smic    = ref.smic;
+  const coefT   = ema50p ? ref.coefT50p : ref.coefT50m;
+  const smicRef = heures * smic;
+  const ratio   = brut / smicRef;
+  const tauAM   = 0.06;
+  const tauAF   = 0.018;
+  const am      = tauAM * brut;
+  const af      = tauAF * brut;
+
+  // Exonération barème LODEOM dégressive standard
+  // coefExo = coefT * (plafond - ratio) / (plafond - plancher)  si plancher < ratio < plafond
+  // coefExo = coefT si ratio <= plancher
+  // coefExo = 0 si ratio >= plafond
+  function lodeom(p1, p2, pm) {
+    pm = pm || p1;
+    if (ratio <= p1)       return { c: coefT,                                             mode: 'Totale' };
+    if (ratio <= pm)       return { c: coefT,                                             mode: 'Maintien' };
+    if (ratio <  p2)       return { c: Math.max(0, coefT * (p2 - ratio) / (p2 - pm)),    mode: 'Dégressive' };
+    return { c: 0, mode: 'Hors plafond' };
+  }
+
+  // B1 — Compétitivité (plancher 1.3x, plafond 2.2x)
+  const r1 = lodeom(1.3, 2.2);
+  const b1 = { exo: r1.c * brut, am, af, total: r1.c * brut + am + af, coef: r1.c, mode: r1.mode };
+
+  // B2 — Compétitivité renforcée (plancher 2.0x, plafond 2.7x)
+  const r2 = lodeom(2.0, 2.7);
+  const b2 = { exo: r2.c * brut, am, af, total: r2.c * brut + am + af, coef: r2.c, mode: r2.mode };
+
+  // B3 — Innovation & Croissance (plancher 1.7x, maintien 2.5x, plafond 3.5x)
+  const r3 = lodeom(1.7, 3.5, 2.5);
+  const b3 = { exo: r3.c * brut, am, af, total: r3.c * brut + am + af, coef: r3.c, mode: r3.mode };
+
+  // B0bis — RGDU (à partir du 01/01/2026)
+  // Formule : coefExo = Tmax * ((plafond/brut - 1) / (plafond/plancher - 1))^P
+  // RGDU intègre déjà AM et AF -> coefExo global = exo RGDU / brut
+  let b0bis;
+  if (annee < 2026) {
+    b0bis = { exo: 0, am: 0, af: 0, total: 0, coef: 0, mode: 'N/A avant 2026' };
+  } else {
+    const tmin  = ema50p ? ref.tmin50p  : ref.tmin50m;
+    const tmax  = ema50p ? ref.tmax50p  : ref.tmax50m;
+    if (!tmax) {
+      b0bis = { exo: 0, am: 0, af: 0, total: 0, coef: 0, mode: 'N/A' };
+    } else {
+      const P = 1.75;
+      const pf = 3.0 * smicRef;
+      const pl = 1.0 * smicRef;
+      let c;
+      if (brut > pf)      c = 0;
+      else if (brut <= pl) c = tmax;
+      else                 c = Math.max(tmin, tmax * Math.pow((pf/brut - 1) / (pf/pl - 1), P));
+      // RGDU : coef global (AM+AF inclus)
+      b0bis = { exo: c * brut, am: 0, af: 0, total: c * brut, coef: c, mode: 'Dégressive' };
+    }
+  }
+
+  // B0 — RGCP (jusqu'au 31/12/2025)
+  // Formule : coefExo = coefT * (plafond - ratio) / (plafond - plancher) si 1.0 < ratio < 1.6
+  let b0;
+  if (annee >= 2026) {
+    b0 = { exo: 0, am, af, total: am + af, coef: 0, mode: 'Remplacé par RGDU en 2026' };
+  } else {
+    const r0 = lodeom(1.0, 1.6);
+    b0 = { exo: r0.c * brut, am, af, total: r0.c * brut + am + af, coef: r0.c, mode: r0.mode };
+  }
+
+  return { smicRef, smic, coefT, ratio, b1, b2, b3, b0bis, b0 };
+}
+
+// ── UI SIMULATEUR ─────────────────────────────────────────────────────────────
+let simuState = { brut: 3500, heures: 151.67, annee: 2026, mois: 1, ema50p: false };
+
+function buildGSimu() {
+  const moisNoms = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const annees = [...new Set(Object.keys(REF_DATA).map(k => parseInt(k.split(' ')[0])))].sort((a,b)=>b-a);
+
+  document.getElementById('g-simu-content').innerHTML = `
+    <div class="g-hero">
+      <div class="g-hero-ey">Outils · Simulateur</div>
+      <div class="g-hero-title">Comparateur <em>exonérations</em></div>
+      <div class="g-hero-sub">Calcul instantané des exonérations de charges patronales pour tous les barèmes LODEOM et RGDU/RGCP.</div>
+    </div>
+
+    <div class="simu-inputs">
+      <div class="simu-field">
+        <div class="simu-field-lbl">Salaire brut mensuel</div>
+        <input class="simu-field-inp" type="number" id="s-brut" value="${simuState.brut}" step="100" oninput="simuState.brut=+this.value;runSimu()"/>
+        <div class="simu-field-unit">€ brut</div>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Heures travaillées</div>
+        <input class="simu-field-inp" type="number" id="s-h" value="${simuState.heures}" step="1" oninput="simuState.heures=+this.value;runSimu()"/>
+        <div class="simu-field-unit">heures / mois</div>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Année</div>
+        <select class="simu-field-inp" id="s-an" style="font-size:18px;font-family:var(--ff-serif)" onchange="simuState.annee=+this.value;runSimu()">
+          ${annees.map(a=>`<option value="${a}" ${a===simuState.annee?'selected':''}>${a}</option>`).join('')}
+        </select>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Mois</div>
+        <select class="simu-field-inp" id="s-mo" style="font-size:15px;font-family:var(--ff-serif)" onchange="simuState.mois=+this.value;runSimu()">
+          ${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i+1===simuState.mois?'selected':''}>${moisNoms[i+1]}</option>`).join('')}
+        </select>
+      </div>
+      <div class="simu-field">
+        <div class="simu-field-lbl">Effectif > 50 ?</div>
+        <div class="simu-toggle">
+          <button class="simu-toggle-btn ${!simuState.ema50p?'on':''}" onclick="simuState.ema50p=false;document.querySelectorAll('.simu-toggle-btn').forEach((b,i)=>{b.classList.toggle('on',i===0)});runSimu()">Non</button>
+          <button class="simu-toggle-btn ${simuState.ema50p?'on':''}" onclick="simuState.ema50p=true;document.querySelectorAll('.simu-toggle-btn').forEach((b,i)=>{b.classList.toggle('on',i===1)});runSimu()">Oui</button>
+        </div>
+        <div class="simu-field-unit">EMA > 50 salariés</div>
+      </div>
+    </div>
+
+    <div id="simu-ref-bar" class="simu-ref"></div>
+    <div class="simu-results" id="simu-results"></div>
+  `;
+  runSimu();
+}
+
+function runSimu() {
+  const r = calcExo(simuState.brut, simuState.heures, simuState.annee, simuState.mois, simuState.ema50p);
+  if (!r) {
+    document.getElementById('simu-results').innerHTML = '<p style="color:var(--ink4);font-style:italic">Données non disponibles pour cette période.</p>';
+    return;
+  }
+
+  document.getElementById('simu-ref-bar').innerHTML =
+    `SMIC horaire : <strong>${r.smic} €</strong> &nbsp;·&nbsp; SMIC de référence : <strong>${fmt(r.smicRef)}</strong> &nbsp;·&nbsp; Coeff. T : <strong>${r.coefT}</strong> &nbsp;·&nbsp; Ratio brut/SMIC : <strong>${r.ratio}x</strong>`;
+
+  const baremes = [
+    { id:'b1',    name:'B1 — Compétitivité',          res:r.b1,    annees:'Tous' },
+    { id:'b2',    name:'B2 — Compétitivité renforcée', res:r.b2,    annees:'Tous' },
+    { id:'b3',    name:'B3 — Innovation & Croissance',  res:r.b3,    annees:'Tous' },
+    { id:'b0bis', name:'B0bis — RGDU',                 res:r.b0bis, annees:'2026+' },
+    { id:'b0',    name:'B0 — RGCP',                    res:r.b0,    annees:'≤2025' },
+  ];
+
+  const maxExo = Math.max(...baremes.map(b => b.res.total || 0));
+
+  document.getElementById('simu-results').innerHTML = baremes.map(b => {
+    const res = b.res;
+    const isBest = res.total > 0 && res.total === maxExo && !res.na;
+    if (res.na) return `<div class="simu-result" style="opacity:.45">
+      <div class="sr-name">${b.name}</div>
+      <div class="sr-total" style="font-size:18px;color:var(--ink4)">N/A</div>
+      <div class="sr-detail">${res.mode}</div>
+    </div>`;
+    return `<div class="simu-result ${isBest ? 'best' : ''}">
+      <div class="sr-name">${b.name}</div>
+      <div class="sr-total ${isBest ? 'hi' : ''}">${res.total > 0 ? fmt(res.total) : '—'}</div>
+      <div style="margin:8px 0;padding:8px 0;border-top:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-mono);margin-bottom:4px">
+          <span style="color:var(--ink4)">Exo. LODEOM</span>
+          <span style="font-weight:600;color:var(--ink)">${res.exoLodeom > 0 ? fmt(res.exoLodeom) : '—'}</span>
+        </div>
+        ${res.am > 0 ? `<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-mono);margin-bottom:4px">
+          <span style="color:var(--ink4)">Réd. Ass. Maladie</span>
+          <span style="font-weight:500">${fmt(res.am)}</span>
+        </div>` : ''}
+        ${res.af > 0 ? `<div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-mono);margin-bottom:4px">
+          <span style="color:var(--ink4)">Réd. Alloc. Fam.</span>
+          <span style="font-weight:500">${fmt(res.af)}</span>
+        </div>` : ''}
+      </div>
+      <div class="sr-detail">
+        Mode : <strong>${res.mode}</strong><br>
+        Coeff. exo : <strong>${res.coef}</strong><br>
+        ${res.sPlanche ? `Planche : ${new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(res.sPlanche)} € · Plafond : ${new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(res.sPlafond)} €` : ''}<br>
+        ${b.annees}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+
+
+// ── LEXIQUE ───────────────────────────────────────────────────────────────────
+const LEXIQUE=[
+  {c:'LODEOM',t:'LODEOM',d:"Loi pour le Développement Économique des Outre-Mer (2009). Dispositif d'exonérations de cotisations patronales spécifique aux DOM. Constitue le socle de la quasi-totalité des missions d'optimisation sociale d'Hera.",codes:['Art. L.752-3-2 CSS']},
+  {c:'LODEOM',t:'Barème Compétitivité (B1)',d:"Barème d'exonération applicable aux entreprises de moins de 11 salariés ou relevant de secteurs éligibles. Plancher 1.3x SMIC, plafond 2.2x SMIC. CTP 462.",codes:['CTP 462']},
+  {c:'LODEOM',t:'Barème Compétitivité Renforcée (B2)',d:"Barème renforcé applicable aux secteurs spécifiques éligibles ou aux entreprises bénéficiant du Perfectionnement Actif. Plancher 2.0x SMIC, plafond 2.7x SMIC. CTP 463.",codes:['CTP 463']},
+  {c:'LODEOM',t:'Barème Innovation & Croissance (B3)',d:"Barème le plus favorable, réservé aux entreprises innovantes et en forte croissance. Plancher 1.7x SMIC, maintien jusqu'à 2.5x, plafond 3.5x SMIC.",codes:['CTP 463']},
+  {c:'RPA',t:'Perfectionnement Actif (RPA)',d:"Régime douanier permettant d'importer des marchandises hors UE pour les transformer avant mise à la consommation ou réexportation. L'obtention de l'autorisation PA ouvre droit au barème LODEOM renforcé pour l'ensemble des salariés. Autorisation déposée par DELTAPRO auprès des Douanes.",codes:['Art. L.752-3-2 CSS','Règlement UE 952/2013']},
+  {c:'Cotisations',t:'RGDU',d:"Réduction Générale Dégressive Unique. Remplace la RGCP à compter du 01/01/2026. Couvre l'ensemble des cotisations patronales de manière dégressive de 1x à 3x le SMIC. Non cumulable avec LODEOM.",codes:[]},
+  {c:'Cotisations',t:'RGCP',d:"Réduction Générale des Cotisations Patronales. En vigueur jusqu'au 31/12/2025, remplacée par la RGDU. Applicable de 1x à 1.6x le SMIC.",codes:[]},
+  {c:'Cotisations',t:'CTP',d:"Code Type de Personnel. Code utilisé dans les DSN pour identifier le régime d'exonération applicable à chaque salarié. Essentiel pour le contrôle de conformité des bulletins de paie.",codes:['CTP 462 — Compétitivité','CTP 463 — Compétitivité renforcée']},
+  {c:'Cotisations',t:'FNAL',d:"Fonds National d'Aide au Logement. Cotisation patronale dont le taux varie selon l'effectif (0.1% < 50 salariés, 0.5% >= 50). Concernée par la neutralisation de franchissement de seuil.",codes:[]},
+  {c:'Process',t:'BRC',d:"Bordereau Récapitulatif de Cotisations. Document URSSAF récapitulant les cotisations déclarées et payées. Utilisé pour le cadrage avec les journaux de paie lors de l'audit définitif.",codes:[]},
+  {c:'Process',t:'DSN',d:"Déclaration Sociale Nominative. Déclaration mensuelle dématérialisée remplaçant l'ensemble des déclarations sociales. Transmise à l'URSSAF par le gestionnaire de paie. Source principale pour la vérification de conformité.",codes:[]},
+  {c:'Process',t:'Lettre de mission',d:"Document contractuel signé via DocuSign définissant le périmètre de la mission, les honoraires (% des économies identifiées) et les engagements mutuels. Déclencheur de l'audit définitif.",codes:[]},
+  {c:'Process',t:'Convention tiers mandaté',d:"Convention signée par le client autorisant Hera à se connecter au portail URSSAF pour obtenir les DSN sur la période auditée. Indispensable pour l'audit définitif.",codes:[]},
+  {c:'Process',t:'Restitution',d:"Présentation au client des résultats de l'audit avec les économies identifiées, les fondements juridiques et les leviers à mettre en oeuvre. Étape clé de la relation client.",codes:[]},
+  {c:'Seuils',t:'Neutralisation de seuil',d:"Mécanisme légal permettant d'ignorer le franchissement d'un seuil d'effectif pendant 5 années consécutives en matière de cotisations sociales. Cotisations concernées : FNAL, versement mobilité, forfait social.",codes:['Art. L.131-4-2 CSS']},
+  {c:'Seuils',t:'EMA',d:"Effectif Moyen Annuel. Indicateur utilisé pour déterminer le barème LODEOM applicable (seuil 50 salariés). Calculé sur l'ensemble de l'entreprise.",codes:[]},
+  {c:'Organismes',t:'URSSAF',d:"Union de Recouvrement des cotisations de Sécurité Sociale et d'Allocations Familiales. Organisme collectant les cotisations sociales. Interlocuteur principal pour les demandes de remboursement.",codes:[]},
+  {c:'Organismes',t:'CGSS',d:"Caisse Générale de Sécurité Sociale. Équivalent de la CPAM et de l'URSSAF pour les DOM. Interlocuteur pour les rescrits sociaux dans le cadre des missions RPA.",codes:[]},
+  {c:'Organismes',t:'DELTAPRO',d:"Partenaire douanier d'Hera Groupe, chargé du dépôt et du suivi des dossiers de Perfectionnement Actif auprès des Douanes françaises. Contacts : Jamil et Yann.",codes:[]},
+];
+
+const LEX_CATS = [...new Set(LEXIQUE.map(e=>e.c))];
+
+function buildGLexique(){
+  let currentCat = 'Tous';
+  const render = (cat) => {
+    const filtered = cat === 'Tous' ? LEXIQUE : LEXIQUE.filter(e=>e.c===cat);
+    return filtered.map(e=>`
+      <div class="g-levier-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <div class="g-levier-num">${e.c}</div>
+          ${e.codes&&e.codes.length?e.codes.map(c=>`<span class="bx b-gray" style="font-size:8px">${c}</span>`).join(''):''}
+        </div>
+        <div class="g-levier-title">${e.t}</div>
+        <div class="g-levier-body">${e.d}</div>
+      </div>`).join('');
+  };
+
+  document.getElementById('g-lexique-content').innerHTML=`
+    <div class="g-hero">
+      <div class="g-hero-ey">Guide · Lexique</div>
+      <div class="g-hero-title">Lexique <em>métier</em></div>
+      <div class="g-hero-sub">${LEXIQUE.length} termes clés — cotisations, process, organismes, seuils.</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="lex-tabs">
+      ${['Tous',...LEX_CATS].map(c=>`<button class="btn${c==='Tous'?' pri':''} sml" onclick="filterLex('${c}',this)">${c}</button>`).join('')}
+    </div>
+    <div id="lex-cards">${render('Tous')}</div>`;
+}
+
+function filterLex(cat, btn){
+  document.querySelectorAll('#lex-tabs .btn').forEach(b=>{b.classList.remove('pri');b.style.background='';b.style.color='';b.style.borderColor='';});
+  btn.classList.add('pri');
+  const filtered = cat==='Tous' ? LEXIQUE : LEXIQUE.filter(e=>e.c===cat);
+  document.getElementById('lex-cards').innerHTML = filtered.map(e=>`
+    <div class="g-levier-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div class="g-levier-num">${e.c}</div>
+        ${e.codes&&e.codes.length?e.codes.map(c=>`<span class="bx b-gray" style="font-size:8px">${c}</span>`).join(''):''}
+      </div>
+      <div class="g-levier-title">${e.t}</div>
+      <div class="g-levier-body">${e.d}</div>
+    </div>`).join('');
+}
+
+function buildGLex() {
+  const cats = [...new Set(GUIDE_LEX.map(e => e.c))];
+  document.getElementById('g-lex-content').innerHTML = `
+    <div class="g-hero">
+      <div class="g-hero-ey">Guide · Lexique</div>
+      <div class="g-hero-title">Lexique <em>métier</em></div>
+      <div class="g-hero-sub">Tous les termes, abréviations et codes utilisés chez Hera Groupe.</div>
+    </div>
+    ${cats.map(cat => `
+      <div style="margin-bottom:16px">
+        <div class="card-ttl" style="margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line)">${cat}</div>
+        <div class="lex-grid">
+          ${GUIDE_LEX.filter(e=>e.c===cat).map(e=>`
+            <div class="lex-card">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                <div class="lex-term">${e.t}</div>
+                ${e.code?`<span class="bx b-ko" style="font-size:8px">${e.code}</span>`:''}
+              </div>
+              <div class="lex-def">${e.d}</div>
+            </div>`).join('')}
+        </div>
+      </div>`).join('')}`;
+}
+
+
+
+function openGroupForPage(pageId){
+  document.querySelectorAll('.sb-group-items').forEach((el,gi) => {
+    const hasPage = el.querySelector('#ni-'+pageId);
+    if(hasPage){
+      el.classList.add('open');
+      const arrow = document.getElementById('sba-'+gi);
+      if(arrow) arrow.style.transform = 'rotate(90deg)';
+    }
+  });
+}
+
+function buildLogin(){
+  const br={assoc:[],mgr:[],clt:[],aud:[]};
+  USERS.forEach(u=>br[u.role].push(u));
+  const rnd=(id,us)=>document.getElementById(id).innerHTML=us.map(u=>`
+    <div class="l-card" id="lc-${u.id}" onclick="selU('${u.id}')">
+      <div class="l-init ${u.cls}">${u.id}</div>
+      <div class="l-role">${u.lbl}</div>
+      <div class="l-name">${u.name.split(' ')[0]}</div>
+    </div>`).join('');
+  rnd('lg-a',br.assoc);rnd('lg-m',br.mgr);rnd('lg-c',br.clt);rnd('lg-au',br.aud);
+}
+let selUid=null;
+function selU(id){
+  selUid=id;
+  document.querySelectorAll('.l-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('lc-'+id).classList.add('sel');
+  document.getElementById('l-sub').classList.add('ready');
+  document.getElementById('l-err').style.display='none';
+  document.getElementById('l-pwd').style.borderColor='';
+  document.getElementById('l-pwd').focus();
+}
+function doLogin(){
+  if(!selUid)return;
+  const pwd=document.getElementById('l-pwd').value;
+  if(pwd!==PASSWORDS[selUid]){
+    document.getElementById('l-err').style.display='block';
+    document.getElementById('l-pwd').style.borderColor='var(--bx)';
+    return;
+  }
+  CU=USERS.find(u=>u.id===selUid);
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  buildApp();syncData();
+}
+function logout(){
+  CU=null;selUid=null;TASKS=[];
+  document.getElementById('login').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.querySelectorAll('.l-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('l-sub').classList.remove('ready');
+  document.getElementById('l-pwd').value='';
+  document.getElementById('l-pwd').style.borderColor='';
+  document.getElementById('l-err').style.display='none';
+}
+
+// ── BUILD APP ─────────────────────────────────────────────────────────────────
+function buildNavHTML(items) {
+  // Grouper les items par section
+  let html = '<div class="sb-nav-sect">Navigation</div>';
+  let currentGroup = null;
+  let groupItems = [];
+
+  const flushGroup = () => {
+    if (!currentGroup) return '';
+    const gid = 'grp-' + currentGroup.replace(/\s+/g,'-').toLowerCase();
+    let out = `<div class="ni-group">
+      <div class="ni-group-header" id="${gid}-hdr" onclick="toggleGroup('${gid}')">
+        <span>${currentGroup}</span>
+        <span class="ni-group-arrow">▶</span>
+      </div>
+      <div class="ni-group-items" id="${gid}-items">
+        ${groupItems.map(n=>`<div class="ni ni-sub" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('')}
+      </div>
+    </div>`;
+    groupItems = [];
+    currentGroup = null;
+    return out;
+  };
+
+  let i = 0;
+  while (i < items.length) {
+    const n = items[i];
+    if (n.sect) {
+      html += flushGroup();
+      currentGroup = n.sect;
+      groupItems = [];
+    } else if (!currentGroup) {
+      // Items directs (avant la 1ère section)
+      const isFirst = items.findIndex(x => x.id) === i;
+      html += `<div class="ni${isFirst?' on':''}" id="ni-${n.id}" onclick="showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`;
+    } else {
+      groupItems.push(n);
+    }
+    i++;
+  }
+  html += flushGroup();
+  return html;
+}
+
+
+
+function buildApp(){
+  const av=document.getElementById('sb-av');
+  av.textContent=CU.id;av.className='sb-av '+CU.cls;
+  av.style.cssText='width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;font-family:var(--ff-mono);flex-shrink:0;border:1.5px solid rgba(255,255,255,.25)';
+  document.getElementById('sb-name').textContent=CU.name;
+  document.getElementById('sb-role').textContent=CU.lbl;
+
+  const navCfg={
+    assoc:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lex',ic:'❐',l:'Lexique métier'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    mgr:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'leviers',ic:'◈',l:'Leviers'},{id:'alertes',ic:'⚑',l:'Alertes'},{id:'charge',ic:'◎',l:'Charge équipe'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lex',ic:'❐',l:'Lexique métier'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    clt:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lex',ic:'❐',l:'Lexique métier'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'},{sect:'Outils'},{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}],
+    aud:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'},{sect:'Guide'},{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'}],
+  };
+  const items=navCfg[CU.role]||navCfg.aud;
+  // Construire sidebar avec groupes repliables
+  const groups = {
+    assoc:[
+      {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
+      {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+    ],
+    mgr:[
+      {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
+      {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+    ],
+    clt:[
+      {label:'Mes dossiers', ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+    ],
+    aud:[
+      {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'}]},
+      {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-lexique',ic:'⊡',l:'Lexique'},{id:'g-templates',ic:'✉',l:'Templates mails'}]},
+    ],
+  };
+  const roleGroups = groups[CU.role] || groups.aud;
+  document.getElementById('sb-nav').innerHTML = roleGroups.map((g,gi) => `
+    <div class="sb-group-header" id="sbg-${gi}" onclick="toggleGroup(${gi})">
+      <div class="sb-group-label">${g.label}</div>
+      <span class="sb-group-arrow" id="sba-${gi}">▶</span>
+    </div>
+    <div class="sb-group-items" id="sbgi-${gi}">
+      ${g.items.map(n=>`<div class="ni" id="ni-${n.id}" onclick="event.stopPropagation();showPage('${n.id}',this)"><span class="ni-ic">${n.ic}</span>${n.l}${n.badge?`<span class="ni-badge" id="bdg-val">0</span>`:''}</div>`).join('')}
+    </div>`).join('');
+
+  const th=document.getElementById('d-th');
+  if(isFull()||CU.role==='aud'){
+    th.innerHTML='<th>Client</th><th>Société</th><th>Référent</th><th>Gestion</th><th>Statut</th><th>Action</th><th>Inactivité</th><th>Leviers</th><th></th>';
+    document.getElementById('d-sv').style.display='inline-block';
+    document.getElementById('d-al-btn').style.display='inline-block';
+    const sel=document.getElementById('d-sv');
+    [...new Set(DB.map(d=>d.suivi).filter(Boolean))].sort().forEach(v=>{if(!sel.querySelector(`option[value="${v}"]`)){const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);}});
+  }else{
+    th.innerHTML='<th>Client</th><th>Société</th><th>Statut</th><th>Action</th><th>Inactivité</th><th>Tâche en cours</th><th></th>';
+  }
+  const lsel=document.getElementById('l-lv');
+  if(lsel.children.length<=1)LEVIERS.forEach(lv=>{const o=document.createElement('option');o.value=lv;o.textContent=lv;lsel.appendChild(o);});
+  // Ouvrir le premier groupe par défaut
+  document.getElementById('sbg-0').classList.add('open');
+  const firstItems = document.getElementById('sbgi-0');
+  if(firstItems) firstItems.style.maxHeight = '400px';
+  // Ouvrir le premier groupe par défaut
+  const _fi = document.getElementById('sbgi-0');
+  if(_fi){ _fi.classList.add('open'); }
+  showPage('accueil',document.getElementById('ni-accueil'));
+}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
+  openGroupForPage(id);
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-lexique':'Guide'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-lexique':'<em>Lexique</em> métier'};
+  document.getElementById('tb-ey').textContent=eys[id]||'';
+  document.getElementById('tb-ti').innerHTML=tis[id]||'';
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-lexique':buildGLexique};
   if(renders[id])renders[id]();
 }
 
