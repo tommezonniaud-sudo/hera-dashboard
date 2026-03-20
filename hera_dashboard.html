@@ -264,6 +264,29 @@ tr:hover td{background:var(--bg)}
 /* ── ECO ── */
 .eco{font-weight:500;color:#16a34a}
 
+/* ── NDA ── */
+.nda-soc{background:var(--white);border:1px solid var(--line);border-radius:var(--r14);padding:16px 20px;margin-bottom:10px;position:relative}
+.nda-soc-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nda-soc-num{width:24px;height:24px;border-radius:50%;background:var(--bx);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--ff-mono)}
+.nda-soc-nom{font-size:13px;font-weight:500;flex:1}
+.nda-soc-del{background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;padding:0 4px}
+.nda-soc-del:hover{color:var(--bx)}
+.nda-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nda-field{display:flex;flex-direction:column;gap:4px}
+.nda-field.full{grid-column:1/-1}
+.nda-label{font-size:9px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);font-family:var(--ff-mono)}
+.nda-input{border:1px solid var(--line);border-radius:var(--r6);padding:7px 10px;font-size:12px;font-family:var(--ff-body);color:var(--ink);background:var(--bg);outline:none;transition:border-color .15s;width:100%}
+.nda-input:focus{border-color:var(--bx)}
+.nda-siret-row{display:flex;gap:6px;align-items:flex-end}
+.nda-siret-btn{padding:7px 12px;border-radius:var(--r6);border:1px solid var(--bx);background:var(--white);color:var(--bx);font-size:11px;cursor:pointer;font-family:var(--ff-mono);white-space:nowrap;transition:all .15s}
+.nda-siret-btn:hover{background:var(--bx);color:#fff}
+.nda-siret-status{font-size:10px;font-family:var(--ff-mono);padding:3px 0}
+.nda-add-btn{width:100%;padding:10px;border-radius:var(--r10);border:1.5px dashed var(--line2);background:transparent;color:var(--ink3);font-size:12px;cursor:pointer;transition:all .15s;margin-bottom:16px}
+.nda-add-btn:hover{border-color:var(--bx);color:var(--bx)}
+.nda-gen-btn{padding:12px 28px;border-radius:var(--r10);border:none;background:var(--bx);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--ff-body);transition:all .15s}
+.nda-gen-btn:hover{background:var(--bx2)}
+.nda-gen-btn:disabled{opacity:.4;cursor:not-allowed}
+
 /* ── ANALYSE PAIE ── */
 .ap-upload{border:2px dashed var(--line2);border-radius:var(--r14);padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--white);margin-bottom:20px}
 .ap-upload:hover,.ap-upload.drag{border-color:var(--bx);background:var(--bx-pale)}
@@ -578,7 +601,9 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
     </div>
@@ -776,7 +801,9 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
     </div>
@@ -1525,39 +1552,60 @@ var analyseData = null; // Données parsées du fichier Silae
 var analyseParams = {annee:2025, mois:'Périmètre annuel', ema50p:false};
 
 function buildGAnalyse(){
+  var moisNoms = ['','Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  var moisOpts = '<option value="0">Annuel (cumul)</option>';
+  for(var m=1;m<=12;m++) moisOpts += '<option value="'+m+'">'+moisNoms[m]+'</option>';
+
   document.getElementById('g-analyse-content').innerHTML =
     '<div class="g-hero">' +
       '<div class="g-hero-ey">Outils · Analyse</div>' +
       '<div class="g-hero-title">Analyse <em>paie Silae</em></div>' +
-      '<div class="g-hero-sub">Importez un export récapitulatif Silae (xlsx) pour analyser les exonérations existantes et calculer les économies potentielles sur tous les barèmes.</div>' +
-    '<div class="ap-upload" id="ap-drop">' +
-      '<div class="ap-upload-ic">📂</div>' +
-      '<div class="ap-upload-title">Glisser le fichier Silae ici</div>' +
-      '<div class="ap-upload-sub">Récapitulatif de paie détaillé (.xlsx) — ou cliquez pour parcourir</div>' +
-      '<input type="file" id="ap-file" accept=".xlsx" style="display:none" onchange="loadSilaeFile(this.files[0])">' +
+      '<div class="g-hero-sub">Importez un récapitulatif de paie Silae pour détecter les économies potentielles sur tous les barèmes LODEOM.</div>' +
     '</div>' +
-    '<div class="ap-params">' +
-      '<div class="ap-param"><div class="ap-param-lbl">Année</div>' +
-        '<select class="ap-param-inp" id="ap-annee" onchange="analyseParams.annee=+this.value;runAnalyse()">' +
-        [2026,2025,2024,2023,2022].map(function(y){return '<option value="'+y+'"'+(y===2025?' selected':'')+'>'+y+'</option>';}).join('') +
-        '</select></div>' +
-      '<div class="ap-param"><div class="ap-param-lbl">EMA &gt; 50 ?</div>' +
-        '<select class="ap-param-inp" id="ap-ema" onchange="analyseParams.ema50p=this.selectedIndex===1;runAnalyse()">' +
-        '<option>Non</option><option>Oui</option>' +
-        '</select></div>' +
+    '<div class="card" style="margin-bottom:14px">' +
+      '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">' +
+        '<div style="flex:1;min-width:200px">' +
+          '<div style="font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:6px">Fichier Silae (.xlsx)</div>' +
+          '<div id="ap-drop" style="border:1.5px dashed var(--line2);border-radius:var(--r10);padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg);transition:all .15s">' +
+            '<span style="font-size:18px">📂</span>' +
+            '<span id="ap-drop-label" style="font-size:12px;color:var(--ink4)">Glisser ou cliquer pour importer</span>' +
+          '</div>' +
+          '<input type="file" id="ap-file" accept=".xlsx" style="display:none">' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+          '<div class="simu-field" style="min-width:90px;padding:10px 14px">' +
+            '<div class="simu-field-lbl">Année</div>' +
+            '<select class="simu-field-inp" id="ap-annee" style="font-size:14px">' +
+            [2026,2025,2024,2023,2022].map(function(y){return '<option value="'+y+'"'+(y===2025?' selected':'')+'>'+y+'</option>';}).join('') +
+            '</select>' +
+          '</div>' +
+          '<div class="simu-field" style="min-width:100px;padding:10px 14px">' +
+            '<div class="simu-field-lbl">Période</div>' +
+            '<select class="simu-field-inp" id="ap-mois" style="font-size:13px">' + moisOpts + '</select>' +
+          '</div>' +
+          '<div class="simu-field" style="min-width:80px;padding:10px 14px">' +
+            '<div class="simu-field-lbl">EMA &gt; 50</div>' +
+            '<select class="simu-field-inp" id="ap-ema" style="font-size:14px"><option>Non</option><option>Oui</option></select>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
     '</div>' +
     '<div id="ap-results"></div>';
 
+  // Événements
   var drop = document.getElementById('ap-drop');
-  drop.addEventListener('click', function(e){
-    if(e.target.tagName!=='INPUT' && e.target.tagName!=='SPAN') document.getElementById('ap-file').click();
-  });
-  drop.addEventListener('dragover', function(e){e.preventDefault();drop.classList.add('drag');});
-  drop.addEventListener('dragleave', function(){drop.classList.remove('drag');});
+  var fileInp = document.getElementById('ap-file');
+  drop.addEventListener('click', function(){ fileInp.click(); });
+  drop.addEventListener('dragover', function(e){e.preventDefault();drop.style.borderColor='var(--bx)';drop.style.background='var(--bx-pale)';});
+  drop.addEventListener('dragleave', function(){drop.style.borderColor='';drop.style.background='';});
   drop.addEventListener('drop', function(e){
-    e.preventDefault();drop.classList.remove('drag');
+    e.preventDefault();drop.style.borderColor='';drop.style.background='';
     if(e.dataTransfer.files[0]) loadSilaeFile(e.dataTransfer.files[0]);
   });
+  fileInp.addEventListener('change', function(){ if(fileInp.files[0]) loadSilaeFile(fileInp.files[0]); });
+  document.getElementById('ap-annee').addEventListener('change', function(){ analyseParams.annee=+this.value; runAnalyse(); });
+  document.getElementById('ap-mois').addEventListener('change', function(){ analyseParams.mois=+this.value===0?'Périmètre annuel':this.value; runAnalyse(); });
+  document.getElementById('ap-ema').addEventListener('change', function(){ analyseParams.ema50p=this.selectedIndex===1; runAnalyse(); });
 }
 
 function loadSilaeFile(file){
@@ -1672,27 +1720,49 @@ function parseSilaeXlsx(buffer, filename){
 function runAnalyse(){
   if(!analyseData) return;
   var annee = analyseParams.annee;
-  var mois = 'Périmètre annuel';
+  var mois = analyseParams.mois || 'Périmètre annuel';
   var ema50p = analyseParams.ema50p;
   var sal = analyseData.salaries;
+
+  // Pour un export annuel : calculer mois par mois et sommer
+  // Déterminer les mois à analyser
+  var moisList = [];
+  if(mois === 'Périmètre annuel') {
+    for(var m=1; m<=12; m++) {
+      if(REF_DATA[annee+' '+m]) moisList.push(m);
+    }
+  } else {
+    moisList = [parseInt(mois)];
+  }
+  var nbMois = moisList.length || 1;
 
   // Calculer les projections pour chaque salarié
   var rows_calc = sal.map(function(s){
     if(!s.brut || !s.h) return null;
-    var proj = calcExo(s.brut, s.h, annee, mois, ema50p);
-    if(!proj) return null;
+    
+    // Diviser par nb de mois pour obtenir les valeurs mensuelles moyennes
+    var brut_m = s.brut / nbMois;
+    var h_m = s.h / nbMois;
+    
+    // Calculer sur chaque mois et sommer
+    var totals = {b1:0,b2:0,b3:0,b0bis:0,b0:0};
+    var validMois = 0;
+    moisList.forEach(function(m){
+      var p = calcExo(brut_m, h_m, annee, m, ema50p);
+      if(p){ totals.b1+=p.b1.total; totals.b2+=p.b2.total; totals.b3+=p.b3.total; totals.b0bis+=p.b0bis.total; totals.b0+=p.b0.total; validMois++; }
+    });
+    if(!validMois) return null;
 
     var exo_actuelle = Math.abs(s.lodeom_u)+Math.abs(s.lodeom_r)+Math.abs(s.rgcp_u)+Math.abs(s.rgcp_r);
     var bareme_actuel = (Math.abs(s.lodeom_u)+Math.abs(s.lodeom_r))>0 ? 'LODEOM' : ((Math.abs(s.rgcp_u)+Math.abs(s.rgcp_r))>0 ? 'RGCP' : 'Aucun');
 
-    // Meilleur barème projeté
     var projections = [
-      {id:'b1', label:'B1', val:proj.b1.total},
-      {id:'b2', label:'B2', val:proj.b2.total},
-      {id:'b3', label:'B3', val:proj.b3.total},
-      {id:'b0bis', label:'RGDU', val:proj.b0bis.total},
+      {id:'b1', label:'B1', val:totals.b1},
+      {id:'b2', label:'B2', val:totals.b2},
+      {id:'b3', label:'B3', val:totals.b3},
+      {id:'b0bis', label:'RGDU', val:totals.b0bis},
     ];
-    if(annee < 2026) projections.push({id:'b0', label:'RGCP', val:proj.b0.total});
+    if(annee < 2026) projections.push({id:'b0', label:'RGCP', val:totals.b0});
     
     var best = projections.reduce(function(a,b){return b.val>a.val?b:a;});
     var ecart = best.val - exo_actuelle;
@@ -1700,8 +1770,8 @@ function runAnalyse(){
     return {
       nom: s.nom, h:s.h, brut:s.brut,
       exo_act: exo_actuelle, bareme_act: bareme_actuel,
-      proj_b1:proj.b1.total, proj_b2:proj.b2.total, proj_b3:proj.b3.total,
-      proj_b0bis:proj.b0bis.total, proj_b0:proj.b0.total,
+      proj_b1:totals.b1, proj_b2:totals.b2, proj_b3:totals.b3,
+      proj_b0bis:totals.b0bis, proj_b0:totals.b0,
       best_label:best.label, best_val:best.val, ecart:ecart,
     };
   }).filter(Boolean);
@@ -1763,6 +1833,326 @@ function runAnalyse(){
     '</tr></tfoot></table></div>';
 
   document.getElementById('ap-results').innerHTML = html;
+}
+
+
+// ── NDA ──────────────────────────────────────────────────────────────────────
+var PAPPERS_KEY = "17ece9ff94caa3c3f39ae0416ae4b6fb2e004b1507d980a5";
+var ndaSocietes = [];
+var ndaDestinataireNom = "";
+var ndaDestinataireCivilite = "Madame";
+var ndaDestinataireQualite = "";
+
+function buildGNda(){
+  ndaSocietes = [{id:Date.now(), siret:"", nom:"", formeJuridique:"", capital:"", adresse:"", rcs:"", siren:"", siretStatus:""}];
+  renderNda();
+}
+
+function renderNda(){
+  var dest = '<div class="card" style="margin-bottom:14px"><div class="card-ttl">Destinataire</div>' +
+    '<div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:10px">' +
+      '<div class="nda-field">' +
+        '<div class="nda-label">Civilité</div>' +
+        '<select class="nda-input" id="nda-civ" onchange="ndaDestinataireCivilite=this.value">' +
+        '<option'+(ndaDestinataireCivilite==="Madame"?" selected":"")+'">Madame</option>' +
+        '<option'+(ndaDestinataireCivilite==="Monsieur"?" selected":"")+'">Monsieur</option>' +
+        '</select>' +
+      '</div>' +
+      '<div class="nda-field">' +
+        '<div class="nda-label">Prénom Nom</div>' +
+        '<input class="nda-input" id="nda-nom" type="text" value="'+ndaDestinataireNom+'" placeholder="Jean Dupont" oninput="ndaDestinataireNom=this.value">' +
+      '</div>' +
+      '<div class="nda-field">' +
+        '<div class="nda-label">Qualité / Fonction</div>' +
+        '<input class="nda-input" id="nda-qualite" type="text" value="'+ndaDestinataireQualite+'" placeholder="Gérant" oninput="ndaDestinataireQualite=this.value">' +
+      '</div>' +
+    '</div></div>';
+
+  var socs = ndaSocietes.map(function(s, idx){
+    return '<div class="nda-soc" id="nda-soc-'+s.id+'">' +
+      '<div class="nda-soc-header">' +
+        '<div class="nda-soc-num">'+(idx+1)+'</div>' +
+        '<div class="nda-soc-nom">'+(s.nom||'Nouvelle société')+'</div>' +
+        (ndaSocietes.length>1?'<button class="nda-soc-del" onclick="ndaRemoveSoc('+s.id+')">✕</button>':'') +
+      '</div>' +
+      '<div class="nda-grid">' +
+        '<div class="nda-field full">' +
+          '<div class="nda-label">SIRET</div>' +
+          '<div class="nda-siret-row">' +
+            '<input class="nda-input nda-field-input" type="text" maxlength="14" data-id="'+s.id+'" data-field="siret" value="'+s.siret+'" placeholder="91153381800017" style="flex:1">' +
+            '<button class="nda-siret-btn" onclick="ndaFetchPappers('+s.id+')">🔍 Pappers</button>' +
+          '</div>' +
+          '<div class="nda-siret-status" id="nda-status-'+s.id+'" style="color:var(--ink4)">'+s.siretStatus+'</div>' +
+        '</div>' +
+        '<div class="nda-field full"><div class="nda-label">Dénomination sociale</div>' +
+          '<input class="nda-input nda-field-input" data-id="'+s.id+'" data-field="nom" type="text" value="'+s.nom+'" placeholder="SAS EXEMPLE">' +
+        '<div class="nda-field"><div class="nda-label">Forme juridique</div>' +
+          '<input class="nda-input nda-field-input" data-id="'+s.id+'" data-field="formeJuridique" type="text" value="'+s.formeJuridique+'" placeholder="SAS">' +
+        '<div class="nda-field"><div class="nda-label">Capital social (€)</div>' +
+          '<input class="nda-input nda-field-input" data-id="'+s.id+'" data-field="capital" type="text" value="'+s.capital+'" placeholder="10 000">' +
+        '<div class="nda-field full"><div class="nda-label">Adresse du siège</div>' +
+          '<input class="nda-input nda-field-input" data-id="'+s.id+'" data-field="adresse" type="text" value="'+s.adresse+'" placeholder="1 rue de la Paix, 75001 Paris">' +
+        '<div class="nda-field"><div class="nda-label">RCS (ville)</div>' +
+          '<input class="nda-input nda-field-input" data-id="'+s.id+'" data-field="rcs" type="text" value="'+s.rcs+'" placeholder="Saint-Denis de la R\u00e9union">' +
+        '<div class="nda-field"><div class="nda-label">SIREN</div>' +
+          '<input class="nda-input nda-field-input" data-id="'+s.id+'" data-field="siren" type="text" value="'+s.siren+'" placeholder="911533818">' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('g-nda-content').innerHTML =
+  // Listener délégué pour tous les inputs NDA
+  document.getElementById('g-nda-content').addEventListener('input', function(e){
+    if(e.target.classList.contains('nda-field-input')){
+      var sid = parseInt(e.target.getAttribute('data-id'));
+      var field = e.target.getAttribute('data-field');
+      var s = ndaSocietes.find(function(x){return x.id===sid;});
+      if(s && field) s[field] = e.target.value;
+    }
+  });
+    '<div class="g-hero">' +
+      '<div class="g-hero-ey">Outils · Documents</div>' +
+      '<div class="g-hero-title">Engagement de <em>confidentialité</em></div>' +
+      '<div class="g-hero-sub">Saisissez le SIRET pour auto-compléter via Pappers, puis générez le document Word.</div>' +
+    '</div>' +
+    dest +
+    '<div class="card"><div class="card-ttl">Société(s)</div>' +
+    '<div id="nda-socs">'+socs+'</div>' +
+    '<button class="nda-add-btn" onclick="ndaAddSoc()">+ Ajouter une société</button>' +
+    '<div style="display:flex;gap:12px;align-items:center">' +
+      '<button class="nda-gen-btn" onclick="ndaGenerate()" id="nda-gen-btn">Générer le document Word</button>' +
+      '<div id="nda-gen-status" style="font-size:11px;color:var(--ink4);font-family:var(--ff-mono)"></div>' +
+    '</div>' +
+    '</div>';
+}
+
+function ndaUpdateField(id, field, value){
+  var s = ndaSocietes.find(function(x){return x.id===id;});
+  if(s) s[field] = value;
+}
+
+function ndaAddSoc(){
+  ndaSocietes.push({id:Date.now(), siret:"", nom:"", formeJuridique:"", capital:"", adresse:"", rcs:"", siren:"", siretStatus:""});
+  renderNda();
+}
+
+function ndaRemoveSoc(id){
+  ndaSocietes = ndaSocietes.filter(function(s){return s.id!==id;});
+  renderNda();
+}
+
+function ndaFetchPappers(id){
+  var s = ndaSocietes.find(function(x){return x.id===id;});
+  if(!s || !s.siret || s.siret.length < 9) return;
+  var statusEl = document.getElementById('nda-status-'+id);
+  if(statusEl) statusEl.innerHTML = '<span style="color:var(--or)">⏳ Recherche en cours...</span>';
+  
+  var url = "https://api.pappers.fr/v2/entreprise?api_token="+PAPPERS_KEY+"&siret="+s.siret.replace(/\s/g,'');
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.siren){
+        s.nom = d.nom_entreprise || "";
+        s.formeJuridique = d.forme_juridique || "";
+        s.capital = d.capital ? String(d.capital).replace(/\B(?=(\d{3})+(?!\d))/g," ") : "";
+        var siege = d.siege || {};
+        var adr = [siege.adresse_ligne_1, siege.adresse_ligne_2].filter(Boolean).join(", ");
+        if(siege.code_postal && siege.ville) adr += ", "+siege.code_postal+" "+siege.ville;
+        s.adresse = adr;
+        s.rcs = d.greffe || "";
+        s.siren = d.siren || "";
+        s.siretStatus = '<span style="color:#16a34a">✓ Données récupérées depuis Pappers</span>';
+        renderNda();
+      } else {
+        if(statusEl) statusEl.innerHTML = '<span style="color:var(--bx)">✗ SIRET non trouvé sur Pappers</span>';
+      }
+    })
+    .catch(function(){
+      if(statusEl) statusEl.innerHTML = '<span style="color:var(--bx)">✗ Erreur de connexion Pappers</span>';
+    });
+}
+
+function ndaFormatDate(){
+  var d = new Date();
+  var mois = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  return d.getDate()+" "+mois[d.getMonth()]+" "+d.getFullYear();
+}
+
+function ndaGenerate(){
+  if(ndaSocietes.length===0 || !ndaDestinataireNom) {
+    document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Renseignez au moins une société et le destinataire</span>';
+    return;
+  }
+  document.getElementById('nda-gen-btn').disabled = true;
+  document.getElementById('nda-gen-status').innerHTML = 'Génération en cours...';
+  
+  // Appel API Claude pour générer le docx
+  var prompt = buildNdaPrompt();
+  fetch("https://api.anthropic.com/v1/messages", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:1000,
+      messages:[{role:"user", content: prompt}]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var text = d.content && d.content[0] ? d.content[0].text : "";
+    // Le document est généré côté client avec les données
+    ndaGenerateDocx();
+  })
+  .catch(function(){
+    ndaGenerateDocx();
+  });
+}
+
+function buildNdaPrompt(){
+  return "Génère confirmation NDA pour "+ndaDestinataireNom;
+}
+
+function ndaGenerateDocx(){
+  // Générer le docx via fetch vers le serveur Python 
+  // Comme on ne peut pas faire de Python côté browser, on va encoder les données
+  // et envoyer vers l'endpoint de génération
+  // 
+  // Alternative : générer directement en base64 côté JS avec docx-js
+  // Pour l'instant, on crée un endpoint via le dashboard
+  
+  var data = {
+    civilite: ndaDestinataireCivilite,
+    nom: ndaDestinataireNom,
+    qualite: ndaDestinataireQualite,
+    date: ndaFormatDate(),
+    societes: ndaSocietes
+  };
+  
+  // Encoder les données pour envoi via URL (solution simple)
+  var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  
+  // Télécharger via endpoint Python embarqué
+  // Comme le dashboard est statique, on génère le docx en JS pur
+  ndaGenerateDocxJS(data);
+}
+
+function ndaGenerateDocxJS(data){
+  // Générer le DOCX en JavaScript pur avec la bibliothèque docx
+  // Chargée via CDN
+  if(typeof docx === "undefined"){
+    document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Chargement bibliothèque Word...</span>';
+    var script = document.createElement("script");
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js";
+    script.onload = function(){ ndaGenerateDocxJS(data); };
+    script.onerror = function(){ 
+      document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Erreur chargement bibliothèque</span>';
+      document.getElementById("nda-gen-btn").disabled = false;
+    };
+    document.head.appendChild(script);
+    return;
+  }
+
+  try {
+    var D = docx;
+    var sections = [];
+    
+    data.societes.forEach(function(s, idx){
+      var children = [];
+      
+      // En-tête société
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({text:s.nom||"Société", bold:true, size:24, font:"Calibri"})]
+      }));
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({text:s.adresse||"", size:22, font:"Calibri"})]
+      }));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+      
+      // Attention
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({text:"A l’attention de : ", size:22, font:"Calibri"})]
+      }));
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({text:data.civilite+" "+data.nom+", "+data.qualite, bold:true, size:22, font:"Calibri"})]
+      }));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+      
+      // Date
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({text:"A Saint-Paul, le "+data.date+",", size:22, font:"Calibri"})]
+      }));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+      
+      // Objet
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({text:"Objet : Mission d’optimisation sociale – Engagement de Confidentialité", bold:true, size:22, font:"Calibri"})]
+      }));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+      
+      // Corps paragraphe 1
+      var formeNom = (s.formeJuridique?s.formeJuridique+" ":"")+(s.nom||"la société");
+      var cap = s.capital ? s.capital+" euros" : "X euros";
+      var adr = s.adresse || "adresse à compléter";
+      var rcs = s.rcs || "ville à compléter";
+      var siren = s.siren || "SIREN à compléter";
+      
+      children.push(new D.Paragraph({
+        children:[new D.TextRun({
+          text:"1. Vous nous avez fait part de votre souhait de réaliser une pré-étude sur les leviers d’optimisation sociale (ci-après la « Pré-étude ») de "+formeNom+" au capital de "+cap+", sise "+adr+", immatriculée au registre du commerce et des sociétés de "+rcs+" sous le numéro "+siren+" (ci-après la « Société »).",
+          size:22, font:"Calibri"
+        })]
+      }));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+
+      // Paragraphes 2-5 (texte standard)
+      var paras = [
+        "En raison de la pré-étude et afin d’en faciliter l’étude, nous allons recevoir ou avoir accès à diverses informations confidentielles (les « Informations Confidentielles »), et notamment des informations relatives aux données sociales de la société.",
+        "2. Nous nous engageons, en notre propre nom et pour le compte des autres entités de notre groupe, par la signature du présent Engagement de Confidentialité à :",
+        "N’utiliser les Informations Confidentielles que pour notre propre compte et aux seules fins de réaliser la Pré-étude. Notamment, nous nous interdisons d’utiliser directement ou indirectement les Informations Confidentielles à des fins commerciales, financières, techniques, judiciaires ou d’une manière qui puisse entraîner un quelconque préjudice pour la Société ;",
+        "Ne pas divulguer les Informations Confidentielles en tout ou partie à un tiers sauf si nous y sommes tenus par une obligation légale. Toutefois, dans cette dernière hypothèse, nous fournirons sans délai à la Société une notification écrite et préalable d’une telle obligation afin que vous puissiez conjointement examiner la teneur d’une divulgation éventuelle et mettre en œuvre les moyens afin d’empêcher ou limiter cette divulgation ;",
+        "Ne prendre aucun contact et/ou discuter, directement ou indirectement, avec les salariés et employés de la Société, hormis les salariés et employés au fait de notre intervention ;",
+        "3. Nous nous engageons, en outre, dans l’éventualité où vous ne donneriez pas suite à la Pré-étude, ou à première demande de la Société :",
+        "A vous retourner immédiatement tous les documents confidentiels transmis dans le cadre de la Pré-étude ;",
+        "A détruire immédiatement tous les documents confidentiels, ainsi que toute copie de ces documents, à l’exception des sauvegardes informatiques automatiques et des documents devant être conservés pour répondre strictement à nos obligations réglementaires ;",
+        "A vous adresser sans délai une lettre par laquelle nous attésterons avoir procédé au retour et à la destruction des documents visés au a. et b. ci-dessus.",
+        "4. Le présent Engagement de Confidentialité est soumis au droit français. Tout différend se rattachant au présent Engagement de Confidentialité sera soumis à la compétence exclusive du Tribunal de Commerce de Saint-Denis de la Réunion.",
+        "5. En tout état de cause, il est expressément entendu entre vous et HERA GROUPE, que le présent Engagement de Confidentialité sera caduc si nous ne recevons aucune Information Confidentielle à la suite de la signature de l’Engagement de Confidentialité, que ce soit de votre fait ou du fait de HERA Groupe."
+      ];
+      
+      paras.forEach(function(p){
+        children.push(new D.Paragraph({children:[new D.TextRun({text:p, size:22, font:"Calibri"})]}));
+        children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+      });
+      
+      // Signature
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"Pour HERA GROUPE,", size:22, font:"Calibri"})]}));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"Tom MEZONNIAUD", bold:true, size:22, font:"Calibri"})]}));
+      children.push(new D.Paragraph({children:[new D.TextRun({text:"Associé", size:22, font:"Calibri"})]}));
+
+      var sec = {
+        properties:{page:{size:{width:11906,height:16838},margin:{top:1134,bottom:1134,left:1134,right:1134}}},
+        children:children
+      };
+      if(idx > 0) sec.properties.type = D.SectionType.NEXT_PAGE;
+      sections.push(sec);
+    });
+
+    var doc2 = new D.Document({sections:sections});
+    D.Packer.toBlob(doc2).then(function(blob){
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "NDA_Engagement_Confidentialite.docx";
+      a.click();
+      URL.revokeObjectURL(url);
+      document.getElementById("nda-gen-status").innerHTML = '<span style="color:#16a34a">✓ Document téléchargé</span>';
+      document.getElementById("nda-gen-btn").disabled = false;
+    });
+  } catch(e){
+    document.getElementById("nda-gen-status").innerHTML = '<span style="color:var(--bx)">Erreur : "+e.message+"</span>';
+    document.getElementById("nda-gen-btn").disabled = false;
+  }
 }
 
 function buildLogin(){
@@ -1888,18 +2278,18 @@ function buildApp(){
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
       {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
       {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
-      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-nda',ic:'✎',l:'NDA'}]},
     ],
     mgr:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
       {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
       {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
-      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-nda',ic:'✎',l:'NDA'}]},
     ],
     clt:[
       {label:'Mes dossiers', ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'}]},
       {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
-      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-nda',ic:'✎',l:'NDA'}]},
     ],
     aud:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'}]},
@@ -1943,11 +2333,11 @@ function showPage(id,btn){
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
   openGroupForPage(id);
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-analyse':'Outils','g-analyse':'Outils'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-analyse':'Analyse <em>paie</em>','g-analyse':'Analyse <em>paie</em>'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-analyse':'Outils','g-nda':'Outils'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-analyse':'Analyse <em>paie</em>','g-nda':'Engagement de <em>confidentialité</em>'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-analyse':buildGAnalyse};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-analyse':buildGAnalyse,'g-nda':buildGNda};
   if(renders[id])renders[id]();
 }
 
