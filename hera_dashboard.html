@@ -1984,41 +1984,6 @@ function ndaGenerate(){
   }
   document.getElementById('nda-gen-btn').disabled = true;
   document.getElementById('nda-gen-status').innerHTML = 'Génération en cours...';
-  
-  // Appel API Claude pour générer le docx
-  var prompt = buildNdaPrompt();
-  fetch("https://api.anthropic.com/v1/messages", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({
-      model:"claude-sonnet-4-20250514",
-      max_tokens:1000,
-      messages:[{role:"user", content: prompt}]
-    })
-  })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    var text = d.content && d.content[0] ? d.content[0].text : "";
-    // Le document est généré côté client avec les données
-    ndaGenerateDocx();
-  })
-  .catch(function(){
-    ndaGenerateDocx();
-  });
-}
-
-function buildNdaPrompt(){
-  return "Génère confirmation NDA pour "+ndaDestinataireNom;
-}
-
-function ndaGenerateDocx(){
-  // Générer le docx via fetch vers le serveur Python 
-  // Comme on ne peut pas faire de Python côté browser, on va encoder les données
-  // et envoyer vers l'endpoint de génération
-  // 
-  // Alternative : générer directement en base64 côté JS avec docx-js
-  // Pour l'instant, on crée un endpoint via le dashboard
-  
   var data = {
     civilite: ndaDestinataireCivilite,
     nom: ndaDestinataireNom,
@@ -2026,12 +1991,6 @@ function ndaGenerateDocx(){
     date: ndaFormatDate(),
     societes: ndaSocietes
   };
-  
-  // Encoder les données pour envoi via URL (solution simple)
-  var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-  
-  // Télécharger via endpoint Python embarqué
-  // Comme le dashboard est statique, on génère le docx en JS pur
   ndaGenerateDocxJS(data);
 }
 
