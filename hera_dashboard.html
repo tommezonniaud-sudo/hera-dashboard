@@ -603,8 +603,10 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-dsn"><div id="g-dsn-content"></div></div>
         <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-dsn"><div id="g-dsn-content"></div></div>
         <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
@@ -803,8 +805,10 @@ tr:hover td{background:var(--bg)}
         <div class="page" id="page-g-rpa"><div id="g-rpa-content"></div></div>
         <div class="page" id="page-g-simu"><div id="g-simu-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-dsn"><div id="g-dsn-content"></div></div>
         <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-analyse"><div id="g-analyse-content"></div></div>
+        <div class="page" id="page-g-dsn"><div id="g-dsn-content"></div></div>
         <div class="page" id="page-g-nda"><div id="g-nda-content"></div></div>
         <div class="page" id="page-g-lex"><div id="g-lex-content"></div></div>
       </div>
@@ -1554,19 +1558,15 @@ var analyseData = null; // Données parsées du fichier Silae
 var analyseParams = {annee:2025, mois:'Périmètre annuel', ema50p:false};
 
 function buildGAnalyse(){
-  var moisNoms = ['','Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-  var moisOpts = '<option value="0">Annuel (cumul)</option>';
-  for(var m=1;m<=12;m++) moisOpts += '<option value="'+m+'">'+moisNoms[m]+'</option>';
-
   document.getElementById('g-analyse-content').innerHTML =
     '<div class="g-hero">' +
       '<div class="g-hero-ey">Outils · Analyse</div>' +
       '<div class="g-hero-title">Analyse <em>paie Silae</em></div>' +
-      '<div class="g-hero-sub">Importez un récapitulatif de paie Silae pour détecter les économies potentielles sur tous les barèmes LODEOM.</div>' +
+      '<div class="g-hero-sub">Importez un récapitulatif de paie Silae pour analyser la situation existante et calculer les économies potentielles.</div>' +
     '</div>' +
     '<div class="card" style="margin-bottom:14px">' +
       '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">' +
-        '<div style="flex:1;min-width:200px">' +
+        '<div style="flex:1;min-width:220px">' +
           '<div style="font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:6px">Fichier Silae (.xlsx)</div>' +
           '<div id="ap-drop" style="border:1.5px dashed var(--line2);border-radius:var(--r10);padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg);transition:all .15s">' +
             '<span style="font-size:18px">📂</span>' +
@@ -1581,10 +1581,6 @@ function buildGAnalyse(){
             [2026,2025,2024,2023,2022].map(function(y){return '<option value="'+y+'"'+(y===2025?' selected':'')+'>'+y+'</option>';}).join('') +
             '</select>' +
           '</div>' +
-          '<div class="simu-field" style="min-width:100px;padding:10px 14px">' +
-            '<div class="simu-field-lbl">Période</div>' +
-            '<select class="simu-field-inp" id="ap-mois" style="font-size:13px">' + moisOpts + '</select>' +
-          '</div>' +
           '<div class="simu-field" style="min-width:80px;padding:10px 14px">' +
             '<div class="simu-field-lbl">EMA &gt; 50</div>' +
             '<select class="simu-field-inp" id="ap-ema" style="font-size:14px"><option>Non</option><option>Oui</option></select>' +
@@ -1594,7 +1590,6 @@ function buildGAnalyse(){
     '</div>' +
     '<div id="ap-results"></div>';
 
-  // Événements
   var drop = document.getElementById('ap-drop');
   var fileInp = document.getElementById('ap-file');
   drop.addEventListener('click', function(){ fileInp.click(); });
@@ -1605,9 +1600,8 @@ function buildGAnalyse(){
     if(e.dataTransfer.files[0]) loadSilaeFile(e.dataTransfer.files[0]);
   });
   fileInp.addEventListener('change', function(){ if(fileInp.files[0]) loadSilaeFile(fileInp.files[0]); });
-  document.getElementById('ap-annee').addEventListener('change', function(){ analyseParams.annee=+this.value; runAnalyse(); });
-  document.getElementById('ap-mois').addEventListener('change', function(){ analyseParams.mois=+this.value===0?'Périmètre annuel':this.value; runAnalyse(); });
-  document.getElementById('ap-ema').addEventListener('change', function(){ analyseParams.ema50p=this.selectedIndex===1; runAnalyse(); });
+  document.getElementById('ap-annee').addEventListener('change', function(){ analyseParams.annee=+this.value; if(analyseData) runAnalyse(); });
+  document.getElementById('ap-ema').addEventListener('change', function(){ analyseParams.ema50p=this.selectedIndex===1; if(analyseData) runAnalyse(); });
 }
 
 function loadSilaeFile(file){
@@ -1625,221 +1619,254 @@ function loadSilaeFile(file){
 }
 
 function parseSilaeXlsx(buffer, filename){
-  // Parser XLSX avec SheetJS
   var wb = XLSX.read(buffer, {type:'array'});
   var ws = wb.Sheets[wb.SheetNames[0]];
   var rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
 
-  // Ligne 3 (index 2) = noms salariés, col 2, 5, 8...
   var nomRow = rows[2] || [];
   var salaries = [];
   for(var j=2; j<nomRow.length; j+=3){
     var val = nomRow[j];
-    if(val && typeof val === 'string' && val.trim() && val.indexOf('TOTAL')===-1){
-      salaries.push({col:j, nom:val.trim()});
-    }
+    if(val && typeof val==='string' && val.trim() && val.indexOf('TOTAL')===-1)
+      salaries.push({col:j, raw:val.trim()});
   }
-
-  if(salaries.length === 0){
+  if(salaries.length===0){
     document.getElementById('ap-results').innerHTML =
-      '<div style="padding:16px;color:var(--bx);background:var(--bx-pale);border-radius:var(--r10)">Format non reconnu. Vérifiez que c\'est bien un récapitulatif de paie Silae.</div>';
+      '<div style="padding:16px;color:var(--bx);background:var(--bx-pale);border-radius:var(--r10)">Format non reconnu.</div>';
     return;
   }
 
-  // Trouver les lignes clés par code et libellé
-  function findLines(code, libSubstr, excludeStr){
-    var result = [];
+  // Trouver ligne par correspondance exacte du libellé
+  function findLineExact(code, lib){
     for(var i=0;i<rows.length;i++){
-      var r = rows[i];
-      var c = r && r[0] ? String(r[0]).trim() : '';
-      var l = r && r[1] ? String(r[1]).trim() : '';
-      if(c===code && l.indexOf(libSubstr)!==-1){
-        if(!excludeStr || l.indexOf(excludeStr)===-1) result.push(i);
-      }
-    }
-    return result;
-  }
-  function findLine(code, libSubstr){
-    for(var i=0;i<rows.length;i++){
-      var r=rows[i];
-      var c=r&&r[0]?String(r[0]).trim():'';
-      var l=r&&r[1]?String(r[1]).trim():'';
-      if(c===code && l.indexOf(libSubstr)!==-1) return i;
+      var c=rows[i]&&rows[i][0]?String(rows[i][0]).trim():'';
+      var l=rows[i]&&rows[i][1]?String(rows[i][1]).trim():'';
+      if(c===code && l===lib) return i;
     }
     return -1;
   }
-
-  var lineH = findLine('','Total heures travaillées');
-  var lineB = findLine('','Salaire Brut');
-  var linesS019 = findLines('SS019','LODEOM','');
-  var linesA302 = findLines('AA302','LODEOM','');
-  var linesS011 = [];
-  var linesA311 = [];
-  for(var i=0;i<rows.length;i++){
-    var c=rows[i]&&rows[i][0]?String(rows[i][0]).trim():'';
-    if(c.indexOf('SS011')===0) linesS011.push(i);
-    if(c.indexOf('AA311')===0) linesA311.push(i);
+  // Trouver lignes par code exact (principal = sans R dans le code)
+  function findLinesPrincipal(code){
+    var res=[];
+    for(var i=0;i<rows.length;i++){
+      var c=rows[i]&&rows[i][0]?String(rows[i][0]).trim():'';
+      var l=rows[i]&&rows[i][1]?String(rows[i][1]).trim().toLowerCase():'';
+      if(c===code && l.indexOf('r\u00e9gul')===-1) res.push(i);
+    }
+    return res;
   }
-
-  function sumLines(lineIdxs, col){
+  function findLinesRegul(code){
+    var res=[];
+    for(var i=0;i<rows.length;i++){
+      var c=rows[i]&&rows[i][0]?String(rows[i][0]).trim():'';
+      var l=rows[i]&&rows[i][1]?String(rows[i][1]).trim().toLowerCase():'';
+      if(c===code && l.indexOf('r\u00e9gul')!==-1) res.push(i);
+    }
+    return res;
+  }
+  function findLinesByCodePrefix(prefix, excludeSuffix){
+    var res=[];
+    for(var i=0;i<rows.length;i++){
+      var c=rows[i]&&rows[i][0]?String(rows[i][0]).trim():'';
+      if(c.indexOf(prefix)===0){
+        if(!excludeSuffix || c.indexOf(excludeSuffix)===-1) res.push(i);
+      }
+    }
+    return res;
+  }
+  function sumLines(idxs, col){
     var t=0;
-    for(var k=0;k<lineIdxs.length;k++){
-      var v = rows[lineIdxs[k]][col];
-      if(v && typeof v==='number') t+=v;
+    for(var k=0;k<idxs.length;k++){
+      var v=col<(rows[idxs[k]]||[]).length?rows[idxs[k]][col]:null;
+      if(v&&typeof v==='number') t+=v;
     }
     return Math.round(t*100)/100;
   }
-  function vn(x){ return (x && typeof x==='number') ? Math.round(x*100)/100 : 0; }
+  function vn(x){ return (x&&typeof x==='number')?Math.round(x*100)/100:0; }
 
-  var data = [];
+  var lineH   = findLineExact('','Total heures travaill\u00e9es');
+  var lineB   = findLineExact('','Salaire Brut');
+  var lineRet = findLineExact('','Total des retenues');  // correspondance exacte
+
+  // SS019 LODEOM URSSAF
+  var lS019p  = findLinesPrincipal('SS019');
+  var lS019r  = findLinesRegul('SS019');
+  // AA302 LODEOM Retraite
+  var lA302p  = findLinesPrincipal('AA302');
+  var lA302r  = findLinesRegul('AA302');
+  // SS011 RGCP URSSAF (principal = SS011.4 sans R, régul = SS011.4R)
+  var lS011p  = findLinesByCodePrefix('SS011', 'R');
+  var lS011r  = findLinesByCodePrefix('SS011.4R', null);
+  // AA311 RGCP Retraite
+  var lA311p  = findLinesByCodePrefix('AA311', 'R');
+  var lA311r  = findLinesByCodePrefix('AA311.4R', null);
+  // AM et AF
+  var lS046   = findLinesByCodePrefix('SS046', null);
+  var lS043   = findLinesByCodePrefix('SS043', null);
+
+  var data=[];
   for(var si=0;si<salaries.length;si++){
     var s=salaries[si]; var cb=s.col;
-    data.push({
-      nom: s.nom,
-      h: vn(lineH>=0?rows[lineH][cb]:null),
-      brut: vn(lineB>=0?rows[lineB][cb+1]:null),
-      lodeom_u: sumLines(linesS019, cb+2),
-      lodeom_r: sumLines(linesA302, cb+2),
-      rgcp_u: sumLines(linesS011, cb+2),
-      rgcp_r: sumLines(linesA311, cb+2),
-    });
+    // Extraire matricule et nom depuis le champ raw "00072 MARCHAL Marine"
+    var parts=s.raw.split(' ');
+    var mat=parts[0]||'';
+    var nom=parts.slice(1).join(' ');
+    var matNum=parseInt(mat)||0;
+
+    var h    = vn(lineH>=0?rows[lineH][cb]:null);
+    var brut = vn(lineB>=0?rows[lineB][cb+1]:null);
+    var cpat = vn(lineRet>=0?rows[lineRet][cb+2]:null);
+
+    var s019p= sumLines(lS019p,cb+2);
+    var s019r= sumLines(lS019r,cb+2);
+    var a302p= sumLines(lA302p,cb+2);
+    var a302r= sumLines(lA302r,cb+2);
+    var s011p= sumLines(lS011p,cb+2);
+    var s011r= sumLines(lS011r,cb+2);
+    var a311p= sumLines(lA311p,cb+2);
+    var a311r= sumLines(lA311r,cb+2);
+    var am   = Math.abs(sumLines(lS046,cb+2));
+    var af   = Math.abs(sumLines(lS043,cb+2));
+
+    var totLod=Math.abs(s019p+s019r+a302p+a302r);
+    var totRgc=Math.abs(s011p+s011r+a311p+a311r);
+    var bareme=totLod>totRgc&&totLod>0?'LODEOM':(totRgc>0?'RGCP':'Aucun');
+
+    var exoUrssafP = bareme==='LODEOM'?Math.abs(s019p):(bareme==='RGCP'?Math.abs(s011p):0);
+    var exoUrssafR = bareme==='LODEOM'?Math.abs(s019r):(bareme==='RGCP'?Math.abs(s011r):0);
+    var exoRetP    = bareme==='LODEOM'?Math.abs(a302p):(bareme==='RGCP'?Math.abs(a311p):0);
+    var exoRetR    = bareme==='LODEOM'?Math.abs(a302r):(bareme==='RGCP'?Math.abs(a311r):0);
+    var totalExo   = Math.round((exoUrssafP+exoUrssafR+exoRetP+exoRetR+am+af)*100)/100;
+
+    data.push({mat:mat, matNum:matNum, nom:nom, h:h, brut:brut, cpat:cpat,
+               bareme:bareme, exoUrssafP:exoUrssafP, exoUrssafR:exoUrssafR,
+               exoRetP:exoRetP, exoRetR:exoRetR, am:am, af:af, totalExo:totalExo});
   }
 
+  // Trier par matricule
+  data.sort(function(a,b){return a.matNum-b.matNum;});
+
   analyseData = {filename:filename, salaries:data};
-  // Ajouter listener sur "Changer de fichier" après rendu
-  setTimeout(function(){
-    var chg = document.getElementById('ap-change-file');
-    if(chg) chg.addEventListener('click', function(){ document.getElementById('ap-file').click(); });
-  }, 100);
-  document.getElementById('ap-drop').innerHTML =
-    '<div class="ap-upload-ic">✓</div>' +
-    '<div class="ap-upload-title">' + filename + '</div>' +
-    '<div class="ap-upload-sub">' + data.length + ' salariés détectés — <span style="color:var(--bx);cursor:pointer" id="ap-change-file">Changer de fichier</span></div>' +
-    '<input type="file" id="ap-file" accept=".xlsx" style="display:none" onchange="loadSilaeFile(this.files[0])">';
+
+  var dropEl = document.getElementById('ap-drop');
+  if(dropEl){
+    dropEl.innerHTML = '<span style="font-size:18px;color:#16a34a">✓</span>' +
+      '<span style="font-size:12px;font-weight:500;flex:1">'+filename+'</span>' +
+      '<span style="font-size:11px;color:var(--ink4)">'+data.length+' salariés</span>' +
+      '<input type="file" id="ap-file" accept=".xlsx" style="display:none">';
+    var ni=dropEl.querySelector('#ap-file');
+    if(ni) ni.addEventListener('change',function(){if(ni.files[0])loadSilaeFile(ni.files[0]);});
+    dropEl.addEventListener('click',function(e){if(e.target.tagName!=='INPUT'&&document.getElementById('ap-file'))document.getElementById('ap-file').click();});
+  }
   runAnalyse();
 }
 
 function runAnalyse(){
   if(!analyseData) return;
-  var annee = analyseParams.annee;
-  var mois = analyseParams.mois || 'Périmètre annuel';
-  var ema50p = analyseParams.ema50p;
   var sal = analyseData.salaries;
 
-  // Pour un export annuel : calculer mois par mois et sommer
-  // Déterminer les mois à analyser
-  var moisList = [];
-  if(mois === 'Périmètre annuel') {
-    for(var m=1; m<=12; m++) {
-      if(REF_DATA[annee+' '+m]) moisList.push(m);
-    }
-  } else {
-    moisList = [parseInt(mois)];
-  }
-  var nbMois = moisList.length || 1;
-
-  // Calculer les projections pour chaque salarié
-  var rows_calc = sal.map(function(s){
-    if(!s.brut || !s.h) return null;
-    
-    // Diviser par nb de mois pour obtenir les valeurs mensuelles moyennes
-    var brut_m = s.brut / nbMois;
-    var h_m = s.h / nbMois;
-    
-    // Calculer sur chaque mois et sommer
-    var totals = {b1:0,b2:0,b3:0,b0bis:0,b0:0};
-    var validMois = 0;
-    moisList.forEach(function(m){
-      var p = calcExo(brut_m, h_m, annee, m, ema50p);
-      if(p){ totals.b1+=p.b1.total; totals.b2+=p.b2.total; totals.b3+=p.b3.total; totals.b0bis+=p.b0bis.total; totals.b0+=p.b0.total; validMois++; }
-    });
-    if(!validMois) return null;
-
-    var exo_actuelle = Math.abs(s.lodeom_u)+Math.abs(s.lodeom_r)+Math.abs(s.rgcp_u)+Math.abs(s.rgcp_r);
-    var bareme_actuel = (Math.abs(s.lodeom_u)+Math.abs(s.lodeom_r))>0 ? 'LODEOM' : ((Math.abs(s.rgcp_u)+Math.abs(s.rgcp_r))>0 ? 'RGCP' : 'Aucun');
-
-    var projections = [
-      {id:'b1', label:'B1', val:totals.b1},
-      {id:'b2', label:'B2', val:totals.b2},
-      {id:'b3', label:'B3', val:totals.b3},
-      {id:'b0bis', label:'RGDU', val:totals.b0bis},
-    ];
-    if(annee < 2026) projections.push({id:'b0', label:'RGCP', val:totals.b0});
-    
-    var best = projections.reduce(function(a,b){return b.val>a.val?b:a;});
-    var ecart = best.val - exo_actuelle;
-
-    return {
-      nom: s.nom, h:s.h, brut:s.brut,
-      exo_act: exo_actuelle, bareme_act: bareme_actuel,
-      proj_b1:totals.b1, proj_b2:totals.b2, proj_b3:totals.b3,
-      proj_b0bis:totals.b0bis, proj_b0:totals.b0,
-      best_label:best.label, best_val:best.val, ecart:ecart,
-    };
-  }).filter(Boolean);
-
-  // KPIs
-  var total_brut = rows_calc.reduce(function(s,r){return s+r.brut;},0);
-  var total_act = rows_calc.reduce(function(s,r){return s+r.exo_act;},0);
-  var total_best = rows_calc.reduce(function(s,r){return s+r.best_val;},0);
-  var total_ecart = total_best - total_act;
-  var nb_gain = rows_calc.filter(function(r){return r.ecart>10;}).length;
-
-  function fe(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n); }
-  function nom_court(n){ var parts=n.replace(/^\d+\s*/,'').split(' '); return parts.slice(0,2).join(' '); }
-
-  var html = '<div class="ap-kpis">' +
-    '<div class="kpi-card"><div class="kpi-label">Salariés analysés</div><div class="kpi-val">' + rows_calc.length + '</div></div>' +
-    '<div class="kpi-card"><div class="kpi-label">Masse salariale</div><div class="kpi-val">' + fe(total_brut) + '</div></div>' +
-    '<div class="kpi-card"><div class="kpi-label">Exo actuelle</div><div class="kpi-val">' + fe(total_act) + '</div></div>' +
-    '<div class="kpi-card"><div class="kpi-label">Exo optimale</div><div class="kpi-val" style="color:var(--bx)">' + fe(total_best) + '</div></div>' +
-    '<div class="kpi-card"><div class="kpi-label">Économies potentielles</div><div class="kpi-val" style="color:' + (total_ecart>0?'#16a34a':'var(--ink)') + '">' + (total_ecart>0?'+':'') + fe(total_ecart) + '</div></div>' +
-    '<div class="kpi-card"><div class="kpi-label">Salariés avec gain potentiel</div><div class="kpi-val">' + nb_gain + ' / ' + rows_calc.length + '</div></div>' +
-    '</div>';
-
-  html += '<div class="card" style="overflow-x:auto"><div class="card-ttl">Détail par salarié</div><table class="ap-table"><thead><tr>' +
-    '<th>Salarié</th><th class="r">Heures</th><th class="r">Brut</th><th>Barème actuel</th><th class="r">Exo actuelle</th>' +
-    '<th class="r">B1</th><th class="r">B2</th><th class="r">B3</th><th class="r">RGDU</th>' +
-    (annee<2026?'<th class="r">RGCP</th>':'') +
-    '<th class="r">Meilleur</th><th class="r">Écart</th>' +
-    '</tr></thead><tbody>';
-
-  rows_calc.sort(function(a,b){return b.ecart-a.ecart;}).forEach(function(r){
-    var badgeCls = r.bareme_act==='LODEOM'?'lodeom':r.bareme_act==='RGCP'?'rgcp':r.bareme_act==='RGDU'?'rgdu':'none';
-    html += '<tr>' +
-      '<td style="font-weight:500">' + nom_court(r.nom) + '</td>' +
-      '<td class="r">' + r.h.toFixed(2) + 'h</td>' +
-      '<td class="r">' + fe(r.brut) + '</td>' +
-      '<td><span class="ap-badge ' + badgeCls + '">' + r.bareme_act + '</span></td>' +
-      '<td class="r">' + fe(r.exo_act) + '</td>' +
-      '<td class="r">' + fe(r.proj_b1) + '</td>' +
-      '<td class="r">' + fe(r.proj_b2) + '</td>' +
-      '<td class="r">' + fe(r.proj_b3) + '</td>' +
-      '<td class="r">' + fe(r.proj_b0bis) + '</td>' +
-      (annee<2026?'<td class="r">'+fe(r.proj_b0)+'</td>':'') +
-      '<td class="r" style="font-weight:600;color:var(--bx)">' + r.best_label + ' ' + fe(r.best_val) + '</td>' +
-      '<td class="' + (r.ecart>10?'gain':r.ecart<-10?'loss':'r') + '">' + (r.ecart>0?'+':'') + fe(r.ecart) + '</td>' +
-      '</tr>';
+  var totBrut=0,totCpat=0,totExo=0,totUP=0,totUR=0,totRP=0,totRR=0,totAm=0,totAf=0;
+  sal.forEach(function(s){
+    totBrut+=s.brut; totCpat+=s.cpat; totExo+=s.totalExo;
+    totUP+=s.exoUrssafP; totUR+=s.exoUrssafR;
+    totRP+=s.exoRetP; totRR+=s.exoRetR;
+    totAm+=s.am; totAf+=s.af;
   });
 
-  html += '</tbody><tfoot><tr>' +
-    '<td colspan="4">TOTAL</td>' +
-    '<td class="r">' + fe(total_act) + '</td>' +
-    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b1;},0)) + '</td>' +
-    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b2;},0)) + '</td>' +
-    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b3;},0)) + '</td>' +
-    '<td class="r">' + fe(rows_calc.reduce(function(s,r){return s+r.proj_b0bis;},0)) + '</td>' +
-    (annee<2026?'<td class="r">'+fe(rows_calc.reduce(function(s,r){return s+r.proj_b0;},0))+'</td>':'') +
-    '<td class="r">' + fe(total_best) + '</td>' +
-    '<td class="' + (total_ecart>0?'gain':'r') + '">' + (total_ecart>0?'+':'') + fe(total_ecart) + '</td>' +
-    '</tr></tfoot></table></div>';
+  function fe(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n||0); }
+  function fp(n,t){ return t>0?(Math.round(n/t*1000)/10)+'%':'-'; }
 
-  document.getElementById('ap-results').innerHTML = html;
+  var bCol={'LODEOM':'var(--bx)','RGCP':'#1e40af','Aucun':'var(--ink4)'};
+  var bBg ={'LODEOM':'rgba(139,26,44,.1)','RGCP':'rgba(30,64,175,.1)','Aucun':'var(--bg2)'};
+
+  // KPIs
+  var kpis='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:16px">' +
+    ['Salariés analysés;'+sal.length,'Masse salariale;'+fe(totBrut),
+     'Charges patronales;'+fe(totCpat),'Exonérations totales;'+fe(totExo)+'|color:var(--bx)',
+     'Taux exonération;'+fp(totExo,totCpat)].map(function(s){
+      var p=s.split(';'); var v=p[1].split('|');
+      return '<div class="kpi-card"><div class="kpi-label">'+p[0]+'</div><div class="kpi-val"'+(v[1]?' style="'+v[1]+'"':'')+'>'+v[0]+'</div></div>';
+    }).join('')+'</div>';
+
+  // Tableau
+  var thead='<thead><tr>'+
+    '<th>Mat.</th><th>Salarié</th><th class="r">Brut</th><th class="r">Heures</th><th class="r">Ch.pat.</th>'+
+    '<th>Barème</th>'+
+    '<th class="r">Exo URSSAF</th><th class="r">Régul URSSAF</th>'+
+    '<th class="r">Exo Retraite</th><th class="r">Régul Retraite</th>'+
+    '<th class="r">Exo AM</th><th class="r">Exo AF</th>'+
+    '<th class="r">Total exo</th><th class="r">Taux</th>'+
+    '</tr></thead>';
+
+  var tbody='<tbody>'+sal.map(function(s){
+    var c=bCol[s.bareme]||bCol['Aucun'],b=bBg[s.bareme]||bBg['Aucun'];
+    return '<tr>'+
+      '<td style="font-family:var(--ff-mono);font-size:10px;color:var(--ink4)">'+s.mat+'</td>'+
+      '<td style="font-weight:500">'+s.nom+'</td>'+
+      '<td class="r">'+fe(s.brut)+'</td>'+
+      '<td class="r" style="font-family:var(--ff-mono);font-size:10px">'+s.h.toFixed(2)+'h</td>'+
+      '<td class="r">'+fe(s.cpat)+'</td>'+
+      '<td><span style="padding:2px 8px;border-radius:20px;font-size:9px;font-weight:600;font-family:var(--ff-mono);background:'+b+';color:'+c+'">'+s.bareme+'</span></td>'+
+      '<td class="r">'+fe(s.exoUrssafP)+'</td>'+
+      '<td class="r" style="color:var(--or)">'+fe(s.exoUrssafR)+'</td>'+
+      '<td class="r">'+fe(s.exoRetP)+'</td>'+
+      '<td class="r" style="color:var(--or)">'+fe(s.exoRetR)+'</td>'+
+      '<td class="r">'+fe(s.am)+'</td>'+
+      '<td class="r">'+fe(s.af)+'</td>'+
+      '<td class="r" style="font-weight:600;color:var(--bx)">'+fe(s.totalExo)+'</td>'+
+      '<td class="r" style="font-size:10px;font-family:var(--ff-mono)">'+fp(s.totalExo,s.cpat)+'</td>'+
+      '</tr>';
+  }).join('')+'</tbody>';
+
+  var tfoot='<tfoot><tr>'+
+    '<td colspan="2" style="font-weight:600">TOTAL</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totBrut)+'</td><td></td>'+
+    '<td class="r" style="font-weight:600">'+fe(totCpat)+'</td><td></td>'+
+    '<td class="r" style="font-weight:600">'+fe(totUP)+'</td>'+
+    '<td class="r" style="font-weight:600;color:var(--or)">'+fe(totUR)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totRP)+'</td>'+
+    '<td class="r" style="font-weight:600;color:var(--or)">'+fe(totRR)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totAm)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totAf)+'</td>'+
+    '<td class="r" style="font-weight:600;color:var(--bx)">'+fe(totExo)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fp(totExo,totCpat)+'</td>'+
+    '</tr></tfoot>';
+
+  document.getElementById('ap-results').innerHTML = kpis +
+    '<div class="card"><div class="card-ttl">Situation existante — Détail par salarié</div>'+
+    '<div style="display:flex;justify-content:flex-end;margin-bottom:10px">'+
+    '<button onclick="exportAnalyseExcel()" style="padding:7px 16px;border-radius:var(--r10);border:1px solid var(--bx);background:var(--white);color:var(--bx);font-size:11px;cursor:pointer;font-family:var(--ff-mono)">⬇ Exporter Excel</button>'+
+    '</div><div style="overflow-x:auto"><table class="ap-table">'+thead+tbody+tfoot+'</table></div></div>';
 }
+
+function exportAnalyseExcel(){
+  if(!analyseData) return;
+  var sal=analyseData.salaries;
+  var lines=['Matricule;Salarié;Salaire brut;Heures;Charges patronales;Barème;Exo URSSAF;Régul URSSAF;Exo Retraite;Régul Retraite;Exo AM;Exo AF;Total exo;Taux (%)'];
+  var tB=0,tC=0,tE=0,tUP=0,tUR=0,tRP=0,tRR=0,tAm=0,tAf=0;
+  sal.forEach(function(s){
+    var tx=s.cpat>0?Math.round(s.totalExo/s.cpat*1000)/10:0;
+    lines.push([s.mat,s.nom,s.brut,s.h,s.cpat,s.bareme,s.exoUrssafP,s.exoUrssafR,s.exoRetP,s.exoRetR,s.am,s.af,s.totalExo,tx].join(';'));
+    tB+=s.brut;tC+=s.cpat;tE+=s.totalExo;tUP+=s.exoUrssafP;tUR+=s.exoUrssafR;tRP+=s.exoRetP;tRR+=s.exoRetR;tAm+=s.am;tAf+=s.af;
+  });
+  var tx=tC>0?Math.round(tE/tC*1000)/10:0;
+  lines.push(['TOTAL','',Math.round(tB*100)/100,'',Math.round(tC*100)/100,'',
+    Math.round(tUP*100)/100,Math.round(tUR*100)/100,Math.round(tRP*100)/100,Math.round(tRR*100)/100,
+    Math.round(tAm*100)/100,Math.round(tAf*100)/100,Math.round(tE*100)/100,tx].join(';'));
+  var blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='Analyse_Paie_Situation_Existante.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+
 
 
 // ── NDA ──────────────────────────────────────────────────────────────────────
 var PAPPERS_KEY = "47cea1d6ba1fc5a9c9f7e1e04d582d2e326abac5dc969933";
+var NDA_LOGO_B64 = "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";
 var ndaSocietes = [];
 var ndaDestinataireNom = "";
 var ndaDestinataireCivilite = "Madame";
@@ -2168,123 +2195,375 @@ function ndaGenerate(){
   ndaGenerateDocxJS(data);
 }
 
-function ndaGenerateDocxJS(data){
-  // Générer le DOCX en JavaScript pur avec la bibliothèque docx
-  // Chargée via CDN
-  if(typeof docx === "undefined"){
-    document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Chargement bibliothèque Word...</span>';
-    var script = document.createElement("script");
-    script.src = "https://unpkg.com/docx@8.5.0/build/index.umd.js";
-    script.onload = function(){ ndaGenerateDocxJS(data); };
-    script.onerror = function(){ 
-      document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Erreur chargement bibliothèque</span>';
-      document.getElementById("nda-gen-btn").disabled = false;
-    };
-    document.head.appendChild(script);
-    return;
+
+
+// ── ANALYSE DSN ───────────────────────────────────────────────────────────────
+var dsnData = null;
+var dsnParams = {annee: 2026, ema50p: false};
+
+// Codes CTP exonérations — deux modes : Silae (interne) et officiel (Net-Entreprises)
+var CTP_LODEOM_U_P  = {'110':1,'462':1,'463':1,'473':1};       // LODEOM URSSAF principal
+var CTP_LODEOM_U_R  = {'684':1,'538':1,'685':1};                // LODEOM URSSAF régul
+var CTP_LODEOM_R_P  = {'114':1,'112':1,'113':1};                // LODEOM Retraite principal (officiel: 110=B1, 112=B2, 113=B3)
+var CTP_LODEOM_R_R  = {'115':1};                                // LODEOM Retraite régul (si existe)
+var CTP_RGCP_U      = {'012':1,'671':1,'801':1};                // RGCP URSSAF
+var CTP_RGDU_U      = {'668':1,'669':1};                        // RGDU URSSAF
+var CTP_RG_RET      = {'106':1};                                // RGCP/RGDU Retraite
+var CTP_AM          = {'018':1,'635':1};                        // AM complément
+var CTP_AF          = {'430':1};                                // AF complément
+var CTP_MALADIE     = {'040':1};                                // Maladie (base = brut)
+
+function buildGDsn(){
+  document.getElementById('g-analyse-content').innerHTML =
+    '<div class="g-hero">' +
+      '<div class="g-hero-ey">Outils · Analyse</div>' +
+      '<div class="g-hero-title">Analyse <em>DSN</em></div>' +
+      '<div class="g-hero-sub">Importez un ou plusieurs fichiers DSN (.edi / .dsn) pour analyser la situation existante et les économies potentielles.</div>' +
+    '</div>' +
+    '<div class="card" style="margin-bottom:14px">' +
+      '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">' +
+        '<div style="flex:1;min-width:220px">' +
+          '<div style="font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:6px">Fichier(s) DSN (.edi / .dsn)</div>' +
+          '<div id="dsn-drop" style="border:1.5px dashed var(--line2);border-radius:var(--r10);padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--bg);transition:all .15s">' +
+            '<span style="font-size:18px">📂</span>' +
+            '<span id="dsn-drop-label" style="font-size:12px;color:var(--ink4)">Glisser ou cliquer — plusieurs fichiers acceptés</span>' +
+          '</div>' +
+          '<input type="file" id="dsn-file" accept=".edi,.dsn,.txt" multiple style="display:none">' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+          '<div class="simu-field" style="min-width:80px;padding:10px 14px">' +
+            '<div class="simu-field-lbl">EMA &gt; 50</div>' +
+            '<select class="simu-field-inp" id="dsn-ema" style="font-size:14px"><option>Non</option><option>Oui</option></select>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div id="dsn-results"></div>';
+
+  var drop = document.getElementById('dsn-drop');
+  var fileInp = document.getElementById('dsn-file');
+  drop.addEventListener('click', function(){ fileInp.click(); });
+  drop.addEventListener('dragover', function(e){ e.preventDefault(); drop.style.borderColor='var(--bx)'; drop.style.background='var(--bx-pale)'; });
+  drop.addEventListener('dragleave', function(){ drop.style.borderColor=''; drop.style.background=''; });
+  drop.addEventListener('drop', function(e){ e.preventDefault(); drop.style.borderColor=''; drop.style.background=''; loadDsnFiles(e.dataTransfer.files); });
+  fileInp.addEventListener('change', function(){ if(fileInp.files.length) loadDsnFiles(fileInp.files); });
+  document.getElementById('dsn-ema').addEventListener('change', function(){ dsnParams.ema50p = this.selectedIndex===1; if(dsnData) runDsnAnalyse(); });
+}
+
+function loadDsnFiles(files){
+  var pending = files.length;
+  var allInds = {};  // NIR -> individu (pour dédoublonner multi-fichiers)
+  var filenames = [];
+
+  function onFileDone(individuals, filename){
+    filenames.push(filename);
+    individuals.forEach(function(ind){
+      var key = ind.nir || (ind.mat + '_' + ind.nom);
+      if(!allInds[key]){
+        allInds[key] = ind;
+      } else {
+        // Fusionner : cumuler brut, exos
+        var ex = allInds[key];
+        ex.remun_brute   += ind.remun_brute;
+        ex.remun_ref      += ind.remun_ref;
+        ex.heures_reelles += ind.heures_reelles;
+        ex.exo_lodeom_u_p += ind.exo_lodeom_u_p;
+        ex.exo_lodeom_u_r += ind.exo_lodeom_u_r;
+        ex.exo_lodeom_r_p += ind.exo_lodeom_r_p;
+        ex.exo_lodeom_r_r += ind.exo_lodeom_r_r;
+        ex.exo_rgcp_u     += ind.exo_rgcp_u;
+        ex.exo_rgdu_u     += ind.exo_rgdu_u;
+        ex.exo_rg_ret     += ind.exo_rg_ret;
+        ex.exo_am         += ind.exo_am;
+        ex.exo_af         += ind.exo_af;
+        ex.total_exo      = Math.round((ex.exo_lodeom_u_p+ex.exo_lodeom_u_r+ex.exo_lodeom_r_p+ex.exo_lodeom_r_r+ex.exo_rgcp_u+ex.exo_rgdu_u+ex.exo_rg_ret+ex.exo_am+ex.exo_af)*100)/100;
+        ex.nb_mois = (ex.nb_mois||1) + 1;
+      }
+    });
+    pending--;
+    if(pending === 0){
+      var inds = Object.values(allInds);
+      inds.sort(function(a,b){ return (parseInt(a.mat)||0)-(parseInt(b.mat)||0); });
+      dsnData = {filenames: filenames, salaries: inds};
+      var dropEl = document.getElementById('dsn-drop');
+      if(dropEl) dropEl.innerHTML =
+        '<span style="font-size:18px;color:#16a34a">✓</span>' +
+        '<span style="font-size:12px;font-weight:500;flex:1">'+filenames.length+' fichier(s) — '+inds.length+' salariés</span>' +
+        '<input type="file" id="dsn-file" accept=".edi,.dsn,.txt" multiple style="display:none">';
+      var ni = dropEl ? dropEl.querySelector('#dsn-file') : null;
+      if(ni) ni.addEventListener('change', function(){ if(ni.files.length) loadDsnFiles(ni.files); });
+      if(dropEl) dropEl.addEventListener('click', function(e){ if(e.target.tagName!=='INPUT') { var f=document.getElementById('dsn-file'); if(f) f.click(); } });
+      runDsnAnalyse();
+    }
   }
 
-  try {
-    var D = docx;
-    var sections = [];
-    
-    data.societes.forEach(function(s, idx){
-      var children = [];
-      
-      // En-tête société
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({text:s.nom||"Société", bold:true, size:24, font:"Calibri"})]
-      }));
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({text:s.adresse||"", size:22, font:"Calibri"})]
-      }));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-      
-      // Attention
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({text:"A l’attention de : ", size:22, font:"Calibri"})]
-      }));
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({text:data.civilite+" "+data.nom+", "+data.qualite, bold:true, size:22, font:"Calibri"})]
-      }));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-      
-      // Date
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({text:"A Saint-Paul, le "+data.date+",", size:22, font:"Calibri"})]
-      }));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-      
-      // Objet
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({text:"Objet : Mission d’optimisation sociale – Engagement de Confidentialité", bold:true, size:22, font:"Calibri"})]
-      }));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-      
-      // Corps paragraphe 1
-      var formeNom = (s.formeJuridique?s.formeJuridique+" ":"")+(s.nom||"la société");
-      var cap = s.capital ? s.capital+" euros" : "X euros";
-      var adr = s.adresse || "adresse à compléter";
-      var rcs = s.rcs || "ville à compléter";
-      var siren = s.siren || "SIREN à compléter";
-      
-      children.push(new D.Paragraph({
-        children:[new D.TextRun({
-          text:"1. Vous nous avez fait part de votre souhait de réaliser une pré-étude sur les leviers d’optimisation sociale (ci-après la « Pré-étude ») de "+formeNom+" au capital de "+cap+", sise "+adr+", immatriculée au registre du commerce et des sociétés de "+rcs+" sous le numéro "+siren+" (ci-après la « Société »).",
-          size:22, font:"Calibri"
-        })]
-      }));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-
-      // Paragraphes 2-5 (texte standard)
-      var paras = [
-        "En raison de la pré-étude et afin d’en faciliter l’étude, nous allons recevoir ou avoir accès à diverses informations confidentielles (les « Informations Confidentielles »), et notamment des informations relatives aux données sociales de la société.",
-        "2. Nous nous engageons, en notre propre nom et pour le compte des autres entités de notre groupe, par la signature du présent Engagement de Confidentialité à :",
-        "N’utiliser les Informations Confidentielles que pour notre propre compte et aux seules fins de réaliser la Pré-étude. Notamment, nous nous interdisons d’utiliser directement ou indirectement les Informations Confidentielles à des fins commerciales, financières, techniques, judiciaires ou d’une manière qui puisse entraîner un quelconque préjudice pour la Société ;",
-        "Ne pas divulguer les Informations Confidentielles en tout ou partie à un tiers sauf si nous y sommes tenus par une obligation légale. Toutefois, dans cette dernière hypothèse, nous fournirons sans délai à la Société une notification écrite et préalable d’une telle obligation afin que vous puissiez conjointement examiner la teneur d’une divulgation éventuelle et mettre en œuvre les moyens afin d’empêcher ou limiter cette divulgation ;",
-        "Ne prendre aucun contact et/ou discuter, directement ou indirectement, avec les salariés et employés de la Société, hormis les salariés et employés au fait de notre intervention ;",
-        "3. Nous nous engageons, en outre, dans l’éventualité où vous ne donneriez pas suite à la Pré-étude, ou à première demande de la Société :",
-        "A vous retourner immédiatement tous les documents confidentiels transmis dans le cadre de la Pré-étude ;",
-        "A détruire immédiatement tous les documents confidentiels, ainsi que toute copie de ces documents, à l’exception des sauvegardes informatiques automatiques et des documents devant être conservés pour répondre strictement à nos obligations réglementaires ;",
-        "A vous adresser sans délai une lettre par laquelle nous attésterons avoir procédé au retour et à la destruction des documents visés au a. et b. ci-dessus.",
-        "4. Le présent Engagement de Confidentialité est soumis au droit français. Tout différend se rattachant au présent Engagement de Confidentialité sera soumis à la compétence exclusive du Tribunal de Commerce de Saint-Denis de la Réunion.",
-        "5. En tout état de cause, il est expressément entendu entre vous et HERA GROUPE, que le présent Engagement de Confidentialité sera caduc si nous ne recevons aucune Information Confidentielle à la suite de la signature de l’Engagement de Confidentialité, que ce soit de votre fait ou du fait de HERA Groupe."
-      ];
-      
-      paras.forEach(function(p){
-        children.push(new D.Paragraph({children:[new D.TextRun({text:p, size:22, font:"Calibri"})]}));
-        children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-      });
-      
-      // Signature
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"Pour HERA GROUPE,", size:22, font:"Calibri"})]}));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"", size:22})]}));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"Tom MEZONNIAUD", bold:true, size:22, font:"Calibri"})]}));
-      children.push(new D.Paragraph({children:[new D.TextRun({text:"Associé", size:22, font:"Calibri"})]}));
-
-      var sec = {
-        properties:{page:{size:{width:11906,height:16838},margin:{top:1134,bottom:1134,left:1134,right:1134}}},
-        children:children
+  for(var i=0; i<files.length; i++){
+    (function(file){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var inds = parseDsnEdi(e.target.result, file.name);
+        onFileDone(inds, file.name);
       };
-      if(idx > 0) sec.properties.type = D.SectionType.NEXT_PAGE;
-      sections.push(sec);
-    });
-
-    var doc2 = new D.Document({sections:sections});
-    D.Packer.toBlob(doc2).then(function(blob){
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "NDA_Engagement_Confidentialite.docx";
-      a.click();
-      URL.revokeObjectURL(url);
-      document.getElementById("nda-gen-status").innerHTML = '<span style="color:#16a34a">✓ Document téléchargé</span>';
-      document.getElementById("nda-gen-btn").disabled = false;
-    });
-  } catch(e){
-    document.getElementById("nda-gen-status").innerHTML = '<span style="color:var(--bx)">Erreur : "+e.message+"</span>';
-    document.getElementById("nda-gen-btn").disabled = false;
+      reader.readAsText(file, 'latin1');
+    })(files[i]);
   }
+}
+
+function parseDsnEdi(text, filename){
+  var lines = text.split(/\r?\n/);
+  var individuals = [];
+  var current = null;
+  var current_cot = null;
+  var is_official = false;  // DSN officielle vs Silae
+
+  function mkInd(nir){
+    return {
+      nir:nir, nom:'', prenom:'', mat:'', sexe:'', date_naissance:'',
+      type_contrat:'', statut_cadre:'', est_apprenti:false,
+      heures_ref:0, heures_reelles:0,
+      remun_brute:0, remun_ref:0, jours_abs:0, remun_nette:0,
+      exo_lodeom_u_p:0, exo_lodeom_u_r:0,
+      exo_lodeom_r_p:0, exo_lodeom_r_r:0,
+      exo_rgcp_u:0, exo_rgdu_u:0, exo_rg_ret:0,
+      exo_am:0, exo_af:0, total_exo:0,
+      bareme_presume:'Aucun', bareme_detail:'',
+      coef_absence:1.0, nb_mois:1,
+    };
+  }
+
+  for(var i=0; i<lines.length; i++){
+    var line = lines[i].trim();
+    if(!line || line.indexOf(',') === -1) continue;
+    var comma = line.indexOf(',');
+    var code = line.substring(0, comma).trim();
+    var raw = line.substring(comma+1).trim();
+    var val = raw.charAt(0)==="'" ? raw.slice(1, raw.lastIndexOf("'")) : raw;
+
+    // Détection DSN officielle (présence CTP 462/463/473)
+    if(code==='S21.G00.81.001' && (val==='462'||val==='463'||val==='473'||val==='671'||val==='668')) is_official = true;
+
+    if(code==='S21.G00.30.001'){
+      if(current) { finalize(current, is_official); individuals.push(current); }
+      current = mkInd(val);
+      current_cot = null;
+    } else if(!current){ continue; }
+    else if(code==='S21.G00.30.002'){ current.nom = val; }
+    else if(code==='S21.G00.30.004'){ current.prenom = val; }
+    else if(code==='S21.G00.30.019'){ current.mat = val; }
+    else if(code==='S21.G00.30.013'){ current.sexe = val; }
+    else if(code==='S21.G00.30.006'){ current.date_naissance = val; }
+    else if(code==='S21.G00.40.002'){
+      current.type_contrat = val;
+      if(val==='09'||val==='10'||val==='29') current.est_apprenti = true;
+    }
+    else if(code==='S21.G00.40.003'){ current.statut_cadre = val; }
+    else if(code==='S21.G00.40.012'){ var v=parseFloat(val); if(!isNaN(v)&&v>current.heures_ref) current.heures_ref=v; }
+    else if(code==='S21.G00.40.013'){ var v=parseFloat(val); if(!isNaN(v)) current.heures_reelles+=v; }
+    else if(code==='S21.G00.50.002'){ var v=parseFloat(val); if(!isNaN(v)) current.remun_brute+=v; }
+    else if(code==='S21.G00.50.013'){ var v=parseFloat(val); if(!isNaN(v)) current.remun_ref+=v; }
+    else if(code==='S21.G00.50.006'){ var v=parseFloat(val); if(!isNaN(v)) current.jours_abs+=v; }
+    else if(code==='S21.G00.50.004'){ var v=parseFloat(val); if(!isNaN(v)) current.remun_nette+=v; }
+    else if(code==='S21.G00.81.001'){
+      current_cot = {ctp:val, base:null, montant:null, taux:null};
+      current._cots = current._cots||[];
+      current._cots.push(current_cot);
+    }
+    else if(code==='S21.G00.81.003'&&current_cot){ var v=parseFloat(val); if(!isNaN(v)) current_cot.base=v; }
+    else if(code==='S21.G00.81.004'&&current_cot){ var v=parseFloat(val); if(!isNaN(v)) current_cot.montant=v; }
+    else if(code==='S21.G00.81.007'&&current_cot){ var v=parseFloat(val); if(!isNaN(v)) current_cot.taux=v; }
+  }
+  if(current){ finalize(current, is_official); individuals.push(current); }
+  return individuals;
+}
+
+function finalize(ind, is_official){
+  var cots = ind._cots||[];
+  delete ind._cots;
+
+  function sumCtp(ctpSet, negOnly){
+    var t=0;
+    cots.forEach(function(c){
+      if(ctpSet[c.ctp] && c.montant!=null){
+        if(negOnly && c.montant<0) t+=c.montant;
+        else if(!negOnly) t+=c.montant;
+      }
+    });
+    return Math.round(Math.abs(t)*100)/100;
+  }
+
+  // Brut depuis base maladie si remun_brute = 0
+  if(!ind.remun_brute){
+    cots.forEach(function(c){
+      if(CTP_MALADIE[c.ctp] && c.base && c.base>ind.remun_brute) ind.remun_brute=c.base;
+    });
+  }
+
+  // Coefficient d'absence BOSS §850
+  if(ind.remun_ref>0 && ind.remun_brute<ind.remun_ref){
+    ind.coef_absence = Math.round(ind.remun_brute/ind.remun_ref*10000)/10000;
+  }
+
+  // Exonérations
+  if(is_official){
+    // DSN officielle : codes CTP URSSAF
+    ind.exo_lodeom_u_p = sumCtp({'462':1,'463':1,'473':1}, true);
+    ind.exo_lodeom_u_r = sumCtp({'684':1,'538':1,'685':1}, true);
+    ind.exo_lodeom_r_p = sumCtp({'110':1,'112':1,'113':1}, true);
+    ind.exo_lodeom_r_r = sumCtp({'115':1}, true);
+    ind.exo_rgcp_u     = sumCtp({'671':1,'801':1}, true);
+    ind.exo_rgdu_u     = sumCtp({'668':1,'669':1}, true);
+    ind.exo_rg_ret     = sumCtp({'106':1}, true);
+    ind.exo_am         = sumCtp({'635':1}, true);
+    ind.exo_af         = sumCtp({'430':1}, true);
+    // Détail barème depuis CTP présents
+    if(sumCtp({'473':1,'685':1,'113':1},true)>0) ind.bareme_detail='B3';
+    else if(sumCtp({'463':1,'538':1,'112':1},true)>0) ind.bareme_detail='B2';
+    else if(sumCtp({'462':1,'684':1,'110':1},true)>0) ind.bareme_detail='B1';
+    else if(sumCtp({'668':1,'669':1},true)>0) ind.bareme_detail='RGDU';
+    else if(sumCtp({'671':1,'801':1},true)>0) ind.bareme_detail='RGCP';
+  } else {
+    // DSN Silae : codes internes
+    ind.exo_lodeom_u_p = sumCtp({'110':1}, true);
+    ind.exo_lodeom_u_r = 0;
+    ind.exo_lodeom_r_p = sumCtp({'114':1}, true);
+    ind.exo_lodeom_r_r = 0;
+    ind.exo_rgcp_u     = sumCtp({'012':1}, true);
+    ind.exo_rgdu_u     = 0;
+    ind.exo_rg_ret     = 0;
+    ind.exo_am         = sumCtp({'018':1}, true);
+    ind.exo_af         = sumCtp({'106':1}, true);
+    ind.bareme_detail  = '';
+  }
+
+  var tot_lodeom = ind.exo_lodeom_u_p+ind.exo_lodeom_u_r+ind.exo_lodeom_r_p+ind.exo_lodeom_r_r+ind.exo_am+ind.exo_af;
+  var tot_rgcp   = ind.exo_rgcp_u+ind.exo_rg_ret;
+  var tot_rgdu   = ind.exo_rgdu_u+ind.exo_rg_ret;
+
+  if(tot_lodeom>tot_rgcp&&tot_lodeom>tot_rgdu&&tot_lodeom>0) ind.bareme_presume='LODEOM';
+  else if(tot_rgdu>tot_rgcp&&tot_rgdu>0) ind.bareme_presume='RGDU';
+  else if(tot_rgcp>0) ind.bareme_presume='RGCP';
+  else ind.bareme_presume='Aucun';
+
+  ind.total_exo = Math.round((tot_lodeom+tot_rgcp+tot_rgdu)*100)/100;
+  // Éviter double comptage rg_ret
+  if(tot_rgcp>0||tot_rgdu>0) ind.total_exo = Math.round((tot_lodeom+(Math.max(tot_rgcp,tot_rgdu)))*100)/100;
+}
+
+function runDsnAnalyse(){
+  if(!dsnData) return;
+  var sal = dsnData.salaries;
+  var ema50p = dsnParams.ema50p;
+
+  var totBrut=0,totExo=0,nbLodeom=0,nbRgcp=0,nbRgdu=0,nbAucun=0;
+  sal.forEach(function(s){
+    totBrut+=s.remun_brute; totExo+=s.total_exo;
+    if(s.bareme_presume==='LODEOM') nbLodeom++;
+    else if(s.bareme_presume==='RGCP') nbRgcp++;
+    else if(s.bareme_presume==='RGDU') nbRgdu++;
+    else nbAucun++;
+  });
+
+  function fe(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n||0); }
+  function fp(n,t){ return t>0?(Math.round(n/t*1000)/10)+'%':'-'; }
+
+  var bCol={'LODEOM':'var(--bx)','RGCP':'#1e40af','RGDU':'#15803d','Aucun':'var(--ink4)'};
+  var bBg ={'LODEOM':'rgba(139,26,44,.1)','RGCP':'rgba(30,64,175,.1)','RGDU':'rgba(21,128,61,.1)','Aucun':'var(--bg2)'};
+
+  // KPIs
+  var kpis='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:16px">' +
+    [['Salariés',sal.length],['Masse salariale',fe(totBrut)],['Exonérations',fe(totExo)+'|color:var(--bx)'],
+     ['LODEOM',nbLodeom+'|color:var(--bx)'],['RGCP/RGDU',nbRgcp+nbRgdu],['Sans exo',nbAucun],
+     ['Apprentis',sal.filter(function(s){return s.est_apprenti;}).length],
+     ['Taux exo',fp(totExo,totBrut)]].map(function(item){
+      var parts=(item[1]+'').split('|');
+      return '<div class="kpi-card"><div class="kpi-label">'+item[0]+'</div>' +
+        '<div class="kpi-val"'+(parts[1]?' style="'+parts[1]+'"':'')+'>'+parts[0]+'</div></div>';
+    }).join('')+'</div>';
+
+  // Tableau
+  var thead='<thead><tr>'+
+    '<th>Mat.</th><th>Salarié</th><th>Appr.</th>'+
+    '<th class="r">Brut</th><th class="r">H.réf</th><th class="r">Coef.abs</th>'+
+    '<th>Barème</th><th>Détail</th>'+
+    '<th class="r">Exo URSSAF</th><th class="r">Exo Retraite</th>'+
+    '<th class="r">AM</th><th class="r">AF</th>'+
+    '<th class="r">Total exo</th><th class="r">Taux</th>'+
+    '</tr></thead>';
+
+  var tbody='<tbody>'+sal.map(function(s){
+    var bc=bCol[s.bareme_presume]||bCol.Aucun, bb=bBg[s.bareme_presume]||bBg.Aucun;
+    var exoU = s.exo_lodeom_u_p+s.exo_lodeom_u_r+s.exo_rgcp_u+s.exo_rgdu_u;
+    var exoR = s.exo_lodeom_r_p+s.exo_lodeom_r_r+s.exo_rg_ret;
+    var coefStyle = s.coef_absence<0.99 ? 'color:var(--or);font-weight:600' : '';
+    return '<tr>'+
+      '<td style="font-family:var(--ff-mono);font-size:10px;color:var(--ink4)">'+s.mat+'</td>'+
+      '<td style="font-weight:500">'+s.nom+' '+s.prenom+'</td>'+
+      '<td style="text-align:center">'+(s.est_apprenti?'✓':'')+'</td>'+
+      '<td class="r">'+fe(s.remun_brute)+'</td>'+
+      '<td class="r" style="font-family:var(--ff-mono);font-size:10px">'+s.heures_ref.toFixed(2)+'h</td>'+
+      '<td class="r" style="font-family:var(--ff-mono);font-size:10px;'+coefStyle+'">'+s.coef_absence.toFixed(4)+'</td>'+
+      '<td><span style="padding:2px 8px;border-radius:20px;font-size:9px;font-weight:600;font-family:var(--ff-mono);background:'+bb+';color:'+bc+'">'+s.bareme_presume+'</span></td>'+
+      '<td style="font-family:var(--ff-mono);font-size:10px;color:var(--ink3)">'+s.bareme_detail+'</td>'+
+      '<td class="r">'+fe(exoU)+'</td>'+
+      '<td class="r">'+fe(exoR)+'</td>'+
+      '<td class="r">'+fe(s.exo_am)+'</td>'+
+      '<td class="r">'+fe(s.exo_af)+'</td>'+
+      '<td class="r" style="font-weight:600;color:var(--bx)">'+fe(s.total_exo)+'</td>'+
+      '<td class="r" style="font-size:10px;font-family:var(--ff-mono)">'+fp(s.total_exo,s.remun_brute)+'</td>'+
+      '</tr>';
+  }).join('')+'</tbody>';
+
+  var totExoU = sal.reduce(function(a,s){return a+s.exo_lodeom_u_p+s.exo_lodeom_u_r+s.exo_rgcp_u+s.exo_rgdu_u;},0);
+  var totExoR = sal.reduce(function(a,s){return a+s.exo_lodeom_r_p+s.exo_lodeom_r_r+s.exo_rg_ret;},0);
+  var totAm = sal.reduce(function(a,s){return a+s.exo_am;},0);
+  var totAf = sal.reduce(function(a,s){return a+s.exo_af;},0);
+
+  var tfoot='<tfoot><tr>'+
+    '<td colspan="3" style="font-weight:600">TOTAL</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totBrut)+'</td>'+
+    '<td colspan="2"></td><td colspan="2"></td>'+
+    '<td class="r" style="font-weight:600">'+fe(totExoU)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totExoR)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totAm)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fe(totAf)+'</td>'+
+    '<td class="r" style="font-weight:600;color:var(--bx)">'+fe(totExo)+'</td>'+
+    '<td class="r" style="font-weight:600">'+fp(totExo,totBrut)+'</td>'+
+    '</tr></tfoot>';
+
+  document.getElementById('dsn-results').innerHTML = kpis+
+    '<div class="card"><div class="card-ttl">Situation existante — Détail par salarié' +
+    ' <span style="font-size:10px;font-weight:400;color:var(--ink4);margin-left:8px">'+dsnData.filenames.join(', ')+'</span></div>'+
+    '<div style="display:flex;justify-content:flex-end;margin-bottom:10px">'+
+    '<button onclick="exportDsnExcel()" style="padding:7px 16px;border-radius:var(--r10);border:1px solid var(--bx);background:var(--white);color:var(--bx);font-size:11px;cursor:pointer;font-family:var(--ff-mono)">⬇ Exporter Excel</button>'+
+    '</div>'+
+    '<div style="overflow-x:auto"><table class="ap-table">'+thead+tbody+tfoot+'</table></div></div>';
+}
+
+function exportDsnExcel(){
+  if(!dsnData) return;
+  var sal=dsnData.salaries;
+  var lines=['Matricule;Nom;Prénom;Apprenti;Brut;H.réf;Coef.absence;Barème;Détail;Exo URSSAF;Exo Retraite;Exo AM;Exo AF;Total exo;Taux (%)'];
+  var tB=0,tE=0,tU=0,tR=0,tAm=0,tAf=0;
+  sal.forEach(function(s){
+    var exoU=s.exo_lodeom_u_p+s.exo_lodeom_u_r+s.exo_rgcp_u+s.exo_rgdu_u;
+    var exoR=s.exo_lodeom_r_p+s.exo_lodeom_r_r+s.exo_rg_ret;
+    var tx=s.remun_brute>0?Math.round(s.total_exo/s.remun_brute*1000)/10:0;
+    lines.push([s.mat,s.nom,s.prenom,s.est_apprenti?'Oui':'Non',
+      Math.round(s.remun_brute*100)/100,s.heures_ref,s.coef_absence,
+      s.bareme_presume,s.bareme_detail,Math.round(exoU*100)/100,Math.round(exoR*100)/100,
+      s.exo_am,s.exo_af,s.total_exo,tx].join(';'));
+    tB+=s.remun_brute;tE+=s.total_exo;tU+=exoU;tR+=exoR;tAm+=s.exo_am;tAf+=s.exo_af;
+  });
+  var tx=tB>0?Math.round(tE/tB*1000)/10:0;
+  lines.push(['TOTAL','','','','',Math.round(tB*100)/100,'','','','',
+    Math.round(tU*100)/100,Math.round(tR*100)/100,Math.round(tAm*100)/100,Math.round(tAf*100)/100,
+    Math.round(tE*100)/100,tx].join(';'));
+  var blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='Analyse_DSN_Situation_Existante.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function buildLogin(){
@@ -2410,18 +2689,18 @@ function buildApp(){
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Tous les dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
       {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'fact',ic:'◉',l:'Facturation'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
       {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
-      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-nda',ic:'✎',l:'NDA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-dsn',ic:'⊞',l:'Analyse DSN'},{id:'g-nda',ic:'✎',l:'NDA'}]},
     ],
     mgr:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'validations',ic:'✓',l:'Validations',badge:true},{id:'alertes',ic:'⚑',l:'Alertes'}]},
       {label:'Analyse',   ic:'▶', items:[{id:'leviers',ic:'◈',l:'Leviers'},{id:'charge',ic:'◎',l:'Charge équipe'}]},
       {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
-      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-nda',ic:'✎',l:'NDA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-dsn',ic:'⊞',l:'Analyse DSN'},{id:'g-nda',ic:'✎',l:'NDA'}]},
     ],
     clt:[
       {label:'Mes dossiers', ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'kanban',ic:'⊞',l:'Mes tâches'},{id:'dossiers',ic:'◫',l:'Mes dossiers'},{id:'leviers',ic:'◈',l:'Mes leviers'}]},
       {label:'Guide',     ic:'▶', items:[{id:'g-equipe',ic:'◑',l:'Équipe'},{id:'g-outils',ic:'⚙',l:'Outils & accès'},{id:'g-process',ic:'◷',l:'Process missions'},{id:'g-leviers',ic:'◈',l:'Fiche leviers'},{id:'g-templates',ic:'✉',l:'Templates mails'},{id:'g-rpa',ic:'◆',l:'Annexe RPA'}]},
-      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-nda',ic:'✎',l:'NDA'}]},
+      {label:'Outils',    ic:'▶', items:[{id:'g-simu',ic:'◐',l:'Simulateur exonérations'},{id:'g-analyse',ic:'⊕',l:'Analyse paie'},{id:'g-dsn',ic:'⊞',l:'Analyse DSN'},{id:'g-nda',ic:'✎',l:'NDA'}]},
     ],
     aud:[
       {label:'Suivi',     ic:'▶', items:[{id:'accueil',ic:'⌂',l:'Accueil'},{id:'dossiers',ic:'◫',l:'Dossiers'},{id:'alertes',ic:'⚑',l:'Alertes'}]},
@@ -2465,11 +2744,11 @@ function showPage(id,btn){
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');if(btn)btn.classList.add('on');
   openGroupForPage(id);
-  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-analyse':'Outils','g-nda':'Outils'};
-  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-analyse':'Analyse <em>paie</em>','g-nda':'Engagement de <em>confidentialité</em>'};
+  const eys={accueil:'Accueil',dossiers:'Suivi',kanban:'Tâches',validations:'Validation',leviers:'Analyse',fact:'Finance',alertes:'Surveillance',charge:'Équipe','g-equipe':'Guide','g-outils':'Guide','g-process':'Guide','g-leviers':'Guide','g-templates':'Guide','g-rpa':'Guide','g-simu':'Outils','g-analyse':'Outils','g-dsn':'Outils','g-nda':'Outils'};
+  const tis={accueil:'Tableau de <em>bord</em>',dossiers:isFull()?'Tous les <em>dossiers</em>':'Mes <em>dossiers</em>',kanban:'Mes <em>tâches</em>',validations:'En attente de <em>validation</em>',leviers:'Leviers d\'<em>optimisation</em>',fact:'<em>Facturation</em>',alertes:'Alertes <em>actives</em>',charge:'Charge <em>équipe</em>','g-equipe':'<em>Équipe</em>','g-outils':'Outils & <em>accès</em>','g-process':'Process <em>missions</em>','g-leviers':'Fiche <em>leviers</em>','g-templates':'Templates <em>mails</em>','g-rpa':'Annexe <em>RPA</em>','g-simu':'Simulateur <em>exonérations</em>','g-analyse':'Analyse <em>paie</em>','g-dsn':'Analyse <em>DSN</em>','g-nda':'Engagement de <em>confidentialité</em>'};
   document.getElementById('tb-ey').textContent=eys[id]||'';
   document.getElementById('tb-ti').innerHTML=tis[id]||'';
-  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-analyse':buildGAnalyse,'g-nda':buildGNda};
+  const renders={accueil:buildAccueil,dossiers:()=>{buildKPIsD();renderD();},kanban:buildKanban,validations:buildVal,leviers:buildLev,fact:buildFact,alertes:buildAl,charge:buildCh,'g-equipe':buildGEquipe,'g-outils':buildGOutils,'g-process':buildGProcess,'g-leviers':buildGLeviers,'g-templates':buildGTemplates,'g-rpa':buildGRpa,'g-simu':buildGSimu,'g-analyse':buildGAnalyse,'g-dsn':buildGDsn,'g-nda':buildGNda};
   if(renders[id])renders[id]();
 }
 
