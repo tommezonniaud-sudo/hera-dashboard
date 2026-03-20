@@ -2010,6 +2010,165 @@ function ndaGenerate(){
 }
 
 function ndaGenerateDocxJS(data){
+  if(typeof docx === "undefined"){
+    document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--or)">Chargement bibliothèque Word...</span>';
+    var s = document.createElement("script");
+    s.src = "https://unpkg.com/docx@8.5.0/build/index.umd.js";
+    s.onload = function(){ ndaGenerateDocxJS(data); };
+    s.onerror = function(){
+      document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Erreur chargement bibliothèque</span>';
+      document.getElementById('nda-gen-btn').disabled = false;
+    };
+    document.head.appendChild(s);
+    return;
+  }
+  try {
+    var D = docx;
+    var AL = D.AlignmentType;
+    var fn = "Poppins";
+    var sz = 20;
+
+    var logoBytes = Uint8Array.from(atob(NDA_LOGO_B64), function(c){return c.charCodeAt(0);});
+
+    function mkRun(text, bold){
+      return new D.TextRun({text:text, font:fn, size:sz, bold:bold||false});
+    }
+
+    function mkPara(runs, align, opts){
+      var children = typeof runs === 'string' ? [mkRun(runs)] : runs;
+      return new D.Paragraph(Object.assign({
+        alignment: align || AL.LEFT,
+        spacing: {before:0, after:0, line:276},
+        children: children
+      }, opts||{}));
+    }
+
+    function empty(){ return mkPara([mkRun("")]); }
+
+    var sections = [];
+
+    data.societes.forEach(function(s, idx){
+      var formeNom = (s.formeJuridique ? s.formeJuridique+" " : "") + (s.nom||"la société");
+      var cap = s.capital ? s.capital+" euros" : "X euros";
+      var adr = s.adresse || "adresse à compléter";
+      var rcs = s.rcs || "ville à compléter";
+      var siren = s.siren || "SIREN à compléter";
+
+      var header = new D.Header({
+        children: [new D.Paragraph({
+          alignment: AL.RIGHT,
+          spacing: {before:0, after:0},
+          children: [new D.ImageRun({
+            data: logoBytes,
+            transformation: {width:99, height:76},
+            type: "png"
+          })]
+        })]
+      });
+
+      var children = [
+        mkPara([mkRun(s.nom||"Société", true)]),
+        mkPara([mkRun(adr, true)]),
+        empty(), empty(),
+        mkPara([mkRun("A l’attention de : ")]),
+        mkPara([mkRun(data.civilite+" "+data.nom+", "+data.qualite, true)]),
+        empty(), empty(),
+        mkPara([mkRun("A Saint-Paul, le "+data.date+",")], AL.RIGHT),
+        empty(), empty(),
+        mkPara([mkRun("Objet : Mission d’optimisation sociale – Engagement de Confidentialité", true)], AL.JUSTIFY),
+        empty(), empty(),
+        mkPara([
+          mkRun("1. Vous nous avez fait part de votre souhait de réaliser une pré-étude sur les leviers d’optimisation sociale (ci-après la « Pré-étude ») de "+formeNom+" au capital de "+cap+", sise "+adr+", immatriculée au registre du commerce et des sociétés de "+rcs+" sous le numéro "+siren+" (ci-après la « "),
+          mkRun("Société", true), mkRun(" »).")
+        ], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("En raison de la pré-étude et afin d’en faciliter l’étude, nous allons recevoir ou avoir accès à diverses informations confidentielles (les « "), mkRun("Informations Confidentielles", true), mkRun(" »), et notamment des informations relatives aux données sociales de la société.")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("2. Nous nous engageons, en notre propre nom et pour le compte des autres entités de notre groupe, par la signature du présent "), mkRun("Engagement de Confidentialité", true), mkRun(" à :")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("N’utiliser les "), mkRun("Informations Confidentielles", true), mkRun(" que pour notre propre compte et aux seules fins de réaliser la "), mkRun("Pré-étude", true), mkRun(". Notamment, nous nous interdisons d’utiliser directement ou indirectement les "), mkRun("Informations Confidentielles", true), mkRun(" à des fins commerciales, financières, techniques, judiciaires ou d’une manière qui puisse entraîner un quelconque préjudice pour la "), mkRun("Société", true), mkRun(" ;")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("Ne pas divulguer les "), mkRun("Informations Confidentielles", true), mkRun(" en tout ou partie à un tiers sauf si nous y sommes tenus par une obligation légale. Toutefois, dans cette dernière hypothèse, nous fournirons sans délai à la "), mkRun("Société", true), mkRun(" une notification écrite et préalable d’une telle obligation afin que vous puissiez conjointement examiner la teneur d’une divulgation éventuelle et mettre en œuvre les moyens afin d’empêcher ou limiter cette divulgation ;")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("Ne prendre aucun contact et/ou discuter, directement ou indirectement, avec les salariés et employés de la "), mkRun("Société", true), mkRun(", hormis les salariés et employés au fait de notre intervention ;")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("3. Nous nous engageons, en outre, dans l’éventualité où vous ne donneriez pas suite à la "), mkRun("Pré-étude", true), mkRun(", ou à première demande de la "), mkRun("Société", true), mkRun(" :")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("A vous retourner immédiatement tous les documents confidentiels transmis dans le cadre de la "), mkRun("Pré-étude", true), mkRun(" ;")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("A détruire immédiatement tous les documents confidentiels, ainsi que toute copie de ces documents, à l’exception des sauvegardes informatiques automatiques et des documents devant être conservés pour répondre strictement à nos obligations réglementaires ;")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("A vous adresser sans délai une lettre par laquelle nous attésterons avoir procédé au retour et à la destruction des documents visés au a. et b. ci-dessus.")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("4. Le présent "), mkRun("Engagement de Confidentialité", true), mkRun(" est soumis au droit français. Tout différend se rattachant au présent "), mkRun("Engagement de Confidentialité", true), mkRun(" sera soumis à la compétence exclusive du Tribunal de Commerce de Saint-Denis de la Réunion.")], AL.JUSTIFY),
+        empty(),
+        mkPara([mkRun("5. En tout état de cause, il est expressément entendu entre vous et "), mkRun("HERA GROUPE", true), mkRun(", que le présent "), mkRun("Engagement de Confidentialité", true), mkRun(" sera caduc si nous ne recevons aucune "), mkRun("Information Confidentielle", true), mkRun(" à la suite de la signature de l’"), mkRun("Engagement de Confidentialité", true), mkRun(", que ce soit de votre fait ou du fait de "), mkRun("HERA Groupe", true), mkRun(".")], AL.JUSTIFY),
+        empty(), empty(),
+        mkPara([mkRun("Pour HERA GROUPE,")]),
+        empty(), empty(), empty(),
+        mkPara([mkRun("Tom MEZONNIAUD", true)]),
+        mkPara([mkRun("Associé")]),
+      ];
+
+      var secProps = {
+        properties: {
+          page: {
+            size: {width:11906, height:16838},
+            margin: {top:2494, bottom:709, left:2134, right:2134}
+          }
+        },
+        headers: {default: header},
+        children: children
+      };
+      if(idx > 0) secProps.properties.type = D.SectionType.NEXT_PAGE;
+      sections.push(secProps);
+    });
+
+    var doc2 = new D.Document({
+      styles:{default:{document:{run:{font:fn, size:sz}}}},
+      sections: sections
+    });
+
+    D.Packer.toBlob(doc2).then(function(blob){
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = "NDA_Engagement_Confidentialite.docx";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      document.getElementById('nda-gen-status').innerHTML = '<span style="color:#16a34a">✓ Document téléchargé</span>';
+      document.getElementById('nda-gen-btn').disabled = false;
+    });
+  } catch(e){
+    document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Erreur : '+e.message+'</span>';
+    document.getElementById('nda-gen-btn').disabled = false;
+  }
+}
+
+function ndaFormatDate(){
+  var d = new Date();
+  var mois = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  return d.getDate()+" "+mois[d.getMonth()]+" "+d.getFullYear();
+}
+
+function ndaGenerate(){
+  if(ndaSocietes.length===0 || !ndaDestinataireNom) {
+    document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Renseignez au moins une société et le destinataire</span>';
+    return;
+  }
+  ndaSyncFromDOM();
+  document.getElementById('nda-gen-btn').disabled = true;
+  document.getElementById('nda-gen-status').innerHTML = 'Génération en cours...';
+  var data = {
+    civilite: ndaDestinataireCivilite,
+    nom: ndaDestinataireNom,
+    qualite: ndaDestinataireQualite,
+    date: ndaFormatDate(),
+    societes: ndaSocietes
+  };
+  ndaGenerateDocxJS(data);
+}
+
+function ndaGenerateDocxJS(data){
   // Générer le DOCX en JavaScript pur avec la bibliothèque docx
   // Chargée via CDN
   if(typeof docx === "undefined"){
