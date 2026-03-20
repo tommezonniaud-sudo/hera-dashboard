@@ -1936,7 +1936,13 @@ function ndaRemoveSoc(id){
 
 function ndaFetchPappers(id){
   var s = ndaSocietes.find(function(x){return x.id===id;});
-  if(!s || !s.siret || s.siret.length < 9) return;
+  if(!s) return;
+  // Lire directement le champ input (le listener peut ne pas avoir encore mis à jour s.siret)
+  var inputs = document.getElementById('g-nda-content').querySelectorAll('.nda-field-input[data-field="siret"]');
+  for(var i=0;i<inputs.length;i++){
+    if(parseInt(inputs[i].getAttribute('data-id'))===id){ s.siret = inputs[i].value; break; }
+  }
+  if(!s.siret || s.siret.length < 9) return;
   var statusEl = document.getElementById('nda-status-'+id);
   if(statusEl) statusEl.innerHTML = '<span style="color:var(--or)">⏳ Recherche en cours...</span>';
   
