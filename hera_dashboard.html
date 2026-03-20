@@ -1875,14 +1875,14 @@ function renderNda(){
       '<div class="nda-soc-header">' +
         '<div class="nda-soc-num">'+(idx+1)+'</div>' +
         '<div class="nda-soc-nom">'+(s.nom||'Nouvelle société')+'</div>' +
-        (ndaSocietes.length>1?'<button class="nda-soc-del" data-id="'+s.id+'">✕</button>':'') +
+        (ndaSocietes.length>1?'<button class="nda-soc-del" onclick="ndaRemoveSoc('+s.id+')">✕</button>':'') +
       '</div>' +
       '<div class="nda-grid">' +
         '<div class="nda-field full">' +
           '<div class="nda-label">SIRET</div>' +
           '<div class="nda-siret-row">' +
             '<input class="nda-input nda-field-input" type="text" maxlength="14" data-id="'+s.id+'" data-field="siret" value="'+s.siret+'" placeholder="91153381800017" style="flex:1">' +
-            '<button class="nda-siret-btn nda-pappers-btn" data-id="'+s.id+'">🔍 Pappers</button>' +
+            '<button class="nda-siret-btn" onclick="ndaSyncFromDOM();ndaFetchPappers('+s.id+')">🔍 Pappers</button>' +
           '</div>' +
           '<div class="nda-siret-status" id="nda-status-'+s.id+'" style="color:var(--ink4)">'+s.siretStatus+'</div>' +
         '</div>' +
