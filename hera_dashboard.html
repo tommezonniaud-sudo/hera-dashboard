@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Hera Groupe — Optimisation Sociale</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -1901,15 +1903,6 @@ function renderNda(){
   }).join('');
 
   document.getElementById('g-nda-content').innerHTML =
-  // Listener délégué pour tous les inputs NDA
-  document.getElementById('g-nda-content').addEventListener('input', function(e){
-    if(e.target.classList.contains('nda-field-input')){
-      var sid = parseInt(e.target.getAttribute('data-id'));
-      var field = e.target.getAttribute('data-field');
-      var s = ndaSocietes.find(function(x){return x.id===sid;});
-      if(s && field) s[field] = e.target.value;
-    }
-  });
     '<div class="g-hero">' +
       '<div class="g-hero-ey">Outils · Documents</div>' +
       '<div class="g-hero-title">Engagement de <em>confidentialité</em></div>' +
