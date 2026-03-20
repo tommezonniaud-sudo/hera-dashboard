@@ -2000,7 +2000,7 @@ function ndaGenerateDocxJS(data){
   if(typeof docx === "undefined"){
     document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Chargement bibliothèque Word...</span>';
     var script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js";
+    script.src = "https://unpkg.com/docx@8.5.0/build/index.umd.js";
     script.onload = function(){ ndaGenerateDocxJS(data); };
     script.onerror = function(){ 
       document.getElementById('nda-gen-status').innerHTML = '<span style="color:var(--bx)">Erreur chargement bibliothèque</span>';
